@@ -1,0 +1,66 @@
+{
+  "name": "@chubbyts/chubbyts-framework",
+  "version": "1.0.0",
+  "description": "A minimal, highly performant middleware PSR-15 inspired function based microframework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.",
+  "keywords": [
+    "chubbyts",
+    "microframework",
+    "micro framework",
+    "middleware",
+    "handler",
+    "psr-15"
+  ],
+  "author": "Dominik Zogg",
+  "license": "MIT",
+  "repository": "chubbyts/chubbyts-framework",
+  "scripts": {
+    "cs-fix": "prettier --write src tests",
+    "cs": "prettier --check src tests",
+    "test": "jest",
+    "infection": "stryker run",
+    "build": "tsc",
+    "prepare": "rm -Rf dist && npm run build && npm run cs && npm run test"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "src/**/*.ts"
+    ],
+    "coverageThreshold": {
+      "global": {
+        "lines": 100
+      }
+    }
+  },
+  "prettier": {
+    "printWidth": 120,
+    "tabWidth": 2,
+    "singleQuote": true,
+    "trailingComma": "all"
+  },
+  "files": [
+    "dist"
+  ],
+  "engines": {
+    "node": ">=12"
+  },
+  "dependencies": {
+    "path-to-regexp": "^6.2.1",
+    "qs": "^6.10.3"
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "^5.3.0",
+    "@stryker-mutator/jest-runner": "^5.3.0",
+    "@types/jest": "^27.0.1",
+    "@types/node": "^12",
+    "@types/qs": "^6.9.7",
+    "jest": "^27.1.0",
+    "prettier": "^2.4.0",
+    "ts-jest": "^27.0.5",
+    "typescript": "^4.4.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
