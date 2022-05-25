@@ -24,12 +24,8 @@ export const createContainer = (
   };
 
   const set = (id: string, factory: Factory) => {
-    if (storedFactories.has(id)) {
-      factory = createWrapperFactory(storedFactories.get(id) as Factory, factory);
-      storedServices.delete(id);
-    }
-
-    storedFactories.set(id, factory);
+    storedServices.delete(id);
+    storedFactories.set(id, createWrapperFactory(storedFactories.get(id) as Factory, factory));
   };
 
   const get = <T>(id: string): T => {
