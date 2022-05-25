@@ -1,5 +1,4 @@
-import { ServerResponse } from 'http';
-import { IncomingMessage } from 'http';
+import { IncomingMessage, ServerResponse } from 'http';
 import { Method, Response, ServerRequest } from '../vendor/chubbyts-types/message';
 import { ServerRequestFactory, StreamFromResourceFactory, UriFactory } from '../vendor/chubbyts-types/message-factory';
 
