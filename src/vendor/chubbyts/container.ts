@@ -15,7 +15,7 @@ export const createContainer = (
   set: (id: string, factory: Factory) => void;
 } => {
   const storedFactories = new Map(factories);
-  const storedServices = new Map<string, any>();
+  const storedServices = new Map<string, unknown>();
 
   const sets = (factories: Map<string, Factory>) => {
     factories.forEach((factory, id) => {
@@ -37,7 +37,7 @@ export const createContainer = (
       storedServices.set(id, create<T>(id));
     }
 
-    return storedServices.get(id);
+    return storedServices.get(id) as T;
   };
 
   const has = (id: string): boolean => storedFactories.has(id);

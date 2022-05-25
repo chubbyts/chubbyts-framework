@@ -9,8 +9,8 @@ export enum LogLevel {
   DEBUG = 'debug',
 }
 
-export type NamedLogFn = (message: string, context: Record<string, any>) => void;
-export type LogFn = (level: LogLevel, message: string, context: Record<string, any>) => void;
+export type NamedLogFn = (message: string, context: Record<string, unknown>) => void;
+export type LogFn = (level: LogLevel, message: string, context: Record<string, unknown>) => void;
 
 export type Logger = {
   emergency: NamedLogFn;
@@ -25,35 +25,35 @@ export type Logger = {
 };
 
 export const createLogger = (log: LogFn = () => {}): Logger => {
-  const emergency = (message: string, context: Record<string, any>) => {
+  const emergency = (message: string, context: Record<string, unknown>) => {
     log(LogLevel.EMERGENCY, message, context);
   };
 
-  const alert = (message: string, context: Record<string, any>) => {
+  const alert = (message: string, context: Record<string, unknown>) => {
     log(LogLevel.ALERT, message, context);
   };
 
-  const critical = (message: string, context: Record<string, any>) => {
+  const critical = (message: string, context: Record<string, unknown>) => {
     log(LogLevel.CRITICAL, message, context);
   };
 
-  const error = (message: string, context: Record<string, any>) => {
+  const error = (message: string, context: Record<string, unknown>) => {
     log(LogLevel.ERROR, message, context);
   };
 
-  const warning = (message: string, context: Record<string, any>) => {
+  const warning = (message: string, context: Record<string, unknown>) => {
     log(LogLevel.WARNING, message, context);
   };
 
-  const notice = (message: string, context: Record<string, any>) => {
+  const notice = (message: string, context: Record<string, unknown>) => {
     log(LogLevel.NOTICE, message, context);
   };
 
-  const info = (message: string, context: Record<string, any>) => {
+  const info = (message: string, context: Record<string, unknown>) => {
     log(LogLevel.INFO, message, context);
   };
 
-  const debug = (message: string, context: Record<string, any>) => {
+  const debug = (message: string, context: Record<string, unknown>) => {
     log(LogLevel.DEBUG, message, context);
   };
 
