@@ -218,7 +218,7 @@ describe('http-node', () => {
         uriFactory,
         serverRequestFactory,
         streamFromResourceFactory,
-        true,
+        'forwarded',
       );
 
       expect(() => {
@@ -276,7 +276,7 @@ describe('http-node', () => {
         uriFactory,
         serverRequestFactory,
         streamFromResourceFactory,
-        true,
+        'forwarded',
       );
 
       const { body, ...rest } = nodeToServerRequestFactory(req);
