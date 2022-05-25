@@ -39,6 +39,7 @@ describe('createApplication', () => {
     const application = createApplication([middleware]);
 
     expect(await application(request)).toBe(response);
+
     expect(middleware).toHaveBeenCalledTimes(1);
   });
 });

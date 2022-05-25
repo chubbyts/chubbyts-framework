@@ -51,6 +51,7 @@ describe('createRouteHandler', () => {
     const routeHandler = createRouteHandler(middlewareDispatcher);
 
     expect(await routeHandler(request)).toBe(response);
+
     expect(middlewareDispatcher).toHaveBeenCalledTimes(1);
   });
 });

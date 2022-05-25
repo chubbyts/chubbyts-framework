@@ -20,6 +20,7 @@ describe('createErrorMiddleware', () => {
     const errorMiddleware = createErrorMiddleware(responseFactory);
 
     expect(await errorMiddleware(request, handler)).toBe(response);
+
     expect(handler).toHaveBeenCalledTimes(1);
     expect(responseFactory).toHaveBeenCalledTimes(0);
   });
@@ -167,6 +168,7 @@ describe('createErrorMiddleware', () => {
       ...response,
       headers: { 'content-type': ['text/html'] },
     });
+
     expect(end).toHaveBeenCalledTimes(1);
     expect(handler).toHaveBeenCalledTimes(1);
     expect(responseFactory).toHaveBeenCalledTimes(1);
@@ -336,6 +338,7 @@ describe('createErrorMiddleware', () => {
       ...response,
       headers: { 'content-type': ['text/html'] },
     });
+
     expect(end).toHaveBeenCalledTimes(1);
     expect(handler).toHaveBeenCalledTimes(1);
     expect(responseFactory).toHaveBeenCalledTimes(1);
@@ -494,6 +497,7 @@ describe('createErrorMiddleware', () => {
       ...response,
       headers: { 'content-type': ['text/html'] },
     });
+
     expect(end).toHaveBeenCalledTimes(1);
     expect(handler).toHaveBeenCalledTimes(1);
     expect(responseFactory).toHaveBeenCalledTimes(1);

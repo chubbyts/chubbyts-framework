@@ -24,6 +24,7 @@ test('createLazyHandler', async () => {
   const lazyHandler = createLazyHandler(container, 'id');
 
   expect(await lazyHandler(request)).toBe(response);
+
   expect(get).toHaveBeenCalledTimes(1);
   expect(get).toHaveBeenCalledTimes(1);
 });

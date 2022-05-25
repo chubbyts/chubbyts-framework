@@ -22,6 +22,7 @@ test('createMiddlewareHandler', async () => {
   const middlewareRequestHandler = createMiddlewareHandler(middleware, handler);
 
   expect(await middlewareRequestHandler(request)).toBe(response);
+
   expect(handler).toHaveBeenCalledTimes(1);
   expect(middleware).toHaveBeenCalledTimes(1);
 });

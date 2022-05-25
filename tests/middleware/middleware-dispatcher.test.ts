@@ -18,6 +18,7 @@ describe('createMiddlewareDispatcher', () => {
     const middlewareDispatcher = createMiddlewareDispatcher();
 
     expect(await middlewareDispatcher([], handler, request)).toBe(response);
+
     expect(handler).toHaveBeenCalledTimes(1);
   });
 
@@ -54,6 +55,7 @@ describe('createMiddlewareDispatcher', () => {
     const middlewareDispatcher = createMiddlewareDispatcher();
 
     expect(await middlewareDispatcher([middleware1, middleware2], handler, request)).toBe(response);
+
     expect(handler).toHaveBeenCalledTimes(1);
     expect(middleware1).toHaveBeenCalledTimes(1);
     expect(middleware2).toHaveBeenCalledTimes(1);

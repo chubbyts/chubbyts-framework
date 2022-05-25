@@ -31,6 +31,7 @@ test('createLazyMiddleware', async () => {
   const lazyMiddleware = createLazyMiddleware(container, 'id');
 
   expect(await lazyMiddleware(request, handler)).toBe(response);
+
   expect(handler).toHaveBeenCalledTimes(1);
   expect(middleware).toHaveBeenCalledTimes(1);
   expect(get).toHaveBeenCalledTimes(1);

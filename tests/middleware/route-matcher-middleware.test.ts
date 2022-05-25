@@ -34,6 +34,7 @@ describe('createRouteMatcherMiddleware', () => {
     const routeMatcherMiddleware = createRouteMatcherMiddleware(match, responseFactory);
 
     expect(await routeMatcherMiddleware(request, handler)).toBe(response);
+
     expect(handler).toHaveBeenCalledTimes(1);
     expect(match).toHaveBeenCalledTimes(1);
     expect(responseFactory).toHaveBeenCalledTimes(0);
@@ -234,6 +235,7 @@ describe('createRouteMatcherMiddleware', () => {
       ...response,
       headers: { 'content-type': ['text/html'] },
     });
+
     expect(handler).toHaveBeenCalledTimes(0);
     expect(match).toHaveBeenCalledTimes(1);
     expect(responseFactory).toHaveBeenCalledTimes(1);
