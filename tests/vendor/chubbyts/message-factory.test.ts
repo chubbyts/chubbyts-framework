@@ -197,7 +197,7 @@ describe('message-factory', () => {
   });
 
   describe('createRequestFactory', () => {
-    test('with uri as string', async () => {
+    test('with uri as string', () => {
       const requestFactory = createRequestFactory();
       const request = requestFactory(Method.GET, 'https://localhost:10443/api');
 
@@ -223,7 +223,7 @@ describe('message-factory', () => {
       `);
     });
 
-    test('with uri as object', async () => {
+    test('with uri as object', () => {
       const requestFactory = createRequestFactory();
       const request = requestFactory(Method.GET, createUriFactory()('https://localhost:10443/api'));
 
@@ -250,7 +250,7 @@ describe('message-factory', () => {
     });
   });
 
-  test('createServerRequestFactory', async () => {
+  test('createServerRequestFactory', () => {
     const serverRequestFactory = createServerRequestFactory();
     const serverRequest = serverRequestFactory(Method.GET, 'https://localhost:10443/api');
 
@@ -278,7 +278,7 @@ describe('message-factory', () => {
   });
 
   describe('createResponseFactory', () => {
-    test('without reason phrase, but found in map', async () => {
+    test('without reason phrase, but found in map', () => {
       const responseFactory = createResponseFactory();
       const response = responseFactory(404);
 
@@ -296,7 +296,7 @@ describe('message-factory', () => {
       `);
     });
 
-    test('without reason phrase, but not found in map', async () => {
+    test('without reason phrase, but not found in map', () => {
       const responseFactory = createResponseFactory();
       const response = responseFactory(600);
 
@@ -314,7 +314,7 @@ describe('message-factory', () => {
       `);
     });
 
-    test('with reason phrase', async () => {
+    test('with reason phrase', () => {
       const responseFactory = createResponseFactory();
       const response = responseFactory(404, 'Not Found???!!!');
 

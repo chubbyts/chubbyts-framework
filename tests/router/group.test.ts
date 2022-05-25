@@ -5,7 +5,7 @@ import { Method } from '../../src/vendor/chubbyts-types/message';
 
 describe('group', () => {
   describe('createGroup', () => {
-    test('minimal', async () => {
+    test('minimal', () => {
       expect(
         createGroup({
           path: '/api',
@@ -22,7 +22,7 @@ describe('group', () => {
       `);
     });
 
-    test('maximal', async () => {
+    test('maximal', () => {
       expect(
         createGroup({
           path: '/api',
@@ -59,7 +59,7 @@ describe('group', () => {
     });
   });
 
-  test('getRoutes', async () => {
+  test('getRoutes', () => {
     const group = createGroup({
       path: '/api',
       children: [

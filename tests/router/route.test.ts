@@ -28,7 +28,7 @@ describe('route', () => {
   });
 
   describe('createRoute', () => {
-    test('minimal', async () => {
+    test('minimal', () => {
       expect(
         createRoute({
           method: Method.GET,
@@ -50,7 +50,7 @@ describe('route', () => {
       `);
     });
 
-    test('maximal', async () => {
+    test('maximal', () => {
       expect(
         createRoute({
           method: Method.GET,
@@ -79,7 +79,7 @@ describe('route', () => {
     });
   });
 
-  test('createDeleteRoute', async () => {
+  test('createDeleteRoute', () => {
     expect(
       createDeleteRoute({
         path: '/api/pet/{id}',
@@ -106,7 +106,7 @@ describe('route', () => {
     `);
   });
 
-  test('createGetRoute', async () => {
+  test('createGetRoute', () => {
     expect(
       createGetRoute({
         path: '/api/pet/{id}',
@@ -133,7 +133,7 @@ describe('route', () => {
     `);
   });
 
-  test('createHeadRoute', async () => {
+  test('createHeadRoute', () => {
     expect(
       createHeadRoute({
         path: '/api/pet/{id}',
@@ -160,7 +160,7 @@ describe('route', () => {
     `);
   });
 
-  test('createOptionsRoute', async () => {
+  test('createOptionsRoute', () => {
     expect(
       createOptionsRoute({
         path: '/api/pet/{id}',
@@ -187,7 +187,7 @@ describe('route', () => {
     `);
   });
 
-  test('createPatchRoute', async () => {
+  test('createPatchRoute', () => {
     expect(
       createPatchRoute({
         path: '/api/pet/{id}',
@@ -214,7 +214,7 @@ describe('route', () => {
     `);
   });
 
-  test('createPostRoute', async () => {
+  test('createPostRoute', () => {
     expect(
       createPostRoute({
         path: '/api/pet/{id}',
@@ -241,7 +241,7 @@ describe('route', () => {
     `);
   });
 
-  test('createPutRoute', async () => {
+  test('createPutRoute', () => {
     expect(
       createPutRoute({
         path: '/api/pet/{id}',

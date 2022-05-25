@@ -2,7 +2,7 @@ import { describe, expect, test } from '@jest/globals';
 import { createLogger, LogFn, LogLevel } from '../../../src/vendor/chubbyts-types/log';
 
 describe('log', () => {
-  test('createLogger', async () => {
+  test('createLogger', () => {
     const logEntries: Array<{ level: LogLevel; message: string; context: Record<string, unknown> }> = [];
 
     const log: LogFn = jest.fn((level: LogLevel, message: string, context: Record<string, unknown>) => {
