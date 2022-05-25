@@ -84,7 +84,7 @@ export const createServerRequestFactory = (
   };
 };
 
-const statusCodeMap = new Map([
+export const statusCodeMap = new Map([
   [100, 'Continue'],
   [101, 'Switching Protocols'],
   [102, 'Processing'],
