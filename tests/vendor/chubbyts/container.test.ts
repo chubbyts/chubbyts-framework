@@ -39,10 +39,10 @@ describe('container', () => {
       });
 
       expect(container.get('service')).toMatchInlineSnapshot(`
-          Object {
-            "key2": "value2",
-          }
-        `);
+        Object {
+          "key2": "value2",
+        }
+      `);
     });
 
     test('set with extended service', () => {
@@ -65,7 +65,12 @@ describe('container', () => {
         };
       });
 
-      expect(container.get('service')).toMatchInlineSnapshot(`
+      const service1 = container.get('service');
+      const service2 = container.get('service');
+
+      expect(service1).toBe(service2);
+
+      expect(service1).toMatchInlineSnapshot(`
         Object {
           "key1": "value1",
           "key2": "value2",
