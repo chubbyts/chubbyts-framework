@@ -81,9 +81,7 @@ describe('path-to-regexp-router', () => {
 
       const pathToRegexpPathGenerator = createPathToRegexpPathGenerator(routes);
 
-      expect(pathToRegexpPathGenerator('name', undefined, { key: { subKey: 'value' } })).toMatchInlineSnapshot(
-        `"/api/pet?key%5BsubKey%5D=value"`,
-      );
+      expect(pathToRegexpPathGenerator('name')).toMatchInlineSnapshot(`"/api/pet"`);
 
       expect(routes).toHaveBeenCalledTimes(1);
     });
@@ -113,7 +111,7 @@ describe('path-to-regexp-router', () => {
     });
   });
 
-  describe('createPathToRegexpPathGenerator', () => {
+  describe('createPathToRegexpUrlGenerator', () => {
     test('with userInfo and port', () => {
       const request = {
         uri: {

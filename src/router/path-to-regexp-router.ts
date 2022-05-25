@@ -64,15 +64,7 @@ export const createPathToRegexpPathGenerator = (routes: Routes): GeneratePath =>
 
     const compiler = compilersByName[name] as PathFunction;
 
-    let path = '';
-
-    path = compiler(undefined !== attributes ? attributes : {});
-
-    if (undefined !== query) {
-      path += '?' + stringify(query);
-    }
-
-    return path;
+    return compiler(attributes) + (undefined !== query ? '?' + stringify(query) : '');
   };
 };
 
