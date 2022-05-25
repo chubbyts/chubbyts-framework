@@ -8,6 +8,6 @@ export const createApplication = (
   middlewares: Array<Middleware>,
   middlewareDispatcher: MiddlewareDispatcher = createMiddlewareDispatcher(),
   handler: Handler = createRouteHandler(middlewareDispatcher),
-) => {
+): Handler => {
   return (request: ServerRequest): Promise<Response> => middlewareDispatcher(middlewares, handler, request);
 };

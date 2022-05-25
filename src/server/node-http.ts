@@ -41,12 +41,14 @@ const getUri = (req: IncomingMessage, uriOptions: UriOptions): string => {
   return schema + '://' + host + req.url;
 };
 
+type NodeToServerRequestFactory = (req: IncomingMessage) => ServerRequest;
+
 export const createNodeToServerRequestFactory = (
   uriFactory: UriFactory,
   serverRequestFactory: ServerRequestFactory,
   streamFromResourceFactory: StreamFromResourceFactory,
   uriOptions: UriOptions = false,
-) => {
+): NodeToServerRequestFactory => {
   return (req: IncomingMessage): ServerRequest => {
     if (!req.method) {
       throw new Error('Method missing');
@@ -69,7 +71,9 @@ export const createNodeToServerRequestFactory = (
   };
 };
 
-export const createResponseToNodeEmitter = () => {
+type ResponseToNodeEmitter = (response: Response, res: ServerResponse) => void;
+
+export const createResponseToNodeEmitter = (): ResponseToNodeEmitter => {
   return (response: Response, res: ServerResponse): void => {
     res.writeHead(response.status, response.reasonPhrase, response.headers);
     response.body.pipe(res);
