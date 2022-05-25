@@ -3,9 +3,7 @@ import { Container } from '../chubbyts-types/container';
 export type Factory = (container: Container, existingFactory?: Factory) => unknown;
 
 const createWrapperFactory = (existingFactory: Factory, newFactory: Factory): Factory => {
-  return (container: Container) => {
-    return newFactory(container, existingFactory);
-  };
+  return (container: Container) => newFactory(container, existingFactory);
 };
 
 export const createContainer = (
