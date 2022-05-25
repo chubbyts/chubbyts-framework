@@ -1,9 +1,24 @@
 import { describe, expect, test } from '@jest/globals';
-import { createGroup, getRoutes } from '../../src/router/group';
+import { createGroup, getRoutes, isGroup } from '../../src/router/group';
 import { createRoute } from '../../src/router/route';
 import { Method } from '../../src/vendor/chubbyts-types/message';
 
 describe('group', () => {
+  describe('isGroup', () => {
+    [
+      { name: 'group', value: { _group: 'Group' }, toBe: true },
+      { name: 'error', value: new Error(), toBe: false },
+      { name: 'object', value: {}, toBe: false },
+      { name: 'string', value: 'example', toBe: false },
+      { name: 'undefined', value: undefined, toBe: false },
+      { name: 'null', value: null, toBe: false },
+    ].forEach(({ name, value, toBe }) => {
+      test('type is ' + name, () => {
+        expect(isGroup(value)).toBe(toBe);
+      });
+    });
+  });
+
   describe('createGroup', () => {
     test('minimal', () => {
       expect(
@@ -72,7 +87,7 @@ describe('group', () => {
               name: 'pet_list',
               handler: jest.fn(),
               middlewares: [jest.fn()],
-              pathOptions: { name: 'list' },
+              pathOptions: { name3: 'list' },
             }),
             createRoute({
               method: Method.POST,
@@ -80,7 +95,7 @@ describe('group', () => {
               name: 'pet_create',
               handler: jest.fn(),
               middlewares: [jest.fn()],
-              pathOptions: { name: 'create' },
+              pathOptions: { name3: 'create' },
             }),
             createRoute({
               method: Method.GET,
@@ -88,7 +103,7 @@ describe('group', () => {
               name: 'pet_read',
               handler: jest.fn(),
               middlewares: [jest.fn()],
-              pathOptions: { name: 'read' },
+              pathOptions: { name3: 'read' },
             }),
             createRoute({
               method: Method.PUT,
@@ -96,7 +111,7 @@ describe('group', () => {
               name: 'pet_update',
               handler: jest.fn(),
               middlewares: [jest.fn()],
-              pathOptions: { name: 'update' },
+              pathOptions: { name3: 'update' },
             }),
             createRoute({
               method: Method.DELETE,
@@ -104,15 +119,15 @@ describe('group', () => {
               name: 'pet_delete',
               handler: jest.fn(),
               middlewares: [jest.fn()],
-              pathOptions: { name: 'delete' },
+              pathOptions: { name3: 'delete' },
             }),
           ],
           middlewares: [jest.fn()],
-          pathOptions: { name: 'pet' },
+          pathOptions: { name2: 'pet' },
         }),
       ],
       middlewares: [jest.fn()],
-      pathOptions: { name: 'api' },
+      pathOptions: { name1: 'api' },
     });
 
     expect(getRoutes(group)).toMatchInlineSnapshot(`
@@ -130,7 +145,9 @@ describe('group', () => {
           "name": "pet_list",
           "path": "/api/pet/",
           "pathOptions": Object {
-            "name": "list",
+            "name1": "api",
+            "name2": "pet",
+            "name3": "list",
           },
         },
         Object {
@@ -146,7 +163,9 @@ describe('group', () => {
           "name": "pet_create",
           "path": "/api/pet/",
           "pathOptions": Object {
-            "name": "create",
+            "name1": "api",
+            "name2": "pet",
+            "name3": "create",
           },
         },
         Object {
@@ -162,7 +181,9 @@ describe('group', () => {
           "name": "pet_read",
           "path": "/api/pet/{id}",
           "pathOptions": Object {
-            "name": "read",
+            "name1": "api",
+            "name2": "pet",
+            "name3": "read",
           },
         },
         Object {
@@ -178,7 +199,9 @@ describe('group', () => {
           "name": "pet_update",
           "path": "/api/pet/{id}",
           "pathOptions": Object {
-            "name": "update",
+            "name1": "api",
+            "name2": "pet",
+            "name3": "update",
           },
         },
         Object {
@@ -194,7 +217,9 @@ describe('group', () => {
           "name": "pet_delete",
           "path": "/api/pet/{id}",
           "pathOptions": Object {
-            "name": "delete",
+            "name1": "api",
+            "name2": "pet",
+            "name3": "delete",
           },
         },
       ]

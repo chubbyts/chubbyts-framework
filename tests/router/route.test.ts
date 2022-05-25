@@ -16,6 +16,7 @@ describe('route', () => {
   describe('isRoute', () => {
     [
       { name: 'route', value: { _route: 'Route' }, toBe: true },
+      { name: 'error', value: new Error(), toBe: false },
       { name: 'object', value: {}, toBe: false },
       { name: 'string', value: 'example', toBe: false },
       { name: 'undefined', value: undefined, toBe: false },

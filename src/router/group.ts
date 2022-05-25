@@ -10,7 +10,7 @@ export type Group = {
   _group: string;
 };
 
-const isGroup = (group: unknown): group is Group => {
+export const isGroup = (group: unknown): group is Group => {
   return typeof group === 'object' && null !== group && typeof (group as Group)._group === 'string';
 };
 
