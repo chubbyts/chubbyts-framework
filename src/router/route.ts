@@ -11,7 +11,7 @@ export type Route = {
   handler: Handler;
   middlewares: Array<Middleware>;
   pathOptions: PathOptions;
-  attributes: Record<string, any>;
+  attributes: Record<string, string>;
   _route: string;
 };
 

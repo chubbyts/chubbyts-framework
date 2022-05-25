@@ -31,7 +31,7 @@ export const createPathToRegexpRouteMatcher = (routes: Routes): Match => {
       const routeMethod = route.method;
 
       if (routeMethod === method) {
-        return { ...route, attributes: matchedPath.params };
+        return { ...route, attributes: matchedPath.params as Record<string, string> };
       }
 
       matchWithMethods.push(routeMethod);
