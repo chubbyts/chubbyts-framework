@@ -29,13 +29,16 @@ describe('path-to-regexp-router', () => {
     test('method not allowed', () => {
       const request = { method: Method.GET, uri: { path: '/api' } } as ServerRequest;
 
-      const routes: Routes = jest.fn(() => ({ name: { method: Method.POST, path: '/api', _route: 'Route' } as Route }));
+      const routes: Routes = jest.fn(() => ({
+        name1: { method: Method.POST, path: '/api', _route: 'Route' } as Route,
+        name2: { method: Method.PUT, path: '/api', _route: 'Route' } as Route,
+      }));
 
       const pathToRegexpRouteMatcher = createPathToRegexpRouteMatcher(routes);
 
       expect(() => {
         pathToRegexpRouteMatcher(request);
-      }).toThrow('Method "GET" at path "/api" is not allowed. Must be one of: "POST".');
+      }).toThrow('Method "GET" at path "/api" is not allowed. Must be one of: "POST", "PUT".');
 
       expect(routes).toHaveBeenCalledTimes(1);
     });
