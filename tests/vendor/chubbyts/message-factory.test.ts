@@ -198,13 +198,17 @@ describe('message-factory', () => {
   });
 
   describe('createRequestFactory', () => {
-    test('with uri as string', () => {
+    test('with uri as string', async () => {
       const requestFactory = createRequestFactory();
       const request = requestFactory(Method.GET, 'https://localhost:10443/api');
 
       const { body, ...rest } = request;
 
       expect(body).toBeInstanceOf(Stream);
+
+      body.end();
+
+      expect(await readStream(body)).toBe('');
 
       expect(rest).toMatchInlineSnapshot(`
         Object {
@@ -356,13 +360,17 @@ describe('message-factory', () => {
   });
 
   describe('createResponseFactory', () => {
-    test('without reason phrase, but found in map', () => {
+    test('without reason phrase, but found in map', async () => {
       const responseFactory = createResponseFactory();
       const response = responseFactory(404);
 
       const { body, ...rest } = response;
 
       expect(body).toBeInstanceOf(Stream);
+
+      body.end();
+
+      expect(await readStream(body)).toBe('');
 
       expect(rest).toMatchInlineSnapshot(`
         Object {
