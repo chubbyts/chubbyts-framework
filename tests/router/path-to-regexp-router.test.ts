@@ -13,7 +13,7 @@ describe('path-to-regexp-router', () => {
     test('not found', () => {
       const request = { method: Method.GET, uri: { path: '/' } } as ServerRequest;
 
-      const routes: Routes = jest.fn(() => ({ name: { path: '/api', _route: 'Route' } as Route }));
+      const routes: Routes = jest.fn(() => new Map([['name', { path: '/api', _route: 'Route' } as Route]]));
 
       const pathToRegexpRouteMatcher = createPathToRegexpRouteMatcher(routes);
 
@@ -29,10 +29,13 @@ describe('path-to-regexp-router', () => {
     test('method not allowed', () => {
       const request = { method: Method.GET, uri: { path: '/api' } } as ServerRequest;
 
-      const routes: Routes = jest.fn(() => ({
-        name1: { method: Method.POST, path: '/api', _route: 'Route' } as Route,
-        name2: { method: Method.PUT, path: '/api', _route: 'Route' } as Route,
-      }));
+      const routes: Routes = jest.fn(
+        () =>
+          new Map([
+            ['name1', { method: Method.POST, path: '/api', _route: 'Route' } as Route],
+            ['name2', { method: Method.PUT, path: '/api', _route: 'Route' } as Route],
+          ]),
+      );
 
       const pathToRegexpRouteMatcher = createPathToRegexpRouteMatcher(routes);
 
@@ -46,7 +49,9 @@ describe('path-to-regexp-router', () => {
     test('matched', () => {
       const request = { method: Method.GET, uri: { path: '/api' } } as ServerRequest;
 
-      const routes: Routes = jest.fn(() => ({ name: { method: Method.GET, path: '/api', _route: 'Route' } as Route }));
+      const routes: Routes = jest.fn(
+        () => new Map([['name', { method: Method.GET, path: '/api', _route: 'Route' } as Route]]),
+      );
 
       const pathToRegexpRouteMatcher = createPathToRegexpRouteMatcher(routes);
 
@@ -65,7 +70,7 @@ describe('path-to-regexp-router', () => {
 
   describe('createPathToRegexpPathGenerator', () => {
     test('with attributes and query params', () => {
-      const routes: Routes = jest.fn(() => ({ name: { path: '/api/pet/:id', _route: 'Route' } as Route }));
+      const routes: Routes = jest.fn(() => new Map([['name', { path: '/api/pet/:id', _route: 'Route' } as Route]]));
 
       const pathToRegexpPathGenerator = createPathToRegexpPathGenerator(routes);
 
@@ -77,7 +82,7 @@ describe('path-to-regexp-router', () => {
     });
 
     test('without attributes and query params', () => {
-      const routes: Routes = jest.fn(() => ({ name: { path: '/api/pet', _route: 'Route' } as Route }));
+      const routes: Routes = jest.fn(() => new Map([['name', { path: '/api/pet', _route: 'Route' } as Route]]));
 
       const pathToRegexpPathGenerator = createPathToRegexpPathGenerator(routes);
 
@@ -87,7 +92,7 @@ describe('path-to-regexp-router', () => {
     });
 
     test('without attributes', () => {
-      const routes: Routes = jest.fn(() => ({ name: { path: '/api/pet/:id', _route: 'Route' } as Route }));
+      const routes: Routes = jest.fn(() => new Map([['name', { path: '/api/pet/:id', _route: 'Route' } as Route]]));
 
       const pathToRegexpPathGenerator = createPathToRegexpPathGenerator(routes);
 
@@ -99,7 +104,7 @@ describe('path-to-regexp-router', () => {
     });
 
     test('with missing route', () => {
-      const routes: Routes = jest.fn(() => ({ name: { path: '/api/pet/:id', _route: 'Route' } as Route }));
+      const routes: Routes = jest.fn(() => new Map([['name', { path: '/api/pet/:id', _route: 'Route' } as Route]]));
 
       const pathToRegexpPathGenerator = createPathToRegexpPathGenerator(routes);
 
@@ -122,7 +127,7 @@ describe('path-to-regexp-router', () => {
         },
       } as unknown as ServerRequest;
 
-      const routes: Routes = jest.fn(() => ({ name: { path: '/api/pet/:id', _route: 'Route' } as Route }));
+      const routes: Routes = jest.fn(() => new Map([['name', { path: '/api/pet/:id', _route: 'Route' } as Route]]));
 
       const pathToRegexpUrlGenerator = createPathToRegexpUrlGenerator(createPathToRegexpPathGenerator(routes));
 
@@ -148,7 +153,7 @@ describe('path-to-regexp-router', () => {
         },
       } as unknown as ServerRequest;
 
-      const routes: Routes = jest.fn(() => ({ name: { path: '/api/pet/:id', _route: 'Route' } as Route }));
+      const routes: Routes = jest.fn(() => new Map([['name', { path: '/api/pet/:id', _route: 'Route' } as Route]]));
 
       const pathToRegexpUrlGenerator = createPathToRegexpUrlGenerator(createPathToRegexpPathGenerator(routes));
 

@@ -9,8 +9,8 @@ import { stringify } from 'qs';
 
 export const createPathToRegexpRouteMatcher = (routes: Routes): Match => {
   const routesByName = routes();
-  const matchersByName: Record<string, MatchFunction> = Object.fromEntries(
-    Object.entries(routesByName).map(([name, route]) => [name, match(route.path)]),
+  const matchersByName: Map<string, MatchFunction> = new Map(
+    Array.from(routesByName.entries()).map(([name, route]) => [name, match(route.path)]),
   );
 
   return (request: ServerRequest): Route => {
@@ -19,8 +19,8 @@ export const createPathToRegexpRouteMatcher = (routes: Routes): Match => {
 
     const matchWithMethods: Array<Method> = [];
 
-    for (const [name, route] of Object.entries(routesByName)) {
-      const match = matchersByName[name] as MatchFunction;
+    for (const [name, route] of routesByName.entries()) {
+      const match = matchersByName.get(name) as MatchFunction;
 
       const matchedPath = match(path);
 
@@ -51,18 +51,18 @@ export const createPathToRegexpRouteMatcher = (routes: Routes): Match => {
 
 export const createPathToRegexpPathGenerator = (routes: Routes): GeneratePath => {
   const routesByName = routes();
-  const compilersByName: Record<string, PathFunction> = Object.fromEntries(
-    Object.entries(routesByName).map(([name, route]) => [name, compile(route.path)]),
+  const compilersByName: Map<string, PathFunction> = new Map(
+    Array.from(routesByName.entries()).map(([name, route]) => [name, compile(route.path)]),
   );
 
   return (name: string, attributes?: Record<string, string>, query?: Query) => {
-    const route = routesByName[name];
+    const route = routesByName.get(name);
 
     if (undefined === route) {
       throw new Error(`Missing route: "${name}"`);
     }
 
-    const compiler = compilersByName[name] as PathFunction;
+    const compiler = compilersByName.get(name) as PathFunction;
 
     return compiler(attributes) + (undefined !== query ? '?' + stringify(query) : '');
   };

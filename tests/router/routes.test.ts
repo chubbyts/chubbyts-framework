@@ -17,8 +17,8 @@ describe('routes', () => {
         }),
       ])(),
     ).toMatchInlineSnapshot(`
-      Object {
-        "pet_read": Object {
+      Map {
+        "pet_read" => Object {
           "_route": "Route",
           "attributes": Object {},
           "handler": [MockFunction],
