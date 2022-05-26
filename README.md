@@ -35,7 +35,8 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
 Through [NPM](https://www.npmjs.com) as [@chubbyjs/chubbyts-framework][1].
 
 ```ts
-npm i @chubbyts/chubbyts-framework
+npm i @chubbyts/chubbyts-framework^1.0.0 \
+  @chubbyts/chubbyts-http@^1.0.0
 ```
 
 ## Usage
@@ -51,7 +52,7 @@ import {
   createStreamFromResourceFactory,
   createUriFactory,
   createResponseFactory,
-} from './vendor/chubbyts/message-factory';
+} from '@chubbyts/chubbyts-http/dist/message-factory';
 import { createPathToRegexpRouteMatcher } from './router/path-to-regexp-router';
 import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import { createServer, IncomingMessage, ServerResponse } from 'http';
