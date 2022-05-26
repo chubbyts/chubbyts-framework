@@ -26,8 +26,9 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
  * node: 14
  * [chubbyts/chubbyts-dic-types][4]: ^1.0.0
  * [chubbyts/chubbyts-http-types][5]: ^1.0.0
- * [path-to-regexp][6]: ^6.2.1
- * [qs][7]: ^6.10.3
+ * [chubbyts/chubbyts-log-types][6]: ^1.0.0
+ * [path-to-regexp][7]: ^6.2.1
+ * [qs][8]: ^6.10.3
 
 ## Installation
 
@@ -106,5 +107,6 @@ Dominik Zogg 2022
 [3]: https://www.php-fig.org/psr/psr-15
 [4]: https://www.npmjs.com/package/@chubbyts/chubbyts-dic-types
 [5]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-types
-[6]: https://www.npmjs.com/package/path-to-regexp
-[7]: https://www.npmjs.com/package/qs
+[6]: https://www.npmjs.com/package/@chubbyts/chubbyts-log-types
+[7]: https://www.npmjs.com/package/path-to-regexp
+[8]: https://www.npmjs.com/package/qs

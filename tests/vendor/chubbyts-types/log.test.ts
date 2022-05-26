@@ -1,5 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
-import { createLogger, LogFn, LogLevel } from '../../../src/vendor/chubbyts-types/log';
+import { createLogger, LogFn, LogLevel } from '@chubbyts/chubbyts-log-types/dist/log';
 
 describe('log', () => {
   test('createLogger', () => {

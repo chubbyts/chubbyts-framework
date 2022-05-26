@@ -5,7 +5,7 @@ import { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-fact
 import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import { createLogger, Logger } from '../vendor/chubbyts-types/log';
+import { createLogger, Logger } from '@chubbyts/chubbyts-log-types/dist/log';
 
 const routeErrorResponse = (createResponse: ResponseFactory, log: Logger, httpError: HttpError): Response => {
   log.info('Route error', {

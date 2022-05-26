@@ -3,7 +3,7 @@ import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/mess
 import { createErrorMiddleware } from '../../src/middleware/error-middleware';
 import { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
 import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
-import { Logger, NamedLogFn } from '../../src/vendor/chubbyts-types/log';
+import { Logger, NamedLogFn } from '@chubbyts/chubbyts-log-types/dist/log';
 
 describe('createErrorMiddleware', () => {
   test('successful', async () => {

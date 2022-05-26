@@ -6,7 +6,7 @@ import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { createRouteMatcherMiddleware } from '../../src/middleware/route-matcher-middleware';
 import { Route } from '../../src/router/route';
 import { HttpError } from '../../src/http-error';
-import { Logger, NamedLogFn } from '../../src/vendor/chubbyts-types/log';
+import { Logger, NamedLogFn } from '@chubbyts/chubbyts-log-types/dist/log';
 
 describe('createRouteMatcherMiddleware', () => {
   test('successful', async () => {

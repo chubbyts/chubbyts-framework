@@ -3,7 +3,7 @@ import type { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import { createLogger, Logger } from '../vendor/chubbyts-types/log';
+import { createLogger, Logger } from '@chubbyts/chubbyts-log-types/dist/log';
 import { throwableToError } from '../throwable-to-error';
 
 const addDebugToBody = (e: unknown): string => {
