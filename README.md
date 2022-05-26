@@ -27,15 +27,15 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
  * [chubbyts/chubbyts-dic-types][4]: ^1.0.0
  * [chubbyts/chubbyts-http-types][5]: ^1.0.0
  * [chubbyts/chubbyts-log-types][6]: ^1.0.0
- * [path-to-regexp][7]: ^6.2.1
- * [qs][8]: ^6.10.3
 
 ## Installation
 
 Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 
 ```ts
-npm i @chubbyts/chubbyts-framework^1.0.0 \
+npm i \
+  @chubbyts/chubbyts-framework-router-path-to-regexp@^1.0.0 \
+  @chubbyts/chubbyts-framework@^1.0.0 \
   @chubbyts/chubbyts-http@^1.0.0
 ```
 
@@ -53,7 +53,7 @@ import {
   createUriFactory,
   createResponseFactory,
 } from '@chubbyts/chubbyts-http/dist/message-factory';
-import { createPathToRegexpRouteMatcher } from './router/path-to-regexp-router';
+import { createPathToRegexpRouteMatcher } from '@chubbyts/chubbyts-framework-router-path-to-regexp/dist/path-to-regexp-router';
 import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import { createServer, IncomingMessage, ServerResponse } from 'http';
 import { createNodeToServerRequestFactory, createResponseToNodeEmitter } from './server/node-http';
@@ -111,5 +111,3 @@ Dominik Zogg 2022
 [4]: https://www.npmjs.com/package/@chubbyts/chubbyts-dic-types
 [5]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-types
 [6]: https://www.npmjs.com/package/@chubbyts/chubbyts-log-types
-[7]: https://www.npmjs.com/package/path-to-regexp
-[8]: https://www.npmjs.com/package/qs
