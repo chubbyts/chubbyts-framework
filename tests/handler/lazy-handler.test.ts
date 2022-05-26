@@ -1,7 +1,7 @@
 import { expect, test } from '@jest/globals';
 import { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
 import { createLazyHandler } from '../../src/handler/lazy-handler';
-import { Container } from '../../src/vendor/chubbyts-types/container';
+import { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
 import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 
 test('createLazyHandler', async () => {

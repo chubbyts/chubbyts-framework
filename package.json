@@ -46,6 +46,7 @@
     "node": ">=12"
   },
   "dependencies": {
+    "@chubbyts/chubbyts-dic-types": "^1.0.0",
     "@chubbyts/chubbyts-http-types": "^1.0.0",
     "path-to-regexp": "^6.2.1",
     "qs": "^6.10.3"

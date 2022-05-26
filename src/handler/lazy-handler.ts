@@ -1,4 +1,4 @@
-import type { Container } from '../vendor/chubbyts-types/container';
+import type { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 

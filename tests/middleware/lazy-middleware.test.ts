@@ -1,7 +1,7 @@
 import { expect, test } from '@jest/globals';
 import { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
 import { createLazyMiddleware } from '../../src/middleware/lazy-middleware';
-import { Container } from '../../src/vendor/chubbyts-types/container';
+import { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
 import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 
