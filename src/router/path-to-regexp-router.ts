@@ -1,7 +1,7 @@
 import { Route } from './route';
 import { Match } from './route-matcher';
 import { Routes } from './routes';
-import { Method, Query, ServerRequest } from '../vendor/chubbyts-types/message';
+import { Method, Query, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import { compile, match, MatchFunction, PathFunction } from 'path-to-regexp';
 import { createMethodNotAllowed, createNotFound } from '../http-error';
 import { GeneratePath, GenerateUrl } from './url-generator';

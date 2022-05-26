@@ -1,8 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
-import { ServerRequest, Response } from '../../src/vendor/chubbyts-types/message';
+import { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
 import { createRouteHandler } from '../../src/handler/route-handler';
-import { Middleware } from '../../src/vendor/chubbyts-types/middleware';
-import { Handler } from '../../src/vendor/chubbyts-types/handler';
+import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Route } from '../../src/router/route';
 import { MiddlewareDispatcher } from '../../src/middleware/middleware-dispatcher';
 

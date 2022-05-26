@@ -2,12 +2,12 @@ import { describe, expect, test } from '@jest/globals';
 import { IncomingMessage, OutgoingHttpHeaders, ServerResponse } from 'http';
 import { Duplex, Stream } from 'stream';
 import { createResponseToNodeEmitter, createNodeToServerRequestFactory } from '../../src/server/node-http';
-import { Response, ServerRequest, Uri } from '../../src/vendor/chubbyts-types/message';
+import { Response, ServerRequest, Uri } from '@chubbyts/chubbyts-http-types/dist/message';
 import {
   ServerRequestFactory,
   StreamFromResourceFactory,
   UriFactory,
-} from '../../src/vendor/chubbyts-types/message-factory';
+} from '@chubbyts/chubbyts-http-types/dist/message-factory';
 
 describe('http-node', () => {
   describe('createNodeToServerRequestFactory', () => {

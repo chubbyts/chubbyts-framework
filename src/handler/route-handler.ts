@@ -1,7 +1,7 @@
 import type { MiddlewareDispatcher } from '../middleware/middleware-dispatcher';
 import { isRoute } from '../router/route';
-import type { Response, ServerRequest } from '../vendor/chubbyts-types/message';
-import { Handler } from '../vendor/chubbyts-types/handler';
+import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
+import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 
 export const createRouteHandler = (middlewareDispatcher: MiddlewareDispatcher): Handler => {
   return (request: ServerRequest): Promise<Response> => {

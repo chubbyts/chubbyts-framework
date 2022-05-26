@@ -1,9 +1,9 @@
 import { describe, expect, test } from '@jest/globals';
 import { createApplication } from '../src/application';
 import { Route } from '../src/router/route';
-import { Handler } from '../src/vendor/chubbyts-types/handler';
-import { Response, ServerRequest } from '../src/vendor/chubbyts-types/message';
-import { Middleware } from '../src/vendor/chubbyts-types/middleware';
+import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
+import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 
 describe('createApplication', () => {
   test('without middlewares', async () => {

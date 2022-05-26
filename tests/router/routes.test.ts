@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
 import { createRoute } from '../../src/router/route';
 import { createRoutesByName } from '../../src/router/routes';
-import { Method } from '../../src/vendor/chubbyts-types/message';
+import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 
 describe('routes', () => {
   test('createRoutesByName', () => {

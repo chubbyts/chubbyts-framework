@@ -1,7 +1,7 @@
 import { expect, test } from '@jest/globals';
-import { ServerRequest, Response } from '../../src/vendor/chubbyts-types/message';
-import { Handler } from '../../src/vendor/chubbyts-types/handler';
-import { Middleware } from '../../src/vendor/chubbyts-types/middleware';
+import { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
+import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import { createMiddlewareHandler } from '../../src/handler/middleware-handler';
 
 test('createMiddlewareHandler', async () => {

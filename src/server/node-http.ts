@@ -1,6 +1,10 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { Method, Response, ServerRequest } from '../vendor/chubbyts-types/message';
-import { ServerRequestFactory, StreamFromResourceFactory, UriFactory } from '../vendor/chubbyts-types/message-factory';
+import { Method, Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
+import {
+  ServerRequestFactory,
+  StreamFromResourceFactory,
+  UriFactory,
+} from '@chubbyts/chubbyts-http-types/dist/message-factory';
 
 type UriOptions =
   | {

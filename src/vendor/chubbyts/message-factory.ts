@@ -1,6 +1,6 @@
 import { createReadStream, existsSync } from 'fs';
 import { Duplex, PassThrough, Stream } from 'stream';
-import { Method, Query, Request, Response, ServerRequest, Uri } from '../chubbyts-types/message';
+import { Method, Query, Request, Response, ServerRequest, Uri } from '@chubbyts/chubbyts-http-types/dist/message';
 import {
   RequestFactory,
   ResponseFactory,
@@ -9,7 +9,7 @@ import {
   StreamFromFileFactory,
   StreamFromResourceFactory,
   UriFactory,
-} from '../chubbyts-types/message-factory';
+} from '@chubbyts/chubbyts-http-types/dist/message-factory';
 import { parse as queryParser } from 'qs';
 
 export const createUriFactory = (): UriFactory => {

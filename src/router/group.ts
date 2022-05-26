@@ -1,4 +1,4 @@
-import type { Middleware } from '../vendor/chubbyts-types/middleware';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import type { PathOptions, Route } from './route';
 import { createRoute } from './route';
 

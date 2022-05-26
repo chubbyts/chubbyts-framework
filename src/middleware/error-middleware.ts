@@ -1,8 +1,8 @@
 import { htmlTemplate } from '../http-error';
-import type { ResponseFactory } from '../vendor/chubbyts-types/message-factory';
-import type { Response, ServerRequest } from '../vendor/chubbyts-types/message';
-import type { Handler } from '../vendor/chubbyts-types/handler';
-import { Middleware } from '../vendor/chubbyts-types/middleware';
+import type { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
+import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import { createLogger, Logger } from '../vendor/chubbyts-types/log';
 import { throwableToError } from '../throwable-to-error';
 

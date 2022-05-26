@@ -1,8 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
-import { Response, ServerRequest } from '../../src/vendor/chubbyts-types/message';
+import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import { createErrorMiddleware } from '../../src/middleware/error-middleware';
-import { ResponseFactory } from '../../src/vendor/chubbyts-types/message-factory';
-import { Handler } from '../../src/vendor/chubbyts-types/handler';
+import { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
+import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Logger, NamedLogFn } from '../../src/vendor/chubbyts-types/log';
 
 describe('createErrorMiddleware', () => {

@@ -10,7 +10,7 @@ import {
   createPostRoute,
   createPutRoute,
 } from '../../src/router/route';
-import { Method } from '../../src/vendor/chubbyts-types/message';
+import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 
 describe('route', () => {
   describe('isRoute', () => {

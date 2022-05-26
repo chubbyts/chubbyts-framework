@@ -1,4 +1,4 @@
-import { Query, ServerRequest } from '../vendor/chubbyts-types/message';
+import { Query, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 
 export type GenerateUrl = (
   request: ServerRequest,

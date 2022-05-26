@@ -6,7 +6,7 @@ import {
   createPathToRegexpRouteMatcher,
   createPathToRegexpUrlGenerator,
 } from '../../src/router/path-to-regexp-router';
-import { Method, ServerRequest } from '../../src/vendor/chubbyts-types/message';
+import { Method, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 
 describe('path-to-regexp-router', () => {
   describe('createPathToRegexpRouteMatcher', () => {

@@ -1,10 +1,10 @@
 import { htmlTemplate, HttpError, isHttpError } from '../http-error';
 import { Route } from '../router/route';
 import { Match } from '../router/route-matcher';
-import { ResponseFactory } from '../vendor/chubbyts-types/message-factory';
-import { Response, ServerRequest } from '../vendor/chubbyts-types/message';
-import { Handler } from '../vendor/chubbyts-types/handler';
-import { Middleware } from '../vendor/chubbyts-types/middleware';
+import { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
+import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
+import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import { createLogger, Logger } from '../vendor/chubbyts-types/log';
 
 const routeErrorResponse = (createResponse: ResponseFactory, log: Logger, httpError: HttpError): Response => {

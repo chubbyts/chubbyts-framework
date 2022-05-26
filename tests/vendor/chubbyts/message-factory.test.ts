@@ -13,7 +13,7 @@ import {
   createResponseFactory,
   statusCodeMap,
 } from '../../../src/vendor/chubbyts/message-factory';
-import { Method } from '../../../src/vendor/chubbyts-types/message';
+import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 
 const readStream = async (stream: Stream) => {
   return new Promise((resolve, reject) => {
