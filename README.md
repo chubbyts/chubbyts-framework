@@ -99,7 +99,7 @@ server.listen(port, host, () => {
 
 Dominik Zogg 2022
 
-[1]: https://www.npmjs.com/package/@chubbyjs/chubbyjs-framework
+[1]: https://www.npmjs.com/package/@chubbyts/chubbyts-framework
 [2]: https://web-frameworks-benchmark.netlify.app/result
 [3]: https://www.php-fig.org/psr/psr-15
 [4]: https://www.npmjs.com/package/path-to-regexp
