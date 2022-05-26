@@ -31,10 +31,10 @@ export const createRouteMatcherMiddleware = (
   logger: Logger = createLogger(),
 ): Middleware => {
   return async (request: ServerRequest, handler: Handler): Promise<Response> => {
-    let route: Route;
-
     try {
-      route = match(request);
+      const route = match(request);
+
+      return handler({ ...request, attributes: { ...request.attributes, route, ...route.attributes } });
     } catch (error) {
       if (isHttpError(error)) {
         return routeErrorResponse(createResponse, logger, error);
@@ -42,7 +42,5 @@ export const createRouteMatcherMiddleware = (
 
       throw error;
     }
-
-    return handler({ ...request, attributes: { ...request.attributes, route, ...route.attributes } });
   };
 };
