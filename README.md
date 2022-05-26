@@ -32,6 +32,8 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
 
 ## Installation
 
+Through [NPM](https://www.npmjs.com) as [@chubbyjs/chubbyts-framework][1].
+
 ```ts
 npm i @chubbyts/chubbyts-framework
 ```
