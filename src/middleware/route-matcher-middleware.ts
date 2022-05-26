@@ -1,5 +1,4 @@
 import { htmlTemplate, HttpError, isHttpError } from '../http-error';
-import { Route } from '../router/route';
 import { Match } from '../router/route-matcher';
 import { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
 import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
