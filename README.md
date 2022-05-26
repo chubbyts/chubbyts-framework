@@ -23,7 +23,7 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
 
 ## Requirements
 
- * node: 12
+ * node: 14
  * [chubbyts/chubbyts-dic-types][4]: ^1.0.0
  * [chubbyts/chubbyts-http-types][5]: ^1.0.0
  * [path-to-regexp][6]: ^6.2.1
