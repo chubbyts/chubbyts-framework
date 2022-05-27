@@ -1,10 +1,24 @@
-import { htmlTemplate } from '../http-error';
+import { htmlTemplate, HttpError, isHttpError } from '../http-error';
 import type { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import { createLogger, Logger } from '@chubbyts/chubbyts-log-types/dist/log';
 import { throwableToError } from '../throwable-to-error';
+
+const handleHttpError = (createResponse: ResponseFactory, logger: Logger, httpError: HttpError): Response => {
+  logger.info('Http Error', { httpError });
+
+  const response = createResponse(httpError.code);
+  response.body.end(
+    htmlTemplate
+      .replace(/__STATUS__/g, httpError.code.toString())
+      .replace(/__TITLE__/g, httpError.name)
+      .replace(/__BODY__/g, httpError.message),
+  );
+
+  return { ...response, headers: { ...response.headers, 'content-type': ['text/html'] } };
+};
 
 const addDebugToBody = (e: unknown): string => {
   const errors: Array<Error> = [];
@@ -24,7 +38,7 @@ const addDebugToBody = (e: unknown): string => {
     .join('');
 };
 
-const handleError = (responseFactory: ResponseFactory, debug: boolean, logger: Logger, error: unknown): Response => {
+const handleError = (responseFactory: ResponseFactory, logger: Logger, error: unknown, debug: boolean): Response => {
   logger.error('Error', { error });
 
   const response = responseFactory(500);
@@ -49,8 +63,12 @@ export const createErrorMiddleware = (
   return async (request: ServerRequest, handler: Handler) => {
     try {
       return await handler(request);
-    } catch (error) {
-      return handleError(responseFactory, debug, logger, error);
+    } catch (e) {
+      if (isHttpError(e)) {
+        return handleHttpError(responseFactory, logger, e);
+      }
+
+      return handleError(responseFactory, logger, e, debug);
     }
   };
 };

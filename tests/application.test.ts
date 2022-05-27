@@ -11,11 +11,16 @@ describe('createApplication', () => {
 
     const application = createApplication([]);
 
-    await expect(async () => {
+    try {
       await application(request);
-    }).rejects.toThrow(
-      'Request attribute "route" missing or wrong type "undefined", please add the "createRouteHandler" middleware.',
-    );
+      fail('Missing error');
+    } catch (e) {
+      expect(e).toEqual(
+        new Error(
+          'Request attribute "route" missing or wrong type "undefined", please add the "createRouteHandler" middleware.',
+        ),
+      );
+    }
   });
 
   test('with middlewares', async () => {

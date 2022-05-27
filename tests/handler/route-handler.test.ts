@@ -17,11 +17,16 @@ describe('createRouteHandler', () => {
 
     const routeHandler = createRouteHandler(middlewareDispatcher);
 
-    await expect(async () => {
+    try {
       await routeHandler(request);
-    }).rejects.toThrow(
-      'Request attribute "route" missing or wrong type "undefined", please add the "createRouteHandler" middleware.',
-    );
+      fail('Missing error');
+    } catch (e) {
+      expect(e).toEqual(
+        new Error(
+          'Request attribute "route" missing or wrong type "undefined", please add the "createRouteHandler" middleware.',
+        ),
+      );
+    }
 
     expect(middlewareDispatcher).toHaveBeenCalledTimes(0);
   });

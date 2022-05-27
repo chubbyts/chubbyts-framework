@@ -35,7 +35,7 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```ts
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^1.0.0 \
-  @chubbyts/chubbyts-framework@^1.0.1 \
+  @chubbyts/chubbyts-framework@^1.0.2 \
   @chubbyts/chubbyts-http@^1.0.0
 ```
 
@@ -77,7 +77,6 @@ const app = createApplication([
         }),
       ]),
     ),
-    responseFactory,
   ),
 ]);
 
