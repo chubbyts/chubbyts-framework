@@ -25,7 +25,7 @@ const addDebugToBody = (e: unknown): string => {
 
   do {
     errors.push(throwableToError(e));
-  } while ((e = e && (e as { previous: unknown }).previous));
+  } while ((e = e && (e as { cause: unknown }).cause));
 
   return errors
     .map((error) => {

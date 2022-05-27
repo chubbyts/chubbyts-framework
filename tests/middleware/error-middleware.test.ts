@@ -179,11 +179,11 @@ describe('createErrorMiddleware', () => {
     const error = new Error('error');
     error.stack = 'Error: error\nat Line1\nat Line2';
 
-    const previousError = new Error('previous');
-    previousError.stack = 'Error: previous\nat Line1\nat Line2\nat Line3';
+    const causeError = new Error('cause');
+    causeError.stack = 'Error: cause\nat Line1\nat Line2\nat Line3';
 
     // @ts-ignore
-    error.previous = previousError;
+    error.cause = causeError;
 
     const end = jest.fn((data) => {
       expect(data).toMatchInlineSnapshot(`
@@ -301,7 +301,7 @@ describe('createErrorMiddleware', () => {
                         <div class=\\"text-5xl\\">Internal Server Error</div>
                         <div class=\\"mt-3\\">The requested page failed to load, please try again later.<div class=\\"mt-3\\">Error: error
         <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line1
-        <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line2</div><div class=\\"mt-3\\">Error: previous
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line2</div><div class=\\"mt-3\\">Error: cause
         <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line1
         <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line2
         <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line3</div></div>
