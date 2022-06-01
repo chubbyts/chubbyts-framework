@@ -72,7 +72,7 @@ const app = createApplication([
             const response = responseFactory(200);
             response.body.end(`Hello, ${request.attributes.name}`);
 
-            return { ...response, headers: { ...response.headers, 'content-type': ['text/html'] } };
+            return { ...response, headers: { ...response.headers, 'content-type': ['text/plain'] } };
           },
         }),
       ]),
