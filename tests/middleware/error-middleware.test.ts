@@ -4,7 +4,7 @@ import { createErrorMiddleware } from '../../src/middleware/error-middleware';
 import { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
 import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Logger, NamedLogFn } from '@chubbyts/chubbyts-log-types/dist/log';
-import { HttpError } from '../../src/http-error';
+import { HttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 
 describe('createErrorMiddleware', () => {
   test('successful', async () => {
@@ -507,10 +507,11 @@ describe('createErrorMiddleware', () => {
 
   test('http error with log', async () => {
     const httpError: HttpError = {
-      name: 'Not Found',
-      message:
+      type: 'https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.5',
+      status: 404,
+      title: 'Not Found',
+      detail:
         'The page "/" you are looking for could not be found. Check the address bar to ensure your URL is spelled correctly.',
-      code: 404,
       _httpError: 'NotFound',
     };
 
