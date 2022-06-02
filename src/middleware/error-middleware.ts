@@ -132,7 +132,7 @@ const handleHttpError = (createResponse: ResponseFactory, logger: Logger, httpEr
     htmlTemplate
       .replace(/__STATUS__/g, httpError.status.toString())
       .replace(/__TITLE__/g, httpError.title)
-      .replace(/__BODY__/g, String(httpError.detail)),
+      .replace(/__BODY__/g, httpError.detail ?? ''),
   );
 
   return { ...response, headers: { ...response.headers, 'content-type': ['text/html'] } };
