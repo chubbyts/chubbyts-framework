@@ -2,7 +2,7 @@ import type { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import { createLogger, Logger } from '@chubbyts/chubbyts-log-types/dist/log';
+import { createLogger, Logger, LogLevel } from '@chubbyts/chubbyts-log-types/dist/log';
 import { throwableToError } from '../throwable-to-error';
 import { HttpError, isHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 
@@ -124,15 +124,33 @@ const htmlTemplate: string = `<html>
     </body>
 </html>`;
 
-const handleHttpError = (createResponse: ResponseFactory, logger: Logger, httpError: HttpError): Response => {
-  logger.info('Http Error', { httpError });
+const handleHttpError = (
+  createResponse: ResponseFactory,
+  logger: Logger,
+  httpError: HttpError,
+  debug: boolean,
+): Response => {
+  const { type, status, title, detail, instance, _httpError, ...rest } = httpError;
 
-  const response = createResponse(httpError.status);
+  const isClientError = status < 500;
+
+  logger[isClientError ? LogLevel.INFO : LogLevel.ERROR]('Http Error', { httpError });
+
+  const response = createResponse(status);
   response.body.end(
     htmlTemplate
-      .replace(/__STATUS__/g, httpError.status.toString())
-      .replace(/__TITLE__/g, httpError.title)
-      .replace(/__BODY__/g, httpError.detail ?? ''),
+      .replace(/__STATUS__/g, status.toString())
+      .replace(/__TITLE__/g, title)
+      .replace(
+        /__BODY__/g,
+        [
+          ...(detail ? [detail] : []),
+          ...(instance ? [instance] : []),
+          ...((isClientError || debug) && Object.keys(rest).length > 0
+            ? [`<pre>${JSON.stringify(rest, undefined, 4)}</pre>`]
+            : []),
+        ].join('<br>'),
+      ),
   );
 
   return { ...response, headers: { ...response.headers, 'content-type': ['text/html'] } };
@@ -183,7 +201,7 @@ export const createErrorMiddleware = (
       return await handler(request);
     } catch (e) {
       if (isHttpError(e)) {
-        return handleHttpError(responseFactory, logger, e);
+        return handleHttpError(responseFactory, logger, e, debug);
       }
 
       return handleError(responseFactory, logger, e, debug);
