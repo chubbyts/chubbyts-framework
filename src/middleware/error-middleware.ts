@@ -124,13 +124,8 @@ const htmlTemplate: string = `<html>
     </body>
 </html>`;
 
-const handleHttpError = (
-  createResponse: ResponseFactory,
-  logger: Logger,
-  httpError: HttpError,
-  debug: boolean,
-): Response => {
-  const { type, status, title, detail, instance, _httpError, ...rest } = httpError;
+const handleHttpError = (createResponse: ResponseFactory, logger: Logger, httpError: HttpError): Response => {
+  const { status, title, detail, instance } = httpError;
 
   const isClientError = status < 500;
 
@@ -141,16 +136,7 @@ const handleHttpError = (
     htmlTemplate
       .replace(/__STATUS__/g, status.toString())
       .replace(/__TITLE__/g, title)
-      .replace(
-        /__BODY__/g,
-        [
-          ...(detail ? [detail] : []),
-          ...(instance ? [instance] : []),
-          ...((isClientError || debug) && Object.keys(rest).length > 0
-            ? [`<pre>${JSON.stringify(rest, undefined, 4)}</pre>`]
-            : []),
-        ].join('<br>'),
-      ),
+      .replace(/__BODY__/g, [...(detail ? [detail] : []), ...(instance ? [instance] : [])].join('<br>')),
   );
 
   return { ...response, headers: { ...response.headers, 'content-type': ['text/html'] } };
@@ -201,7 +187,7 @@ export const createErrorMiddleware = (
       return await handler(request);
     } catch (e) {
       if (isHttpError(e)) {
-        return handleHttpError(responseFactory, logger, e, debug);
+        return handleHttpError(responseFactory, logger, e);
       }
 
       return handleError(responseFactory, logger, e, debug);
