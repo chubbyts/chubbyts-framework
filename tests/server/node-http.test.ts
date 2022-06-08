@@ -59,7 +59,14 @@ describe('http-node', () => {
       const req = {
         method: 'get',
         url: '/api?key=value',
-        headers: { key1: 'value1', key2: ['value2'] },
+        headers: {
+          key1: '   value1',
+          key2: ['value2     '],
+          key3: 'value3,value4',
+          key4: ['value5, value6  ', ' value7, value8 '],
+          key5: [undefined, 'value9'],
+          key6: undefined,
+        },
         httpVersion: '1.1',
       } as unknown as IncomingMessage;
 
@@ -111,6 +118,19 @@ describe('http-node', () => {
             ],
             "key2": Array [
               "value2",
+            ],
+            "key3": Array [
+              "value3",
+              "value4",
+            ],
+            "key4": Array [
+              "value5",
+              "value6",
+              "value7",
+              "value8",
+            ],
+            "key5": Array [
+              "value9",
             ],
           },
           "protocolVersion": "1.1",

@@ -43,6 +43,22 @@ const getUri = (req: IncomingMessage, uriOptions: UriOptions): string => {
   return schema + '://' + host + req.url;
 };
 
+const normalizeHeader = (header: string | undefined): Array<string> => {
+  if (undefined === header) {
+    return [];
+  }
+
+  return header.split(',').map((headerPart) => headerPart.trim());
+};
+
+const normalizeHeaders = (headers: Array<string> | string | undefined): Array<string> => {
+  if (Array.isArray(headers)) {
+    return headers.flatMap(normalizeHeader);
+  }
+
+  return normalizeHeader(headers);
+};
+
 type NodeToServerRequestFactory = (req: IncomingMessage) => ServerRequest;
 
 export const createNodeToServerRequestFactory = (
@@ -60,9 +76,9 @@ export const createNodeToServerRequestFactory = (
 
     const headers = Object.fromEntries(
       Object.entries(req.headers)
-        .filter(([_, value]) => value !== undefined)
-        .map(([name, value]) => [name, Array.isArray(value) ? value : [value]]),
-    ) as Record<string, Array<string>>;
+        .map(([name, value]) => [name, normalizeHeaders(value)])
+        .filter(([_, value]) => value.length),
+    );
 
     return {
       ...serverRequestFactory(req.method.toUpperCase() as Method, uri),
