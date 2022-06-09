@@ -3,7 +3,7 @@ import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import { createLogger, Logger, LogLevel } from '@chubbyts/chubbyts-log-types/dist/log';
-import { throwableToError } from '../throwable-to-error';
+import { throwableToError } from '@chubbyts/chubbyts-throwable-to-error/dist/throwable-to-error';
 import { HttpError, isHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 
 const htmlTemplate: string = `<html>
