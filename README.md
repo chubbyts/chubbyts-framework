@@ -34,14 +34,16 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
 
 Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 
-```ts
+```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^1.0.2 \
-  @chubbyts/chubbyts-framework@^1.2.1 \
+  @chubbyts/chubbyts-framework@^1.3.0 \
   @chubbyts/chubbyts-http@^1.0.0
 ```
 
 ## Usage
+
+### App
 
 ```ts
 import { createApplication } from '@chubbyts/chubbyts-framework/dist/application';
@@ -57,8 +59,6 @@ import {
 } from '@chubbyts/chubbyts-http/dist/message-factory';
 import { createPathToRegexpRouteMatcher } from '@chubbyts/chubbyts-framework-router-path-to-regexp/dist/path-to-regexp-router';
 import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
-import { createServer, IncomingMessage, ServerResponse } from 'http';
-import { createNodeToServerRequestFactory, createResponseToNodeEmitter } from '@chubbyts/chubbyts-framework/dist/server/node-http';
 
 const responseFactory = createResponseFactory();
 
@@ -81,26 +81,29 @@ const app = createApplication([
     ),
   ),
 ]);
-
-const nodeToServerRequestFactory = createNodeToServerRequestFactory(
-  createUriFactory(),
-  createServerRequestFactory(),
-  createStreamFromResourceFactory(),
-);
-
-const responseToNodeEmitter = createResponseToNodeEmitter();
-
-const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
-  responseToNodeEmitter(await app(nodeToServerRequestFactory(req)), res);
-});
-
-const host = '0.0.0.0';
-const port = 8080;
-
-server.listen(port, host, () => {
-  console.log(`Listening to ${host}:${port}`);
-});
 ```
+
+### Server
+
+#### Node
+
+Running the application via the standard node http implementation.
+
+```sh
+npm i @chubbyts/chubbyts-node-http-bridge@^1.0.0
+```
+
+Check the [Usage][10] section.
+
+#### Uwebsockets
+
+Running the application via the uwebsockets http implementation. Linux only. Faster than the node implemenation.
+
+```sh
+npm i @chubbyts/chubbyts-uwebsockets-http-bridge@^1.0.1
+```
+
+Check the [Usage][11] section.
 
 ## Copyright
 
@@ -114,3 +117,6 @@ Dominik Zogg 2022
 [6]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-types
 [7]: https://www.npmjs.com/package/@chubbyts/chubbyts-log-types
 [8]: https://www.npmjs.com/package/@chubbyts/chubbyts-throwable-to-error
+
+[10]: https://github.com/chubbyts/chubbyts-node-http-bridge#usage
+[11]: https://github.com/chubbyts/chubbyts-uwebsockets-http-bridge#usage
