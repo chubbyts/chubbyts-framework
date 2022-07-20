@@ -105,6 +105,11 @@ npm i @chubbyts/chubbyts-uwebsockets-http-bridge@^1.0.1
 
 Check the [Usage][11] section.
 
+## Skeleton
+
+ * [chubbyts/chubbyts-framework-skeleton][20]
+ * [chubbyts/chubbyts-petstore][21]
+
 ## Copyright
 
 Dominik Zogg 2022
@@ -120,3 +125,6 @@ Dominik Zogg 2022
 
 [10]: https://github.com/chubbyts/chubbyts-node-http-bridge#usage
 [11]: https://github.com/chubbyts/chubbyts-uwebsockets-http-bridge#usage
+
+[20]: https://github.com/chubbyts/chubbyts-framework-skeleton
+[21]: https://github.com/chubbyts/chubbyts-petstore
