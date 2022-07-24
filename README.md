@@ -21,6 +21,8 @@
 
 A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based microframework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.
 
+![Workflow](resources/workflow.svg "Workflow")
+
 ## Requirements
 
  * node: 14
