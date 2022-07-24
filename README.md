@@ -118,7 +118,7 @@ Dominik Zogg 2022
 
 [1]: https://www.npmjs.com/package/@chubbyts/chubbyts-framework
 [2]: https://web-frameworks-benchmark.netlify.app/result
-[3]: https://www.php-fig.org/psr/psr-15
+[3]: https://www.php-fig.org/psr/psr-15/#2-interfaces
 [4]: https://www.npmjs.com/package/@chubbyts/chubbyts-dic-types
 [5]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-error
 [6]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-types
