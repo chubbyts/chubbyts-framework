@@ -39,7 +39,7 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^1.0.2 \
-  @chubbyts/chubbyts-framework@^1.3.1 \
+  @chubbyts/chubbyts-framework@^1.3.2 \
   @chubbyts/chubbyts-http@^1.0.0
 ```
 
@@ -125,8 +125,8 @@ Dominik Zogg 2022
 [7]: https://www.npmjs.com/package/@chubbyts/chubbyts-log-types
 [8]: https://www.npmjs.com/package/@chubbyts/chubbyts-throwable-to-error
 
-[10]: https://github.com/chubbyts/chubbyts-node-http-bridge#usage
-[11]: https://github.com/chubbyts/chubbyts-uwebsockets-http-bridge#usage
+[10]: https://www.npmjs.com/package/@chubbyts/chubbyts-node-http-bridge#usage
+[11]: https://www.npmjs.com/package/@chubbyts/chubbyts-uwebsockets-http-bridge#usage
 
 [20]: https://github.com/chubbyts/chubbyts-framework-skeleton
 [21]: https://github.com/chubbyts/chubbyts-petstore
