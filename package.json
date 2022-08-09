@@ -18,8 +18,8 @@
     "cs": "prettier --check src tests",
     "test": "jest",
     "infection": "stryker run",
-    "build": "tsc",
-    "prepare": "rm -Rf dist && npm run build && npm run cs && npm run test"
+    "build": "rm -Rf dist && tsc",
+    "prepare": "npm run build"
   },
   "jest": {
     "preset": "ts-jest",
