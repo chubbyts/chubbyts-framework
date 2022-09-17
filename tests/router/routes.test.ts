@@ -18,17 +18,17 @@ describe('routes', () => {
       ])(),
     ).toMatchInlineSnapshot(`
       Map {
-        "pet_read" => Object {
+        "pet_read" => {
           "_route": "Route",
-          "attributes": Object {},
+          "attributes": {},
           "handler": [MockFunction],
           "method": "GET",
-          "middlewares": Array [
+          "middlewares": [
             [MockFunction],
           ],
           "name": "pet_read",
           "path": "/api/pet/{id}",
-          "pathOptions": Object {
+          "pathOptions": {
             "name": "read",
           },
         },

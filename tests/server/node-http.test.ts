@@ -111,31 +111,31 @@ describe('http-node', () => {
       expect(body).toBeInstanceOf(Stream);
 
       expect(rest).toMatchInlineSnapshot(`
-        Object {
-          "headers": Object {
-            "key1": Array [
+        {
+          "headers": {
+            "key1": [
               "value1",
             ],
-            "key2": Array [
+            "key2": [
               "value2",
             ],
-            "key3": Array [
+            "key3": [
               "value3",
               "value4",
             ],
-            "key4": Array [
+            "key4": [
               "value5",
               "value6",
               "value7",
               "value8",
             ],
-            "key5": Array [
+            "key5": [
               "value9",
             ],
           },
           "protocolVersion": "1.1",
-          "uri": Object {
-            "query": Object {
+          "uri": {
+            "query": {
               "key": "value",
             },
           },
@@ -196,21 +196,21 @@ describe('http-node', () => {
       expect(body).toBeInstanceOf(Stream);
 
       expect(rest).toMatchInlineSnapshot(`
-        Object {
-          "headers": Object {
-            "host": Array [
+        {
+          "headers": {
+            "host": [
               "localhost:10080",
             ],
-            "key1": Array [
+            "key1": [
               "value1",
             ],
-            "key2": Array [
+            "key2": [
               "value2",
             ],
           },
           "protocolVersion": "1.1",
-          "uri": Object {
-            "query": Object {
+          "uri": {
+            "query": {
               "key": "value",
             },
           },
@@ -304,21 +304,21 @@ describe('http-node', () => {
       expect(body).toBeInstanceOf(Stream);
 
       expect(rest).toMatchInlineSnapshot(`
-        Object {
-          "headers": Object {
-            "x-forwarded-host": Array [
+        {
+          "headers": {
+            "x-forwarded-host": [
               "localhost",
             ],
-            "x-forwarded-port": Array [
+            "x-forwarded-port": [
               "10443",
             ],
-            "x-forwarded-proto": Array [
+            "x-forwarded-proto": [
               "https",
             ],
           },
           "protocolVersion": "1.1",
-          "uri": Object {
-            "query": Object {
+          "uri": {
+            "query": {
               "key": "value",
             },
           },
@@ -381,10 +381,10 @@ describe('http-node', () => {
       expect(body).toBeInstanceOf(Stream);
 
       expect(rest).toMatchInlineSnapshot(`
-        Object {
-          "headers": Object {},
+        {
+          "headers": {},
           "protocolVersion": "1.1",
-          "uri": Object {},
+          "uri": {},
         }
       `);
 

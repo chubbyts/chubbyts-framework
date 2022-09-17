@@ -27,12 +27,12 @@ describe('group', () => {
           children: [],
         }),
       ).toMatchInlineSnapshot(`
-        Object {
+        {
           "_group": "Group",
-          "children": Array [],
-          "middlewares": Array [],
+          "children": [],
+          "middlewares": [],
           "path": "/api",
-          "pathOptions": Object {},
+          "pathOptions": {},
         }
       `);
     });
@@ -47,26 +47,27 @@ describe('group', () => {
               children: [],
             }),
           ],
+
           middlewares: [jest.fn()],
           pathOptions: { key: 'value' },
         }),
       ).toMatchInlineSnapshot(`
-        Object {
+        {
           "_group": "Group",
-          "children": Array [
-            Object {
+          "children": [
+            {
               "_group": "Group",
-              "children": Array [],
-              "middlewares": Array [],
+              "children": [],
+              "middlewares": [],
               "path": "/pet",
-              "pathOptions": Object {},
+              "pathOptions": {},
             },
           ],
-          "middlewares": Array [
+          "middlewares": [
             [MockFunction],
           ],
           "path": "/api",
-          "pathOptions": Object {
+          "pathOptions": {
             "key": "value",
           },
         }
@@ -131,92 +132,92 @@ describe('group', () => {
     });
 
     expect(getRoutes(group)).toMatchInlineSnapshot(`
-      Array [
-        Object {
+      [
+        {
           "_route": "Route",
-          "attributes": Object {},
+          "attributes": {},
           "handler": [MockFunction],
           "method": "GET",
-          "middlewares": Array [
+          "middlewares": [
             [MockFunction],
             [MockFunction],
             [MockFunction],
           ],
           "name": "pet_list",
           "path": "/api/pet/",
-          "pathOptions": Object {
+          "pathOptions": {
             "name1": "api",
             "name2": "pet",
             "name3": "list",
           },
         },
-        Object {
+        {
           "_route": "Route",
-          "attributes": Object {},
+          "attributes": {},
           "handler": [MockFunction],
           "method": "POST",
-          "middlewares": Array [
+          "middlewares": [
             [MockFunction],
             [MockFunction],
             [MockFunction],
           ],
           "name": "pet_create",
           "path": "/api/pet/",
-          "pathOptions": Object {
+          "pathOptions": {
             "name1": "api",
             "name2": "pet",
             "name3": "create",
           },
         },
-        Object {
+        {
           "_route": "Route",
-          "attributes": Object {},
+          "attributes": {},
           "handler": [MockFunction],
           "method": "GET",
-          "middlewares": Array [
+          "middlewares": [
             [MockFunction],
             [MockFunction],
             [MockFunction],
           ],
           "name": "pet_read",
           "path": "/api/pet/{id}",
-          "pathOptions": Object {
+          "pathOptions": {
             "name1": "api",
             "name2": "pet",
             "name3": "read",
           },
         },
-        Object {
+        {
           "_route": "Route",
-          "attributes": Object {},
+          "attributes": {},
           "handler": [MockFunction],
           "method": "PUT",
-          "middlewares": Array [
+          "middlewares": [
             [MockFunction],
             [MockFunction],
             [MockFunction],
           ],
           "name": "pet_update",
           "path": "/api/pet/{id}",
-          "pathOptions": Object {
+          "pathOptions": {
             "name1": "api",
             "name2": "pet",
             "name3": "update",
           },
         },
-        Object {
+        {
           "_route": "Route",
-          "attributes": Object {},
+          "attributes": {},
           "handler": [MockFunction],
           "method": "DELETE",
-          "middlewares": Array [
+          "middlewares": [
             [MockFunction],
             [MockFunction],
             [MockFunction],
           ],
           "name": "pet_delete",
           "path": "/api/pet/{id}",
-          "pathOptions": Object {
+          "pathOptions": {
             "name1": "api",
             "name2": "pet",
             "name3": "delete",

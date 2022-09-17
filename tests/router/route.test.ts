@@ -38,15 +38,15 @@ describe('route', () => {
           handler: jest.fn(),
         }),
       ).toMatchInlineSnapshot(`
-        Object {
+        {
           "_route": "Route",
-          "attributes": Object {},
+          "attributes": {},
           "handler": [MockFunction],
           "method": "GET",
-          "middlewares": Array [],
+          "middlewares": [],
           "name": "pet_read",
           "path": "/api/pet/{id}",
-          "pathOptions": Object {},
+          "pathOptions": {},
         }
       `);
     });
@@ -62,17 +62,17 @@ describe('route', () => {
           pathOptions: { name: 'read' },
         }),
       ).toMatchInlineSnapshot(`
-        Object {
+        {
           "_route": "Route",
-          "attributes": Object {},
+          "attributes": {},
           "handler": [MockFunction],
           "method": "GET",
-          "middlewares": Array [
+          "middlewares": [
             [MockFunction],
           ],
           "name": "pet_read",
           "path": "/api/pet/{id}",
-          "pathOptions": Object {
+          "pathOptions": {
             "name": "read",
           },
         }
@@ -90,17 +90,17 @@ describe('route', () => {
         pathOptions: { name: 'delete' },
       }),
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "_route": "Route",
-        "attributes": Object {},
+        "attributes": {},
         "handler": [MockFunction],
         "method": "DELETE",
-        "middlewares": Array [
+        "middlewares": [
           [MockFunction],
         ],
         "name": "pet_delete",
         "path": "/api/pet/{id}",
-        "pathOptions": Object {
+        "pathOptions": {
           "name": "delete",
         },
       }
@@ -117,17 +117,17 @@ describe('route', () => {
         pathOptions: { name: 'read' },
       }),
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "_route": "Route",
-        "attributes": Object {},
+        "attributes": {},
         "handler": [MockFunction],
         "method": "GET",
-        "middlewares": Array [
+        "middlewares": [
           [MockFunction],
         ],
         "name": "pet_read",
         "path": "/api/pet/{id}",
-        "pathOptions": Object {
+        "pathOptions": {
           "name": "read",
         },
       }
@@ -144,17 +144,17 @@ describe('route', () => {
         pathOptions: { name: 'head' },
       }),
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "_route": "Route",
-        "attributes": Object {},
+        "attributes": {},
         "handler": [MockFunction],
         "method": "HEAD",
-        "middlewares": Array [
+        "middlewares": [
           [MockFunction],
         ],
         "name": "pet_head",
         "path": "/api/pet/{id}",
-        "pathOptions": Object {
+        "pathOptions": {
           "name": "head",
         },
       }
@@ -171,17 +171,17 @@ describe('route', () => {
         pathOptions: { name: 'options' },
       }),
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "_route": "Route",
-        "attributes": Object {},
+        "attributes": {},
         "handler": [MockFunction],
         "method": "OPTIONS",
-        "middlewares": Array [
+        "middlewares": [
           [MockFunction],
         ],
         "name": "pet_options",
         "path": "/api/pet/{id}",
-        "pathOptions": Object {
+        "pathOptions": {
           "name": "options",
         },
       }
@@ -198,17 +198,17 @@ describe('route', () => {
         pathOptions: { name: 'patch' },
       }),
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "_route": "Route",
-        "attributes": Object {},
+        "attributes": {},
         "handler": [MockFunction],
         "method": "PATCH",
-        "middlewares": Array [
+        "middlewares": [
           [MockFunction],
         ],
         "name": "pet_patch",
         "path": "/api/pet/{id}",
-        "pathOptions": Object {
+        "pathOptions": {
           "name": "patch",
         },
       }
@@ -225,17 +225,17 @@ describe('route', () => {
         pathOptions: { name: 'post' },
       }),
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "_route": "Route",
-        "attributes": Object {},
+        "attributes": {},
         "handler": [MockFunction],
         "method": "POST",
-        "middlewares": Array [
+        "middlewares": [
           [MockFunction],
         ],
         "name": "pet_post",
         "path": "/api/pet/{id}",
-        "pathOptions": Object {
+        "pathOptions": {
           "name": "post",
         },
       }
@@ -252,17 +252,17 @@ describe('route', () => {
         pathOptions: { name: 'put' },
       }),
     ).toMatchInlineSnapshot(`
-      Object {
+      {
         "_route": "Route",
-        "attributes": Object {},
+        "attributes": {},
         "handler": [MockFunction],
         "method": "PUT",
-        "middlewares": Array [
+        "middlewares": [
           [MockFunction],
         ],
         "name": "pet_put",
         "path": "/api/pet/{id}",
-        "pathOptions": Object {
+        "pathOptions": {
           "name": "put",
         },
       }

@@ -33,7 +33,7 @@ describe('createErrorMiddleware', () => {
       expect(data).toMatchInlineSnapshot(`
         "<html>
             <head>
-                <meta http-equiv=\\"Content-Type\\" content=\\"text/html; charset=utf-8\\">
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <title>Internal Server Error</title>
                 <style>
                     html {
@@ -139,11 +139,11 @@ describe('createErrorMiddleware', () => {
                 </style>
             </head>
             <body>
-                <div class=\\"container mx-auto tracking-tighter mt-12\\">
-                    <div class=\\"inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl\\">500</div>
-                    <div class=\\"inline-block align-top\\">
-                        <div class=\\"text-5xl\\">Internal Server Error</div>
-                        <div class=\\"mt-3\\">The requested page failed to load, please try again later.</div>
+                <div class="container mx-auto tracking-tighter mt-12">
+                    <div class="inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl">500</div>
+                    <div class="inline-block align-top">
+                        <div class="text-5xl">Internal Server Error</div>
+                        <div class="mt-3">The requested page failed to load, please try again later.</div>
                     </div>
                 </div>
             </body>
@@ -189,7 +189,7 @@ describe('createErrorMiddleware', () => {
       expect(data).toMatchInlineSnapshot(`
         "<html>
             <head>
-                <meta http-equiv=\\"Content-Type\\" content=\\"text/html; charset=utf-8\\">
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <title>Internal Server Error</title>
                 <style>
                     html {
@@ -295,13 +295,13 @@ describe('createErrorMiddleware', () => {
                 </style>
             </head>
             <body>
-                <div class=\\"container mx-auto tracking-tighter mt-12\\">
-                    <div class=\\"inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl\\">500</div>
-                    <div class=\\"inline-block align-top\\">
-                        <div class=\\"text-5xl\\">Internal Server Error</div>
-                        <div class=\\"mt-3\\">The requested page failed to load, please try again later.<div class=\\"mt-3\\">Error: error
+                <div class="container mx-auto tracking-tighter mt-12">
+                    <div class="inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl">500</div>
+                    <div class="inline-block align-top">
+                        <div class="text-5xl">Internal Server Error</div>
+                        <div class="mt-3">The requested page failed to load, please try again later.<div class="mt-3">Error: error
         <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line1
-        <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line2</div><div class=\\"mt-3\\">Error: cause
+        <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line2</div><div class="mt-3">Error: cause
         <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line1
         <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line2
         <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line3</div></div>
@@ -353,7 +353,7 @@ describe('createErrorMiddleware', () => {
       expect(data).toMatchInlineSnapshot(`
         "<html>
             <head>
-                <meta http-equiv=\\"Content-Type\\" content=\\"text/html; charset=utf-8\\">
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <title>Internal Server Error</title>
                 <style>
                     html {
@@ -459,11 +459,11 @@ describe('createErrorMiddleware', () => {
                 </style>
             </head>
             <body>
-                <div class=\\"container mx-auto tracking-tighter mt-12\\">
-                    <div class=\\"inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl\\">500</div>
-                    <div class=\\"inline-block align-top\\">
-                        <div class=\\"text-5xl\\">Internal Server Error</div>
-                        <div class=\\"mt-3\\">The requested page failed to load, please try again later.<div class=\\"mt-3\\">string: error</div></div>
+                <div class="container mx-auto tracking-tighter mt-12">
+                    <div class="inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl">500</div>
+                    <div class="inline-block align-top">
+                        <div class="text-5xl">Internal Server Error</div>
+                        <div class="mt-3">The requested page failed to load, please try again later.<div class="mt-3">string: error</div></div>
                     </div>
                 </div>
             </body>
@@ -519,7 +519,7 @@ describe('createErrorMiddleware', () => {
       expect(data).toMatchInlineSnapshot(`
         "<html>
             <head>
-                <meta http-equiv=\\"Content-Type\\" content=\\"text/html; charset=utf-8\\">
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <title>Bad Request</title>
                 <style>
                     html {
@@ -625,11 +625,11 @@ describe('createErrorMiddleware', () => {
                 </style>
             </head>
             <body>
-                <div class=\\"container mx-auto tracking-tighter mt-12\\">
-                    <div class=\\"inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl\\">400</div>
-                    <div class=\\"inline-block align-top\\">
-                        <div class=\\"text-5xl\\">Bad Request</div>
-                        <div class=\\"mt-3\\">The given data is not valid<br>some-instance</div>
+                <div class="container mx-auto tracking-tighter mt-12">
+                    <div class="inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl">400</div>
+                    <div class="inline-block align-top">
+                        <div class="text-5xl">Bad Request</div>
+                        <div class="mt-3">The given data is not valid<br>some-instance</div>
                     </div>
                 </div>
             </body>
@@ -683,7 +683,7 @@ describe('createErrorMiddleware', () => {
       expect(data).toMatchInlineSnapshot(`
         "<html>
             <head>
-                <meta http-equiv=\\"Content-Type\\" content=\\"text/html; charset=utf-8\\">
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <title>Internal Server Error</title>
                 <style>
                     html {
@@ -789,11 +789,11 @@ describe('createErrorMiddleware', () => {
                 </style>
             </head>
             <body>
-                <div class=\\"container mx-auto tracking-tighter mt-12\\">
-                    <div class=\\"inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl\\">500</div>
-                    <div class=\\"inline-block align-top\\">
-                        <div class=\\"text-5xl\\">Internal Server Error</div>
-                        <div class=\\"mt-3\\"></div>
+                <div class="container mx-auto tracking-tighter mt-12">
+                    <div class="inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl">500</div>
+                    <div class="inline-block align-top">
+                        <div class="text-5xl">Internal Server Error</div>
+                        <div class="mt-3"></div>
                     </div>
                 </div>
             </body>
