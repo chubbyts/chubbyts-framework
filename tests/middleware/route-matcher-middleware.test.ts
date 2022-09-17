@@ -4,7 +4,7 @@ import { Match } from '../../src/router/route-matcher';
 import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { createRouteMatcherMiddleware } from '../../src/middleware/route-matcher-middleware';
 import { Route } from '../../src/router/route';
-import { HttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import { createNotFound, HttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 
 describe('createRouteMatcherMiddleware', () => {
   test('match', async () => {
@@ -36,14 +36,10 @@ describe('createRouteMatcherMiddleware', () => {
   });
 
   test('no match', async () => {
-    const httpError: HttpError = {
-      type: 'https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.5',
-      status: 404,
-      title: 'Not Found',
+    const httpError = createNotFound({
       detail:
         'The page "/" you are looking for could not be found. Check the address bar to ensure your URL is spelled correctly.',
-      _httpError: 'NotFound',
-    };
+    });
 
     const request = {} as ServerRequest;
     const response = {} as Response;

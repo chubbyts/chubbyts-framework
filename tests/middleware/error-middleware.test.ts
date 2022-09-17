@@ -4,7 +4,7 @@ import { createErrorMiddleware } from '../../src/middleware/error-middleware';
 import { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
 import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Logger, NamedLogFn } from '@chubbyts/chubbyts-log-types/dist/log';
-import { HttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import { createBadRequest, createInternalServerError, HttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 
 describe('createErrorMiddleware', () => {
   test('successful', async () => {
@@ -506,14 +506,10 @@ describe('createErrorMiddleware', () => {
   });
 
   test('http error: client', async () => {
-    const httpError: HttpError = {
-      type: 'https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.1',
-      status: 400,
-      title: 'Bad Request',
+    const httpError = createBadRequest({
       detail: 'The given data is not valid',
       instance: 'some-instance',
-      _httpError: 'BadRequest',
-    };
+    });
 
     const end = jest.fn((data) => {
       expect(data).toMatchInlineSnapshot(`
@@ -672,12 +668,7 @@ describe('createErrorMiddleware', () => {
   });
 
   test('http error: server', async () => {
-    const httpError: HttpError = {
-      type: 'https://datatracker.ietf.org/doc/html/rfc2616#section-10.5.1',
-      status: 500,
-      title: 'Internal Server Error',
-      _httpError: 'InternalServerError',
-    };
+    const httpError = createInternalServerError({});
 
     const end = jest.fn((data) => {
       expect(data).toMatchInlineSnapshot(`
