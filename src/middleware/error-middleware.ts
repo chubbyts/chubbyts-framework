@@ -4,9 +4,10 @@ import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import { createLogger, Logger, LogLevel } from '@chubbyts/chubbyts-log-types/dist/log';
 import { throwableToError } from '@chubbyts/chubbyts-throwable-to-error/dist/throwable-to-error';
-import { HttpError, isHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import { createInternalServerError, HttpError, isHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 
-const htmlTemplate: string = `<html>
+const htmlTemplate: string = `<!DOCTYPE html>
+<html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <title>__TITLE__</title>
@@ -30,6 +31,75 @@ const htmlTemplate: string = `<html>
                 width: 100%
             }
 
+            .mx-auto {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .mt-12 {
+                margin-top: 3rem;
+            }
+
+            .mb-12 {
+                margin-bottom: 3rem;
+            }
+
+            .text-gray-400 {
+                --tw-text-opacity: 1;
+                color: rgba(156, 163, 175, var(--tw-text-opacity));
+            }
+
+            .text-5xl {
+                font-size: 3rem;
+                line-height: 1;
+            }
+
+            .text-right {
+                text-align: right;
+            }
+
+            .tracking-tighter {
+                letter-spacing: -.05em;
+            }
+
+            .flex {
+                display: flex;
+            }
+
+            .flex-row {
+                flex-direction: row;
+            }
+
+            .basis-2\\/12 {
+                flex-basis: 16.666667%;
+            }
+
+            .basis-10\\/12 {
+                flex-basis: 83.333333%;
+            }
+
+            .space-x-8>:not([hidden])~:not([hidden]) {
+                --tw-space-x-reverse: 0;
+                margin-right: calc(2rem * var(--tw-space-x-reverse));
+                margin-left: calc(2rem * calc(1 - var(--tw-space-x-reverse)))
+            }
+
+            .gap-x-4 {
+                column-gap: 1rem;
+            }
+
+            .gap-y-1\\.5 {
+                row-gap: 0.375rem;
+            }
+
+            .grid-cols-1 {
+                grid-template-columns: repeat(1, minmax(0, 1fr));
+            }
+
+            .grid {
+                display: grid;
+            }
+
             @media (min-width:640px) {
                 .container {
                     max-width: 640px
@@ -39,6 +109,14 @@ const htmlTemplate: string = `<html>
             @media (min-width:768px) {
                 .container {
                     max-width: 768px
+                }
+
+                .md\\:grid-cols-8 {
+                    grid-template-columns: repeat(8, minmax(0, 1fr));
+                }
+
+                .md\\:col-span-7 {
+                    grid-column: span 7/span 7
                 }
             }
 
@@ -59,72 +137,44 @@ const htmlTemplate: string = `<html>
                     max-width: 1536px
                 }
             }
-
-            .mx-auto {
-                margin-left: auto;
-                margin-right: auto;
-            }
-
-            .inline-block {
-                display: inline-block;
-            }
-
-            .align-top {
-                vertical-align: top;
-            }
-
-            .mt-3 {
-                margin-top: .75rem;
-            }
-
-            .mt-12 {
-                margin-top: 3rem;
-            }
-
-            .mr-5 {
-                margin-right: 1.25rem;
-            }
-
-            .pr-5 {
-                padding-right: 1.25rem;
-            }
-
-            .text-gray-400 {
-                --tw-text-opacity: 1;
-                color: rgba(156, 163, 175, var(--tw-text-opacity));
-            }
-
-            .text-5xl {
-                font-size: 3rem;
-                line-height: 1;
-            }
-
-            .tracking-tighter {
-                letter-spacing: -.05em;
-            }
-
-            .border-gray-400 {
-                --tw-border-opacity: 1;
-                border-color: rgba(156, 163, 175, var(--tw-border-opacity));
-            }
-
-            .border-r-2 {
-                border-right-width: 2px;
-            }
         </style>
     </head>
     <body>
         <div class="container mx-auto tracking-tighter mt-12">
-            <div class="inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl">__STATUS__</div>
-            <div class="inline-block align-top">
-                <div class="text-5xl">__TITLE__</div>
-                <div class="mt-3">__BODY__</div>
+            <div class="flex flex-row space-x-8">
+                <div class="basis-1/12 text-5xl text-gray-400 text-right">__STATUS__</div>
+                <div class="basis-11/12">
+                    <span class="text-5xl">__TITLE__</span>__BODY__
+                </div>
             </div>
         </div>
     </body>
 </html>`;
 
-const handleHttpError = (createResponse: ResponseFactory, logger: Logger, httpError: HttpError): Response => {
+const addDebugToBody = (e: unknown): string => {
+  const errors: Array<Error> = [];
+
+  do {
+    errors.push(throwableToError(e));
+  } while ((e = e && (e as { cause: unknown }).cause));
+
+  return errors
+    .map((error, i) => {
+      return `<div class="${i === 0 ? 'mt-12 ' : ''}mb-12">${
+        !error.stack
+          ? `${error.name}: ${error.message}`
+          : error.stack.replace(/at /gm, '<br>&nbsp;&nbsp;&nbsp;&nbsp;at ')
+      }</div>`;
+    })
+    .join('\n');
+};
+
+const handleHttpError = (
+  createResponse: ResponseFactory,
+  logger: Logger,
+  httpError: HttpError,
+  debug: boolean,
+): Response => {
   const { status, title, detail, instance } = httpError;
 
   const isClientError = status < 500;
@@ -136,45 +186,27 @@ const handleHttpError = (createResponse: ResponseFactory, logger: Logger, httpEr
     htmlTemplate
       .replace(/__STATUS__/g, status.toString())
       .replace(/__TITLE__/g, title)
-      .replace(/__BODY__/g, [...(detail ? [detail] : []), ...(instance ? [instance] : [])].join('<br>')),
-  );
-
-  return { ...response, headers: { ...response.headers, 'content-type': ['text/html'] } };
-};
-
-const addDebugToBody = (e: unknown): string => {
-  const errors: Array<Error> = [];
-
-  do {
-    errors.push(throwableToError(e));
-  } while ((e = e && (e as { cause: unknown }).cause));
-
-  return errors
-    .map((error) => {
-      if (!error.stack) {
-        return `<div class="mt-3">${error.name}: ${error.message}</div>`;
-      }
-
-      return `<div class="mt-3">${error.stack.replace(/at /gm, '<br>&nbsp;&nbsp;&nbsp;&nbsp;at ')}</div>`;
-    })
-    .join('');
-};
-
-const handleError = (responseFactory: ResponseFactory, logger: Logger, error: unknown, debug: boolean): Response => {
-  logger.error('Error', { error });
-
-  const response = responseFactory(500);
-  response.body.end(
-    htmlTemplate
-      .replace(/__STATUS__/g, '500')
-      .replace(/__TITLE__/g, 'Internal Server Error')
       .replace(
         /__BODY__/g,
-        `The requested page failed to load, please try again later.${debug ? addDebugToBody(error) : ''}`,
+        [
+          ...(detail ? [`<p>${detail}</p>`] : []),
+          ...(instance ? [`<p>${instance}</p>`] : []),
+          ...(debug ? [addDebugToBody(httpError)] : []),
+        ].join(''),
       ),
   );
 
   return { ...response, headers: { ...response.headers, 'content-type': ['text/html'] } };
+};
+
+const createHttpErrorFromError = (e: unknown): HttpError => {
+  const httpError = createInternalServerError({
+    detail: 'A website error has occurred. Sorry for the temporary inconvenience.',
+  });
+
+  httpError.cause = e;
+
+  return httpError;
 };
 
 export const createErrorMiddleware = (
@@ -186,11 +218,7 @@ export const createErrorMiddleware = (
     try {
       return await handler(request);
     } catch (e) {
-      if (isHttpError(e)) {
-        return handleHttpError(responseFactory, logger, e);
-      }
-
-      return handleError(responseFactory, logger, e, debug);
+      return handleHttpError(responseFactory, logger, isHttpError(e) ? e : createHttpErrorFromError(e), debug);
     }
   };
 };

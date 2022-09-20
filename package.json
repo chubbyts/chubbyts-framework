@@ -1,6 +1,6 @@
 {
   "name": "@chubbyts/chubbyts-framework",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "A minimal, highly performant middleware PSR-15 inspired function based microframework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.",
   "keywords": [
     "chubbyts",

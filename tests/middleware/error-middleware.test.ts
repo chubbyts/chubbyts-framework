@@ -4,7 +4,9 @@ import { createErrorMiddleware } from '../../src/middleware/error-middleware';
 import { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
 import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Logger, NamedLogFn } from '@chubbyts/chubbyts-log-types/dist/log';
-import { createBadRequest, createInternalServerError, HttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import { createBadRequest, createInternalServerError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+
+const replaceStackLines = (data: string) => data.replace(/.*<br>&nbsp;&nbsp;&nbsp;&nbsp;at.*\n/g, '');
 
 describe('createErrorMiddleware', () => {
   test('successful', async () => {
@@ -29,9 +31,10 @@ describe('createErrorMiddleware', () => {
   test('error, without debug and without log', async () => {
     const error = new Error('error');
 
-    const end = jest.fn((data) => {
-      expect(data).toMatchInlineSnapshot(`
-        "<html>
+    const end = jest.fn((data: string) => {
+      expect(replaceStackLines(data)).toMatchInlineSnapshot(`
+        "<!DOCTYPE html>
+        <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <title>Internal Server Error</title>
@@ -55,6 +58,75 @@ describe('createErrorMiddleware', () => {
                         width: 100%
                     }
 
+                    .mx-auto {
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+
+                    .mt-12 {
+                        margin-top: 3rem;
+                    }
+
+                    .mb-12 {
+                        margin-bottom: 3rem;
+                    }
+
+                    .text-gray-400 {
+                        --tw-text-opacity: 1;
+                        color: rgba(156, 163, 175, var(--tw-text-opacity));
+                    }
+
+                    .text-5xl {
+                        font-size: 3rem;
+                        line-height: 1;
+                    }
+
+                    .text-right {
+                        text-align: right;
+                    }
+
+                    .tracking-tighter {
+                        letter-spacing: -.05em;
+                    }
+
+                    .flex {
+                        display: flex;
+                    }
+
+                    .flex-row {
+                        flex-direction: row;
+                    }
+
+                    .basis-2\\/12 {
+                        flex-basis: 16.666667%;
+                    }
+
+                    .basis-10\\/12 {
+                        flex-basis: 83.333333%;
+                    }
+
+                    .space-x-8>:not([hidden])~:not([hidden]) {
+                        --tw-space-x-reverse: 0;
+                        margin-right: calc(2rem * var(--tw-space-x-reverse));
+                        margin-left: calc(2rem * calc(1 - var(--tw-space-x-reverse)))
+                    }
+
+                    .gap-x-4 {
+                        column-gap: 1rem;
+                    }
+
+                    .gap-y-1\\.5 {
+                        row-gap: 0.375rem;
+                    }
+
+                    .grid-cols-1 {
+                        grid-template-columns: repeat(1, minmax(0, 1fr));
+                    }
+
+                    .grid {
+                        display: grid;
+                    }
+
                     @media (min-width:640px) {
                         .container {
                             max-width: 640px
@@ -64,6 +136,14 @@ describe('createErrorMiddleware', () => {
                     @media (min-width:768px) {
                         .container {
                             max-width: 768px
+                        }
+
+                        .md\\:grid-cols-8 {
+                            grid-template-columns: repeat(8, minmax(0, 1fr));
+                        }
+
+                        .md\\:col-span-7 {
+                            grid-column: span 7/span 7
                         }
                     }
 
@@ -84,71 +164,21 @@ describe('createErrorMiddleware', () => {
                             max-width: 1536px
                         }
                     }
-
-                    .mx-auto {
-                        margin-left: auto;
-                        margin-right: auto;
-                    }
-
-                    .inline-block {
-                        display: inline-block;
-                    }
-
-                    .align-top {
-                        vertical-align: top;
-                    }
-
-                    .mt-3 {
-                        margin-top: .75rem;
-                    }
-
-                    .mt-12 {
-                        margin-top: 3rem;
-                    }
-
-                    .mr-5 {
-                        margin-right: 1.25rem;
-                    }
-
-                    .pr-5 {
-                        padding-right: 1.25rem;
-                    }
-
-                    .text-gray-400 {
-                        --tw-text-opacity: 1;
-                        color: rgba(156, 163, 175, var(--tw-text-opacity));
-                    }
-
-                    .text-5xl {
-                        font-size: 3rem;
-                        line-height: 1;
-                    }
-
-                    .tracking-tighter {
-                        letter-spacing: -.05em;
-                    }
-
-                    .border-gray-400 {
-                        --tw-border-opacity: 1;
-                        border-color: rgba(156, 163, 175, var(--tw-border-opacity));
-                    }
-
-                    .border-r-2 {
-                        border-right-width: 2px;
-                    }
                 </style>
             </head>
             <body>
                 <div class="container mx-auto tracking-tighter mt-12">
-                    <div class="inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl">500</div>
-                    <div class="inline-block align-top">
-                        <div class="text-5xl">Internal Server Error</div>
-                        <div class="mt-3">The requested page failed to load, please try again later.</div>
+                    <div class="flex flex-row space-x-8">
+                        <div class="basis-1/12 text-5xl text-gray-400 text-right">500</div>
+                        <div class="basis-11/12">
+                            <span class="text-5xl">Internal Server Error</span><p>A website error has occurred. Sorry for the temporary inconvenience.</p>
+                        </div>
                     </div>
                 </div>
             </body>
         </html>"
       `);
+      expect(data).not.toMatch('Stryker');
     });
 
     const request = {} as ServerRequest;
@@ -185,9 +215,10 @@ describe('createErrorMiddleware', () => {
     // @ts-ignore
     error.cause = causeError;
 
-    const end = jest.fn((data) => {
-      expect(data).toMatchInlineSnapshot(`
-        "<html>
+    const end = jest.fn((data: string) => {
+      expect(replaceStackLines(data)).toMatchInlineSnapshot(`
+        "<!DOCTYPE html>
+        <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <title>Internal Server Error</title>
@@ -211,6 +242,75 @@ describe('createErrorMiddleware', () => {
                         width: 100%
                     }
 
+                    .mx-auto {
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+
+                    .mt-12 {
+                        margin-top: 3rem;
+                    }
+
+                    .mb-12 {
+                        margin-bottom: 3rem;
+                    }
+
+                    .text-gray-400 {
+                        --tw-text-opacity: 1;
+                        color: rgba(156, 163, 175, var(--tw-text-opacity));
+                    }
+
+                    .text-5xl {
+                        font-size: 3rem;
+                        line-height: 1;
+                    }
+
+                    .text-right {
+                        text-align: right;
+                    }
+
+                    .tracking-tighter {
+                        letter-spacing: -.05em;
+                    }
+
+                    .flex {
+                        display: flex;
+                    }
+
+                    .flex-row {
+                        flex-direction: row;
+                    }
+
+                    .basis-2\\/12 {
+                        flex-basis: 16.666667%;
+                    }
+
+                    .basis-10\\/12 {
+                        flex-basis: 83.333333%;
+                    }
+
+                    .space-x-8>:not([hidden])~:not([hidden]) {
+                        --tw-space-x-reverse: 0;
+                        margin-right: calc(2rem * var(--tw-space-x-reverse));
+                        margin-left: calc(2rem * calc(1 - var(--tw-space-x-reverse)))
+                    }
+
+                    .gap-x-4 {
+                        column-gap: 1rem;
+                    }
+
+                    .gap-y-1\\.5 {
+                        row-gap: 0.375rem;
+                    }
+
+                    .grid-cols-1 {
+                        grid-template-columns: repeat(1, minmax(0, 1fr));
+                    }
+
+                    .grid {
+                        display: grid;
+                    }
+
                     @media (min-width:640px) {
                         .container {
                             max-width: 640px
@@ -220,6 +320,14 @@ describe('createErrorMiddleware', () => {
                     @media (min-width:768px) {
                         .container {
                             max-width: 768px
+                        }
+
+                        .md\\:grid-cols-8 {
+                            grid-template-columns: repeat(8, minmax(0, 1fr));
+                        }
+
+                        .md\\:col-span-7 {
+                            grid-column: span 7/span 7
                         }
                     }
 
@@ -240,76 +348,23 @@ describe('createErrorMiddleware', () => {
                             max-width: 1536px
                         }
                     }
-
-                    .mx-auto {
-                        margin-left: auto;
-                        margin-right: auto;
-                    }
-
-                    .inline-block {
-                        display: inline-block;
-                    }
-
-                    .align-top {
-                        vertical-align: top;
-                    }
-
-                    .mt-3 {
-                        margin-top: .75rem;
-                    }
-
-                    .mt-12 {
-                        margin-top: 3rem;
-                    }
-
-                    .mr-5 {
-                        margin-right: 1.25rem;
-                    }
-
-                    .pr-5 {
-                        padding-right: 1.25rem;
-                    }
-
-                    .text-gray-400 {
-                        --tw-text-opacity: 1;
-                        color: rgba(156, 163, 175, var(--tw-text-opacity));
-                    }
-
-                    .text-5xl {
-                        font-size: 3rem;
-                        line-height: 1;
-                    }
-
-                    .tracking-tighter {
-                        letter-spacing: -.05em;
-                    }
-
-                    .border-gray-400 {
-                        --tw-border-opacity: 1;
-                        border-color: rgba(156, 163, 175, var(--tw-border-opacity));
-                    }
-
-                    .border-r-2 {
-                        border-right-width: 2px;
-                    }
                 </style>
             </head>
             <body>
                 <div class="container mx-auto tracking-tighter mt-12">
-                    <div class="inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl">500</div>
-                    <div class="inline-block align-top">
-                        <div class="text-5xl">Internal Server Error</div>
-                        <div class="mt-3">The requested page failed to load, please try again later.<div class="mt-3">Error: error
-        <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line1
-        <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line2</div><div class="mt-3">Error: cause
-        <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line1
-        <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line2
-        <br>&nbsp;&nbsp;&nbsp;&nbsp;at Line3</div></div>
+                    <div class="flex flex-row space-x-8">
+                        <div class="basis-1/12 text-5xl text-gray-400 text-right">500</div>
+                        <div class="basis-11/12">
+                            <span class="text-5xl">Internal Server Error</span><p>A website error has occurred. Sorry for the temporary inconvenience.</p><div class="mt-12 mb-12">Error: Internal Server Error
+        <div class="mb-12">Error: error
+        <div class="mb-12">Error: cause
+                        </div>
                     </div>
                 </div>
             </body>
         </html>"
       `);
+      expect(data).not.toMatch('Stryker');
     });
 
     const request = {} as ServerRequest;
@@ -325,8 +380,12 @@ describe('createErrorMiddleware', () => {
     });
 
     const logError: NamedLogFn = jest.fn((message: string, context: Record<string, any>) => {
-      expect(message).toBe('Error');
-      expect(context).toEqual({ error });
+      expect(message).toBe('Http Error');
+      expect(context).toMatchInlineSnapshot(`
+        {
+          "httpError": [Error: Internal Server Error],
+        }
+      `);
     });
 
     const logger = {
@@ -349,9 +408,10 @@ describe('createErrorMiddleware', () => {
   test('error without stack, with debug and with log', async () => {
     const error = 'error';
 
-    const end = jest.fn((data) => {
-      expect(data).toMatchInlineSnapshot(`
-        "<html>
+    const end = jest.fn((data: string) => {
+      expect(replaceStackLines(data)).toMatchInlineSnapshot(`
+        "<!DOCTYPE html>
+        <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <title>Internal Server Error</title>
@@ -375,6 +435,75 @@ describe('createErrorMiddleware', () => {
                         width: 100%
                     }
 
+                    .mx-auto {
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+
+                    .mt-12 {
+                        margin-top: 3rem;
+                    }
+
+                    .mb-12 {
+                        margin-bottom: 3rem;
+                    }
+
+                    .text-gray-400 {
+                        --tw-text-opacity: 1;
+                        color: rgba(156, 163, 175, var(--tw-text-opacity));
+                    }
+
+                    .text-5xl {
+                        font-size: 3rem;
+                        line-height: 1;
+                    }
+
+                    .text-right {
+                        text-align: right;
+                    }
+
+                    .tracking-tighter {
+                        letter-spacing: -.05em;
+                    }
+
+                    .flex {
+                        display: flex;
+                    }
+
+                    .flex-row {
+                        flex-direction: row;
+                    }
+
+                    .basis-2\\/12 {
+                        flex-basis: 16.666667%;
+                    }
+
+                    .basis-10\\/12 {
+                        flex-basis: 83.333333%;
+                    }
+
+                    .space-x-8>:not([hidden])~:not([hidden]) {
+                        --tw-space-x-reverse: 0;
+                        margin-right: calc(2rem * var(--tw-space-x-reverse));
+                        margin-left: calc(2rem * calc(1 - var(--tw-space-x-reverse)))
+                    }
+
+                    .gap-x-4 {
+                        column-gap: 1rem;
+                    }
+
+                    .gap-y-1\\.5 {
+                        row-gap: 0.375rem;
+                    }
+
+                    .grid-cols-1 {
+                        grid-template-columns: repeat(1, minmax(0, 1fr));
+                    }
+
+                    .grid {
+                        display: grid;
+                    }
+
                     @media (min-width:640px) {
                         .container {
                             max-width: 640px
@@ -384,6 +513,14 @@ describe('createErrorMiddleware', () => {
                     @media (min-width:768px) {
                         .container {
                             max-width: 768px
+                        }
+
+                        .md\\:grid-cols-8 {
+                            grid-template-columns: repeat(8, minmax(0, 1fr));
+                        }
+
+                        .md\\:col-span-7 {
+                            grid-column: span 7/span 7
                         }
                     }
 
@@ -404,71 +541,22 @@ describe('createErrorMiddleware', () => {
                             max-width: 1536px
                         }
                     }
-
-                    .mx-auto {
-                        margin-left: auto;
-                        margin-right: auto;
-                    }
-
-                    .inline-block {
-                        display: inline-block;
-                    }
-
-                    .align-top {
-                        vertical-align: top;
-                    }
-
-                    .mt-3 {
-                        margin-top: .75rem;
-                    }
-
-                    .mt-12 {
-                        margin-top: 3rem;
-                    }
-
-                    .mr-5 {
-                        margin-right: 1.25rem;
-                    }
-
-                    .pr-5 {
-                        padding-right: 1.25rem;
-                    }
-
-                    .text-gray-400 {
-                        --tw-text-opacity: 1;
-                        color: rgba(156, 163, 175, var(--tw-text-opacity));
-                    }
-
-                    .text-5xl {
-                        font-size: 3rem;
-                        line-height: 1;
-                    }
-
-                    .tracking-tighter {
-                        letter-spacing: -.05em;
-                    }
-
-                    .border-gray-400 {
-                        --tw-border-opacity: 1;
-                        border-color: rgba(156, 163, 175, var(--tw-border-opacity));
-                    }
-
-                    .border-r-2 {
-                        border-right-width: 2px;
-                    }
                 </style>
             </head>
             <body>
                 <div class="container mx-auto tracking-tighter mt-12">
-                    <div class="inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl">500</div>
-                    <div class="inline-block align-top">
-                        <div class="text-5xl">Internal Server Error</div>
-                        <div class="mt-3">The requested page failed to load, please try again later.<div class="mt-3">string: error</div></div>
+                    <div class="flex flex-row space-x-8">
+                        <div class="basis-1/12 text-5xl text-gray-400 text-right">500</div>
+                        <div class="basis-11/12">
+                            <span class="text-5xl">Internal Server Error</span><p>A website error has occurred. Sorry for the temporary inconvenience.</p><div class="mt-12 mb-12">Error: Internal Server Error
+        <div class="mb-12">string: error</div>
+                        </div>
                     </div>
                 </div>
             </body>
         </html>"
       `);
+      expect(data).not.toMatch('Stryker');
     });
 
     const request = {} as ServerRequest;
@@ -484,8 +572,12 @@ describe('createErrorMiddleware', () => {
     });
 
     const logError: NamedLogFn = jest.fn((message: string, context: Record<string, any>) => {
-      expect(message).toBe('Error');
-      expect(context).toEqual({ error });
+      expect(message).toBe('Http Error');
+      expect(context).toMatchInlineSnapshot(`
+        {
+          "httpError": [Error: Internal Server Error],
+        }
+      `);
     });
 
     const logger = {
@@ -511,9 +603,10 @@ describe('createErrorMiddleware', () => {
       instance: 'some-instance',
     });
 
-    const end = jest.fn((data) => {
-      expect(data).toMatchInlineSnapshot(`
-        "<html>
+    const end = jest.fn((data: string) => {
+      expect(replaceStackLines(data)).toMatchInlineSnapshot(`
+        "<!DOCTYPE html>
+        <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <title>Bad Request</title>
@@ -537,6 +630,75 @@ describe('createErrorMiddleware', () => {
                         width: 100%
                     }
 
+                    .mx-auto {
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+
+                    .mt-12 {
+                        margin-top: 3rem;
+                    }
+
+                    .mb-12 {
+                        margin-bottom: 3rem;
+                    }
+
+                    .text-gray-400 {
+                        --tw-text-opacity: 1;
+                        color: rgba(156, 163, 175, var(--tw-text-opacity));
+                    }
+
+                    .text-5xl {
+                        font-size: 3rem;
+                        line-height: 1;
+                    }
+
+                    .text-right {
+                        text-align: right;
+                    }
+
+                    .tracking-tighter {
+                        letter-spacing: -.05em;
+                    }
+
+                    .flex {
+                        display: flex;
+                    }
+
+                    .flex-row {
+                        flex-direction: row;
+                    }
+
+                    .basis-2\\/12 {
+                        flex-basis: 16.666667%;
+                    }
+
+                    .basis-10\\/12 {
+                        flex-basis: 83.333333%;
+                    }
+
+                    .space-x-8>:not([hidden])~:not([hidden]) {
+                        --tw-space-x-reverse: 0;
+                        margin-right: calc(2rem * var(--tw-space-x-reverse));
+                        margin-left: calc(2rem * calc(1 - var(--tw-space-x-reverse)))
+                    }
+
+                    .gap-x-4 {
+                        column-gap: 1rem;
+                    }
+
+                    .gap-y-1\\.5 {
+                        row-gap: 0.375rem;
+                    }
+
+                    .grid-cols-1 {
+                        grid-template-columns: repeat(1, minmax(0, 1fr));
+                    }
+
+                    .grid {
+                        display: grid;
+                    }
+
                     @media (min-width:640px) {
                         .container {
                             max-width: 640px
@@ -546,6 +708,14 @@ describe('createErrorMiddleware', () => {
                     @media (min-width:768px) {
                         .container {
                             max-width: 768px
+                        }
+
+                        .md\\:grid-cols-8 {
+                            grid-template-columns: repeat(8, minmax(0, 1fr));
+                        }
+
+                        .md\\:col-span-7 {
+                            grid-column: span 7/span 7
                         }
                     }
 
@@ -566,71 +736,21 @@ describe('createErrorMiddleware', () => {
                             max-width: 1536px
                         }
                     }
-
-                    .mx-auto {
-                        margin-left: auto;
-                        margin-right: auto;
-                    }
-
-                    .inline-block {
-                        display: inline-block;
-                    }
-
-                    .align-top {
-                        vertical-align: top;
-                    }
-
-                    .mt-3 {
-                        margin-top: .75rem;
-                    }
-
-                    .mt-12 {
-                        margin-top: 3rem;
-                    }
-
-                    .mr-5 {
-                        margin-right: 1.25rem;
-                    }
-
-                    .pr-5 {
-                        padding-right: 1.25rem;
-                    }
-
-                    .text-gray-400 {
-                        --tw-text-opacity: 1;
-                        color: rgba(156, 163, 175, var(--tw-text-opacity));
-                    }
-
-                    .text-5xl {
-                        font-size: 3rem;
-                        line-height: 1;
-                    }
-
-                    .tracking-tighter {
-                        letter-spacing: -.05em;
-                    }
-
-                    .border-gray-400 {
-                        --tw-border-opacity: 1;
-                        border-color: rgba(156, 163, 175, var(--tw-border-opacity));
-                    }
-
-                    .border-r-2 {
-                        border-right-width: 2px;
-                    }
                 </style>
             </head>
             <body>
                 <div class="container mx-auto tracking-tighter mt-12">
-                    <div class="inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl">400</div>
-                    <div class="inline-block align-top">
-                        <div class="text-5xl">Bad Request</div>
-                        <div class="mt-3">The given data is not valid<br>some-instance</div>
+                    <div class="flex flex-row space-x-8">
+                        <div class="basis-1/12 text-5xl text-gray-400 text-right">400</div>
+                        <div class="basis-11/12">
+                            <span class="text-5xl">Bad Request</span><p>The given data is not valid</p><p>some-instance</p><div class="mt-12 mb-12">Error: Bad Request
+                        </div>
                     </div>
                 </div>
             </body>
         </html>"
       `);
+      expect(data).not.toMatch('Stryker');
     });
 
     const request = {} as ServerRequest;
@@ -647,7 +767,11 @@ describe('createErrorMiddleware', () => {
 
     const logInfo: NamedLogFn = jest.fn((message: string, context: Record<string, any>) => {
       expect(message).toBe('Http Error');
-      expect(context).toEqual({ httpError });
+      expect(context).toMatchInlineSnapshot(`
+        {
+          "httpError": [Error: Bad Request],
+        }
+      `);
     });
 
     const logger = {
@@ -670,9 +794,10 @@ describe('createErrorMiddleware', () => {
   test('http error: server', async () => {
     const httpError = createInternalServerError({});
 
-    const end = jest.fn((data) => {
-      expect(data).toMatchInlineSnapshot(`
-        "<html>
+    const end = jest.fn((data: string) => {
+      expect(replaceStackLines(data)).toMatchInlineSnapshot(`
+        "<!DOCTYPE html>
+        <html>
             <head>
                 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
                 <title>Internal Server Error</title>
@@ -696,6 +821,75 @@ describe('createErrorMiddleware', () => {
                         width: 100%
                     }
 
+                    .mx-auto {
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+
+                    .mt-12 {
+                        margin-top: 3rem;
+                    }
+
+                    .mb-12 {
+                        margin-bottom: 3rem;
+                    }
+
+                    .text-gray-400 {
+                        --tw-text-opacity: 1;
+                        color: rgba(156, 163, 175, var(--tw-text-opacity));
+                    }
+
+                    .text-5xl {
+                        font-size: 3rem;
+                        line-height: 1;
+                    }
+
+                    .text-right {
+                        text-align: right;
+                    }
+
+                    .tracking-tighter {
+                        letter-spacing: -.05em;
+                    }
+
+                    .flex {
+                        display: flex;
+                    }
+
+                    .flex-row {
+                        flex-direction: row;
+                    }
+
+                    .basis-2\\/12 {
+                        flex-basis: 16.666667%;
+                    }
+
+                    .basis-10\\/12 {
+                        flex-basis: 83.333333%;
+                    }
+
+                    .space-x-8>:not([hidden])~:not([hidden]) {
+                        --tw-space-x-reverse: 0;
+                        margin-right: calc(2rem * var(--tw-space-x-reverse));
+                        margin-left: calc(2rem * calc(1 - var(--tw-space-x-reverse)))
+                    }
+
+                    .gap-x-4 {
+                        column-gap: 1rem;
+                    }
+
+                    .gap-y-1\\.5 {
+                        row-gap: 0.375rem;
+                    }
+
+                    .grid-cols-1 {
+                        grid-template-columns: repeat(1, minmax(0, 1fr));
+                    }
+
+                    .grid {
+                        display: grid;
+                    }
+
                     @media (min-width:640px) {
                         .container {
                             max-width: 640px
@@ -705,6 +899,14 @@ describe('createErrorMiddleware', () => {
                     @media (min-width:768px) {
                         .container {
                             max-width: 768px
+                        }
+
+                        .md\\:grid-cols-8 {
+                            grid-template-columns: repeat(8, minmax(0, 1fr));
+                        }
+
+                        .md\\:col-span-7 {
+                            grid-column: span 7/span 7
                         }
                     }
 
@@ -725,71 +927,21 @@ describe('createErrorMiddleware', () => {
                             max-width: 1536px
                         }
                     }
-
-                    .mx-auto {
-                        margin-left: auto;
-                        margin-right: auto;
-                    }
-
-                    .inline-block {
-                        display: inline-block;
-                    }
-
-                    .align-top {
-                        vertical-align: top;
-                    }
-
-                    .mt-3 {
-                        margin-top: .75rem;
-                    }
-
-                    .mt-12 {
-                        margin-top: 3rem;
-                    }
-
-                    .mr-5 {
-                        margin-right: 1.25rem;
-                    }
-
-                    .pr-5 {
-                        padding-right: 1.25rem;
-                    }
-
-                    .text-gray-400 {
-                        --tw-text-opacity: 1;
-                        color: rgba(156, 163, 175, var(--tw-text-opacity));
-                    }
-
-                    .text-5xl {
-                        font-size: 3rem;
-                        line-height: 1;
-                    }
-
-                    .tracking-tighter {
-                        letter-spacing: -.05em;
-                    }
-
-                    .border-gray-400 {
-                        --tw-border-opacity: 1;
-                        border-color: rgba(156, 163, 175, var(--tw-border-opacity));
-                    }
-
-                    .border-r-2 {
-                        border-right-width: 2px;
-                    }
                 </style>
             </head>
             <body>
                 <div class="container mx-auto tracking-tighter mt-12">
-                    <div class="inline-block align-top text-gray-400 border-r-2 border-gray-400 pr-5 mr-5 text-5xl">500</div>
-                    <div class="inline-block align-top">
-                        <div class="text-5xl">Internal Server Error</div>
-                        <div class="mt-3"></div>
+                    <div class="flex flex-row space-x-8">
+                        <div class="basis-1/12 text-5xl text-gray-400 text-right">500</div>
+                        <div class="basis-11/12">
+                            <span class="text-5xl">Internal Server Error</span><div class="mt-12 mb-12">Error: Internal Server Error
+                        </div>
                     </div>
                 </div>
             </body>
         </html>"
       `);
+      expect(data).not.toMatch('Stryker');
     });
 
     const request = {} as ServerRequest;
@@ -806,7 +958,11 @@ describe('createErrorMiddleware', () => {
 
     const logError: NamedLogFn = jest.fn((message: string, context: Record<string, any>) => {
       expect(message).toBe('Http Error');
-      expect(context).toEqual({ httpError });
+      expect(context).toMatchInlineSnapshot(`
+        {
+          "httpError": [Error: Internal Server Error],
+        }
+      `);
     });
 
     const logger = {
