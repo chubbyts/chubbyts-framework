@@ -6,7 +6,8 @@ import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Logger, NamedLogFn } from '@chubbyts/chubbyts-log-types/dist/log';
 import { createBadRequest, createInternalServerError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 
-const replaceStackLines = (data: string) => data.replace(/.*<br>&nbsp;&nbsp;&nbsp;&nbsp;at.*\n/g, '');
+const replaceHtmlStack = (data: string) => data.replace(/\n    at .*/g, '');
+const replaceJsonStack = (data: string) => data.replace(/\\n    at .*/g, '');
 
 describe('createErrorMiddleware', () => {
   test('successful', async () => {
@@ -32,7 +33,7 @@ describe('createErrorMiddleware', () => {
     const error = new Error('error');
 
     const end = jest.fn((data: string) => {
-      expect(replaceStackLines(data)).toMatchInlineSnapshot(`
+      expect(replaceHtmlStack(data)).toMatchInlineSnapshot(`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -216,7 +217,7 @@ describe('createErrorMiddleware', () => {
     error.cause = causeError;
 
     const end = jest.fn((data: string) => {
-      expect(replaceStackLines(data)).toMatchInlineSnapshot(`
+      expect(replaceHtmlStack(data)).toMatchInlineSnapshot(`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -355,9 +356,22 @@ describe('createErrorMiddleware', () => {
                     <div class="flex flex-row space-x-8">
                         <div class="basis-1/12 text-5xl text-gray-400 text-right">500</div>
                         <div class="basis-11/12">
-                            <span class="text-5xl">Internal Server Error</span><p>A website error has occurred. Sorry for the temporary inconvenience.</p><div class="mt-12 mb-12">Error: Internal Server Error
-        <div class="mb-12">Error: error
-        <div class="mb-12">Error: cause
+                            <span class="text-5xl">Internal Server Error</span><p>A website error has occurred. Sorry for the temporary inconvenience.</p><div class="mt-12">
+            <div class="mb-12 grid grid-cols-1 md:grid-cols-8 gap-4">
+                <div><strong>name</strong></div><div class="md:col-span-7">Error</div><div><strong>message</strong></div><div class="md:col-span-7">Internal Server Error</div><div><strong>stack</strong></div><div class="md:col-span-7">Error: Internal Server Error<br>
+                    </div>
+        <div class="mb-12 grid grid-cols-1 md:grid-cols-8 gap-4">
+                <div><strong>name</strong></div><div class="md:col-span-7">Error</div><div><strong>message</strong></div><div class="md:col-span-7">error</div><div><strong>stack</strong></div><div class="md:col-span-7">Error: error<br>
+        at Line1<br>
+        at Line2</div>
+                    </div>
+        <div class="mb-12 grid grid-cols-1 md:grid-cols-8 gap-4">
+                <div><strong>name</strong></div><div class="md:col-span-7">Error</div><div><strong>message</strong></div><div class="md:col-span-7">cause</div><div><strong>stack</strong></div><div class="md:col-span-7">Error: cause<br>
+        at Line1<br>
+        at Line2<br>
+        at Line3</div>
+                    </div>
+            </div>
                         </div>
                     </div>
                 </div>
@@ -381,10 +395,36 @@ describe('createErrorMiddleware', () => {
 
     const logError: NamedLogFn = jest.fn((message: string, context: Record<string, any>) => {
       expect(message).toBe('Http Error');
-      expect(context).toMatchInlineSnapshot(`
-        {
-          "httpError": [Error: Internal Server Error],
-        }
+      expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
+        "{
+          "data": {
+            "type": "https://datatracker.ietf.org/doc/html/rfc2616#section-10.5.1",
+            "status": 500,
+            "title": "Internal Server Error",
+            "_httpError": "InternalServerError",
+            "detail": "A website error has occurred. Sorry for the temporary inconvenience.",
+            "cause": {
+              "cause": {}
+            }
+          },
+          "errors": [
+            {
+              "name": "Error",
+              "message": "Internal Server Error",
+              "stack": "Error: Internal Server Error
+            },
+            {
+              "name": "Error",
+              "message": "error",
+              "stack": "Error: error\\nat Line1\\nat Line2"
+            },
+            {
+              "name": "Error",
+              "message": "cause",
+              "stack": "Error: cause\\nat Line1\\nat Line2\\nat Line3"
+            }
+          ]
+        }"
       `);
     });
 
@@ -409,7 +449,7 @@ describe('createErrorMiddleware', () => {
     const error = 'error';
 
     const end = jest.fn((data: string) => {
-      expect(replaceStackLines(data)).toMatchInlineSnapshot(`
+      expect(replaceHtmlStack(data)).toMatchInlineSnapshot(`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -548,8 +588,14 @@ describe('createErrorMiddleware', () => {
                     <div class="flex flex-row space-x-8">
                         <div class="basis-1/12 text-5xl text-gray-400 text-right">500</div>
                         <div class="basis-11/12">
-                            <span class="text-5xl">Internal Server Error</span><p>A website error has occurred. Sorry for the temporary inconvenience.</p><div class="mt-12 mb-12">Error: Internal Server Error
-        <div class="mb-12">string: error</div>
+                            <span class="text-5xl">Internal Server Error</span><p>A website error has occurred. Sorry for the temporary inconvenience.</p><div class="mt-12">
+            <div class="mb-12 grid grid-cols-1 md:grid-cols-8 gap-4">
+                <div><strong>name</strong></div><div class="md:col-span-7">Error</div><div><strong>message</strong></div><div class="md:col-span-7">Internal Server Error</div><div><strong>stack</strong></div><div class="md:col-span-7">Error: Internal Server Error<br>
+                    </div>
+        <div class="mb-12 grid grid-cols-1 md:grid-cols-8 gap-4">
+                <div><strong>name</strong></div><div class="md:col-span-7">string</div><div><strong>message</strong></div><div class="md:col-span-7">error</div><div><strong>stack</strong></div><div class="md:col-span-7">undefined</div>
+                    </div>
+            </div>
                         </div>
                     </div>
                 </div>
@@ -573,10 +619,28 @@ describe('createErrorMiddleware', () => {
 
     const logError: NamedLogFn = jest.fn((message: string, context: Record<string, any>) => {
       expect(message).toBe('Http Error');
-      expect(context).toMatchInlineSnapshot(`
-        {
-          "httpError": [Error: Internal Server Error],
-        }
+      expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
+        "{
+          "data": {
+            "type": "https://datatracker.ietf.org/doc/html/rfc2616#section-10.5.1",
+            "status": 500,
+            "title": "Internal Server Error",
+            "_httpError": "InternalServerError",
+            "detail": "A website error has occurred. Sorry for the temporary inconvenience.",
+            "cause": "error"
+          },
+          "errors": [
+            {
+              "name": "Error",
+              "message": "Internal Server Error",
+              "stack": "Error: Internal Server Error
+            },
+            {
+              "name": "string",
+              "message": "error"
+            }
+          ]
+        }"
       `);
     });
 
@@ -604,7 +668,7 @@ describe('createErrorMiddleware', () => {
     });
 
     const end = jest.fn((data: string) => {
-      expect(replaceStackLines(data)).toMatchInlineSnapshot(`
+      expect(replaceHtmlStack(data)).toMatchInlineSnapshot(`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -743,7 +807,11 @@ describe('createErrorMiddleware', () => {
                     <div class="flex flex-row space-x-8">
                         <div class="basis-1/12 text-5xl text-gray-400 text-right">400</div>
                         <div class="basis-11/12">
-                            <span class="text-5xl">Bad Request</span><p>The given data is not valid</p><p>some-instance</p><div class="mt-12 mb-12">Error: Bad Request
+                            <span class="text-5xl">Bad Request</span><p>The given data is not valid</p><p>some-instance</p><div class="mt-12">
+            <div class="mb-12 grid grid-cols-1 md:grid-cols-8 gap-4">
+                <div><strong>name</strong></div><div class="md:col-span-7">Error</div><div><strong>message</strong></div><div class="md:col-span-7">Bad Request</div><div><strong>stack</strong></div><div class="md:col-span-7">Error: Bad Request<br>
+                    </div>
+            </div>
                         </div>
                     </div>
                 </div>
@@ -767,10 +835,24 @@ describe('createErrorMiddleware', () => {
 
     const logInfo: NamedLogFn = jest.fn((message: string, context: Record<string, any>) => {
       expect(message).toBe('Http Error');
-      expect(context).toMatchInlineSnapshot(`
-        {
-          "httpError": [Error: Bad Request],
-        }
+      expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
+        "{
+          "data": {
+            "type": "https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.1",
+            "status": 400,
+            "title": "Bad Request",
+            "_httpError": "BadRequest",
+            "detail": "The given data is not valid",
+            "instance": "some-instance"
+          },
+          "errors": [
+            {
+              "name": "Error",
+              "message": "Bad Request",
+              "stack": "Error: Bad Request
+            }
+          ]
+        }"
       `);
     });
 
@@ -795,7 +877,7 @@ describe('createErrorMiddleware', () => {
     const httpError = createInternalServerError({});
 
     const end = jest.fn((data: string) => {
-      expect(replaceStackLines(data)).toMatchInlineSnapshot(`
+      expect(replaceHtmlStack(data)).toMatchInlineSnapshot(`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -934,7 +1016,11 @@ describe('createErrorMiddleware', () => {
                     <div class="flex flex-row space-x-8">
                         <div class="basis-1/12 text-5xl text-gray-400 text-right">500</div>
                         <div class="basis-11/12">
-                            <span class="text-5xl">Internal Server Error</span><div class="mt-12 mb-12">Error: Internal Server Error
+                            <span class="text-5xl">Internal Server Error</span><div class="mt-12">
+            <div class="mb-12 grid grid-cols-1 md:grid-cols-8 gap-4">
+                <div><strong>name</strong></div><div class="md:col-span-7">Error</div><div><strong>message</strong></div><div class="md:col-span-7">Internal Server Error</div><div><strong>stack</strong></div><div class="md:col-span-7">Error: Internal Server Error<br>
+                    </div>
+            </div>
                         </div>
                     </div>
                 </div>
@@ -958,10 +1044,22 @@ describe('createErrorMiddleware', () => {
 
     const logError: NamedLogFn = jest.fn((message: string, context: Record<string, any>) => {
       expect(message).toBe('Http Error');
-      expect(context).toMatchInlineSnapshot(`
-        {
-          "httpError": [Error: Internal Server Error],
-        }
+      expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
+        "{
+          "data": {
+            "type": "https://datatracker.ietf.org/doc/html/rfc2616#section-10.5.1",
+            "status": 500,
+            "title": "Internal Server Error",
+            "_httpError": "InternalServerError"
+          },
+          "errors": [
+            {
+              "name": "Error",
+              "message": "Internal Server Error",
+              "stack": "Error: Internal Server Error
+            }
+          ]
+        }"
       `);
     });
 

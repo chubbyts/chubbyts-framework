@@ -151,22 +151,41 @@ const htmlTemplate: string = `<!DOCTYPE html>
     </body>
 </html>`;
 
-const addDebugToBody = (e: unknown): string => {
+const errorToData = (error: Error): Error => {
+  return {
+    name: error.name,
+    message: error.message,
+    stack: error.stack,
+  };
+};
+
+const errorToDataArray = (e: unknown): Array<Error> => {
   const errors: Array<Error> = [];
 
   do {
-    errors.push(throwableToError(e));
+    errors.push(errorToData(throwableToError(e)));
   } while ((e = e && (e as { cause: unknown }).cause));
 
-  return errors
-    .map((error, i) => {
-      return `<div class="${i === 0 ? 'mt-12 ' : ''}mb-12">${
-        !error.stack
-          ? `${error.name}: ${error.message}`
-          : error.stack.replace(/at /gm, '<br>&nbsp;&nbsp;&nbsp;&nbsp;at ')
-      }</div>`;
-    })
-    .join('\n');
+  return errors;
+};
+
+const addDebugToBody = (errors: Array<Error>): string => {
+  return `<div class="mt-12">
+    ${errors
+      .map(
+        (error) => `<div class="mb-12 grid grid-cols-1 md:grid-cols-8 gap-4">
+        ${Object.entries(error)
+          .map(
+            ([key, value]) =>
+              `<div><strong>${key}</strong></div><div class="md:col-span-7">${
+                typeof value === 'string' ? value.replace(/\n/g, '<br>\n') : value
+              }</div>`,
+          )
+          .join('')}
+            </div>`,
+      )
+      .join('\n')}
+    </div>`;
 };
 
 const handleHttpError = (
@@ -177,9 +196,11 @@ const handleHttpError = (
 ): Response => {
   const { status, title, detail, instance } = httpError;
 
+  const errors = errorToDataArray(httpError);
+
   const isClientError = status < 500;
 
-  logger[isClientError ? LogLevel.INFO : LogLevel.ERROR]('Http Error', { httpError });
+  logger[isClientError ? LogLevel.INFO : LogLevel.ERROR]('Http Error', { data: { ...httpError }, errors });
 
   const response = createResponse(status);
   response.body.end(
@@ -191,7 +212,7 @@ const handleHttpError = (
         [
           ...(detail ? [`<p>${detail}</p>`] : []),
           ...(instance ? [`<p>${instance}</p>`] : []),
-          ...(debug ? [addDebugToBody(httpError)] : []),
+          ...(debug ? [addDebugToBody(errors)] : []),
         ].join(''),
       ),
   );
