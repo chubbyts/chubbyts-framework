@@ -1,5 +1,6 @@
 import type { Route } from './route';
 
+/** @deprecated use RoutesByName from routes-by-name */
 export type Routes = () => Map<string, Route>;
 
 /** @deprecated use createRoutesByName from routes-by-name */
