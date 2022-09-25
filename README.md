@@ -38,8 +38,8 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 
 ```sh
 npm i \
-  @chubbyts/chubbyts-framework-router-path-to-regexp@^1.0.2 \
-  @chubbyts/chubbyts-framework@^1.5.1 \
+  @chubbyts/chubbyts-framework-router-path-to-regexp@^1.2.0 \
+  @chubbyts/chubbyts-framework@^1.6.1 \
   @chubbyts/chubbyts-http@^1.0.0
 ```
 
@@ -52,7 +52,7 @@ import { createApplication } from '@chubbyts/chubbyts-framework/dist/application
 import { createErrorMiddleware } from '@chubbyts/chubbyts-framework/dist/middleware/error-middleware';
 import { createRouteMatcherMiddleware } from '@chubbyts/chubbyts-framework/dist/middleware/route-matcher-middleware';
 import { createGetRoute } from '@chubbyts/chubbyts-framework/dist/router/route';
-import { createRoutesByName } from '@chubbyts/chubbyts-framework/dist/router/routes';
+import { createRoutesByName } from '@chubbyts/chubbyts-framework/dist/router/routes-by-name';
 import {
   createServerRequestFactory,
   createStreamFromResourceFactory,
