@@ -1,24 +1,21 @@
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import { RequiredProperties } from '../types';
 import type { PathOptions, Route } from './route';
 import { createRoute } from './route';
-
-export type Group = {
-  path: string;
-  children: Array<Group | Route>;
-  middlewares: Array<Middleware>;
-  pathOptions: PathOptions;
-  _group: string;
-};
-
-export const isGroup = (group: unknown): group is Group => {
-  return typeof group === 'object' && null !== group && typeof (group as Group)._group === 'string';
-};
 
 type GroupArgument = {
   path: string;
   children: Array<Group | Route>;
   middlewares?: Array<Middleware>;
   pathOptions?: PathOptions;
+};
+
+export type Group = RequiredProperties<GroupArgument, 'middlewares' | 'pathOptions'> & {
+  _group: string;
+};
+
+export const isGroup = (group: unknown): group is Group => {
+  return typeof group === 'object' && null !== group && typeof (group as Group)._group === 'string';
 };
 
 export const createGroup = ({ path, children, middlewares, pathOptions }: GroupArgument): Group => {

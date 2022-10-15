@@ -1,26 +1,11 @@
 import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import { RequiredProperties } from '../types';
 
 export type PathOptions = { [key: string]: unknown };
 
-export type Route = {
-  method: Method;
-  path: string;
-  name: string;
-  handler: Handler;
-  middlewares: Array<Middleware>;
-  pathOptions: PathOptions;
-  attributes: Record<string, string>;
-  _route: string;
-};
-
-export const isRoute = (route: unknown): route is Route => {
-  return typeof route === 'object' && null !== route && typeof (route as Route)._route === 'string';
-};
-
-type RouteArgument = {
-  method: Method;
+type RouteWithGivenMethodArgument = {
   path: string;
   name: string;
   handler: Handler;
@@ -28,7 +13,18 @@ type RouteArgument = {
   pathOptions?: PathOptions;
 };
 
-type RouteWithGivenMethodArgument = Omit<RouteArgument, 'method'>;
+type RouteArgument = {
+  method: Method;
+} & RouteWithGivenMethodArgument;
+
+export type Route = RequiredProperties<RouteArgument, 'middlewares' | 'pathOptions'> & {
+  attributes: Record<string, string>;
+  _route: string;
+};
+
+export const isRoute = (route: unknown): route is Route => {
+  return typeof route === 'object' && null !== route && typeof (route as Route)._route === 'string';
+};
 
 export const createRoute = ({ method, path, name, handler, middlewares, pathOptions }: RouteArgument): Route => {
   return {
