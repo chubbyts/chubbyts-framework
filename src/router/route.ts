@@ -40,29 +40,29 @@ export const createRoute = ({ method, path, name, handler, middlewares, pathOpti
 };
 
 export const createDeleteRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ method: Method.DELETE, ...args });
+  return createRoute({ ...args, method: Method.DELETE });
 };
 
 export const createGetRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ method: Method.GET, ...args });
+  return createRoute({ ...args, method: Method.GET });
 };
 
 export const createHeadRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ method: Method.HEAD, ...args });
+  return createRoute({ ...args, method: Method.HEAD });
 };
 
 export const createOptionsRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ method: Method.OPTIONS, ...args });
+  return createRoute({ ...args, method: Method.OPTIONS });
 };
 
 export const createPatchRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ method: Method.PATCH, ...args });
+  return createRoute({ ...args, method: Method.PATCH });
 };
 
 export const createPostRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ method: Method.POST, ...args });
+  return createRoute({ ...args, method: Method.POST });
 };
 
 export const createPutRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ method: Method.PUT, ...args });
+  return createRoute({ ...args, method: Method.PUT });
 };
