@@ -39,7 +39,7 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^1.2.0 \
-  @chubbyts/chubbyts-framework@^1.6.3 \
+  @chubbyts/chubbyts-framework@^1.6.4 \
   @chubbyts/chubbyts-http@^1.0.0
 ```
 
@@ -53,12 +53,7 @@ import { createErrorMiddleware } from '@chubbyts/chubbyts-framework/dist/middlew
 import { createRouteMatcherMiddleware } from '@chubbyts/chubbyts-framework/dist/middleware/route-matcher-middleware';
 import { createGetRoute } from '@chubbyts/chubbyts-framework/dist/router/route';
 import { createRoutesByName } from '@chubbyts/chubbyts-framework/dist/router/routes-by-name';
-import {
-  createServerRequestFactory,
-  createStreamFromResourceFactory,
-  createUriFactory,
-  createResponseFactory,
-} from '@chubbyts/chubbyts-http/dist/message-factory';
+import { createResponseFactory } from '@chubbyts/chubbyts-http/dist/message-factory';
 import { createPathToRegexpRouteMatcher } from '@chubbyts/chubbyts-framework-router-path-to-regexp/dist/path-to-regexp-router';
 import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 
