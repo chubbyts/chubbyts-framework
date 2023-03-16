@@ -11,11 +11,9 @@ export type MiddlewareDispatcher = (
 
 export const createMiddlewareDispatcher = (): MiddlewareDispatcher => {
   return (middlewares: Array<Middleware>, handler: Handler, request: ServerRequest): Promise<Response> => {
-    return [...middlewares]
-      .reverse()
-      .reduce(
-        (middlewareHandler: Handler, middleware) => createMiddlewareHandler(middleware, middlewareHandler),
-        handler,
-      )(request);
+    return middlewares.reduceRight(
+      (middlewareHandler: Handler, middleware) => createMiddlewareHandler(middleware, middlewareHandler),
+      handler,
+    )(request);
   };
 };
