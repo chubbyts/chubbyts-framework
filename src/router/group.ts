@@ -31,14 +31,18 @@ export const createGroup = ({ path, children, middlewares, pathOptions }: GroupA
 export const getRoutes = (group: Group): Array<Route> => {
   const routes: Array<Route> = [];
   group.children.forEach((child) => {
+    const childPath = group.path + child.path;
+    const childMiddlewares = [...group.middlewares, ...child.middlewares];
+    const childPathOptions = { ...group.pathOptions, ...child.pathOptions };
+
     if (isGroup(child)) {
       routes.push(
         ...getRoutes(
           createGroup({
-            path: group.path + child.path,
+            path: childPath,
             children: child.children,
-            middlewares: [...group.middlewares, ...child.middlewares],
-            pathOptions: { ...group.pathOptions, ...child.pathOptions },
+            middlewares: childMiddlewares,
+            pathOptions: childPathOptions,
           }),
         ),
       );
@@ -46,11 +50,11 @@ export const getRoutes = (group: Group): Array<Route> => {
       routes.push(
         createRoute({
           method: child.method,
-          path: group.path + child.path,
+          path: childPath,
           name: child.name,
           handler: child.handler,
-          middlewares: [...group.middlewares, ...child.middlewares],
-          pathOptions: { ...group.pathOptions, ...child.pathOptions },
+          middlewares: childMiddlewares,
+          pathOptions: childPathOptions,
         }),
       );
     }
