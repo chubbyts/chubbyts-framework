@@ -1,5 +1,5 @@
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import { RequiredProperties } from '../types';
+import type { RequiredProperties } from '../types';
 import type { PathOptions, Route } from './route';
 import { createRoute } from './route';
 
@@ -29,36 +29,31 @@ export const createGroup = ({ path, children, middlewares, pathOptions }: GroupA
 };
 
 export const getRoutes = (group: Group): Array<Route> => {
-  const routes: Array<Route> = [];
-  group.children.forEach((child) => {
+  return group.children.flatMap((child): Array<Route> => {
     const childPath = group.path + child.path;
     const childMiddlewares = [...group.middlewares, ...child.middlewares];
     const childPathOptions = { ...group.pathOptions, ...child.pathOptions };
 
     if (isGroup(child)) {
-      routes.push(
-        ...getRoutes(
-          createGroup({
-            path: childPath,
-            children: child.children,
-            middlewares: childMiddlewares,
-            pathOptions: childPathOptions,
-          }),
-        ),
-      );
-    } else {
-      routes.push(
-        createRoute({
-          method: child.method,
+      return getRoutes(
+        createGroup({
           path: childPath,
-          name: child.name,
-          handler: child.handler,
+          children: child.children,
           middlewares: childMiddlewares,
           pathOptions: childPathOptions,
         }),
       );
     }
-  });
 
-  return routes;
+    return [
+      createRoute({
+        method: child.method,
+        path: childPath,
+        name: child.name,
+        handler: child.handler,
+        middlewares: childMiddlewares,
+        pathOptions: childPathOptions,
+      }),
+    ];
+  });
 };

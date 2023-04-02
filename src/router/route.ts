@@ -1,7 +1,7 @@
 import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
-import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
-import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import { RequiredProperties } from '../types';
+import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import type { RequiredProperties } from '../types';
 
 export type PathOptions = { [key: string]: unknown };
 

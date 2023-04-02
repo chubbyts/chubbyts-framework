@@ -1,8 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
-import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
-import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import { createMiddlewareDispatcher } from '../../src/middleware/middleware-dispatcher';
-import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 
 describe('createMiddlewareDispatcher', () => {
   test('without middleware', async () => {

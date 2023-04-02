@@ -1,9 +1,9 @@
 import { expect, test } from '@jest/globals';
-import { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
+import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import { createLazyMiddleware } from '../../src/middleware/lazy-middleware';
-import { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
-import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
-import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 
 test('createLazyMiddleware', async () => {
   const request = {} as ServerRequest;

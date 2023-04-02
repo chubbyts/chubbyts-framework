@@ -1,8 +1,8 @@
 import { expect, test } from '@jest/globals';
-import { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
+import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { createLazyHandler } from '../../src/handler/lazy-handler';
-import { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
-import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 
 test('createLazyHandler', async () => {
   const request = {} as ServerRequest;

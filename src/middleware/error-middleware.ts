@@ -1,12 +1,14 @@
 import type { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
-import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import { createLogger, Logger, LogLevel } from '@chubbyts/chubbyts-log-types/dist/log';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import type { Logger } from '@chubbyts/chubbyts-log-types/dist/log';
+import { createLogger, LogLevel } from '@chubbyts/chubbyts-log-types/dist/log';
 import { throwableToError } from '@chubbyts/chubbyts-throwable-to-error/dist/throwable-to-error';
-import { createInternalServerError, HttpError, isHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import type { HttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import { createInternalServerError, isHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 
-const htmlTemplate: string = `<!DOCTYPE html>
+const htmlTemplate = `<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -163,7 +165,9 @@ const errorToDataArray = (e: unknown): Array<Error> => {
   const errors: Array<Error> = [];
 
   do {
+    // eslint-disable-next-line functional/immutable-data
     errors.push(errorToData(throwableToError(e)));
+    // eslint-disable-next-line no-param-reassign
   } while ((e = e && (e as { cause: unknown }).cause));
 
   return errors;
@@ -221,18 +225,15 @@ const handleHttpError = (
 };
 
 const createHttpErrorFromError = (e: unknown): HttpError => {
-  const httpError = createInternalServerError({
+  return createInternalServerError({
     detail: 'A website error has occurred. Sorry for the temporary inconvenience.',
+    cause: e,
   });
-
-  httpError.cause = e;
-
-  return httpError;
 };
 
 export const createErrorMiddleware = (
   responseFactory: ResponseFactory,
-  debug: boolean = false,
+  debug = false,
   logger: Logger = createLogger(),
 ): Middleware => {
   return async (request: ServerRequest, handler: Handler) => {

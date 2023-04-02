@@ -1,7 +1,7 @@
 import { describe, expect, test } from '@jest/globals';
+import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 import { createGroup, getRoutes, isGroup } from '../../src/router/group';
 import { createRoute } from '../../src/router/route';
-import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 
 describe('group', () => {
   describe('isGroup', () => {

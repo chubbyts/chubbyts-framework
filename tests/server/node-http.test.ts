@@ -1,13 +1,13 @@
-import { describe, expect, test } from '@jest/globals';
-import { IncomingMessage, OutgoingHttpHeaders, ServerResponse } from 'http';
+import type { IncomingMessage, OutgoingHttpHeaders, ServerResponse } from 'http';
 import { Duplex, Stream } from 'stream';
-import { createResponseToNodeEmitter, createNodeToServerRequestFactory } from '../../src/server/node-http';
-import { Response, ServerRequest, Uri } from '@chubbyts/chubbyts-http-types/dist/message';
-import {
+import { describe, expect, test } from '@jest/globals';
+import type { Response, ServerRequest, Uri } from '@chubbyts/chubbyts-http-types/dist/message';
+import type {
   ServerRequestFactory,
   StreamFromResourceFactory,
   UriFactory,
 } from '@chubbyts/chubbyts-http-types/dist/message-factory';
+import { createResponseToNodeEmitter, createNodeToServerRequestFactory } from '../../src/server/node-http';
 
 describe('http-node', () => {
   describe('createNodeToServerRequestFactory', () => {
@@ -97,6 +97,8 @@ describe('http-node', () => {
       );
 
       const streamFromResourceFactory: StreamFromResourceFactory = jest.fn((givenStream: Stream): Duplex => {
+        expect(givenStream).toBe(req);
+
         return stream;
       });
 
@@ -182,6 +184,8 @@ describe('http-node', () => {
       );
 
       const streamFromResourceFactory: StreamFromResourceFactory = jest.fn((givenStream: Stream): Duplex => {
+        expect(givenStream).toBe(req);
+
         return stream;
       });
 
@@ -289,6 +293,8 @@ describe('http-node', () => {
       );
 
       const streamFromResourceFactory: StreamFromResourceFactory = jest.fn((givenStream: Stream): Duplex => {
+        expect(givenStream).toBe(req);
+
         return stream;
       });
 
@@ -363,6 +369,8 @@ describe('http-node', () => {
       );
 
       const streamFromResourceFactory: StreamFromResourceFactory = jest.fn((givenStream: Stream): Duplex => {
+        expect(givenStream).toBe(req);
+
         return stream;
       });
 

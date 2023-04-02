@@ -1,4 +1,5 @@
 import { describe, expect, test } from '@jest/globals';
+import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 import {
   createRoute,
   createDeleteRoute,
@@ -10,7 +11,6 @@ import {
   createPostRoute,
   createPutRoute,
 } from '../../src/router/route';
-import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 
 describe('route', () => {
   describe('isRoute', () => {
@@ -273,6 +273,7 @@ describe('route', () => {
     test('createDeleteRoute', () => {
       expect(
         createDeleteRoute({
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           method: 'SOMETHING',
           path: '/api/pet/{id}',
@@ -296,6 +297,7 @@ describe('route', () => {
     test('createGetRoute', () => {
       expect(
         createGetRoute({
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           method: 'SOMETHING',
           path: '/api/pet/{id}',
@@ -319,6 +321,7 @@ describe('route', () => {
     test('createHeadRoute', () => {
       expect(
         createHeadRoute({
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           method: 'SOMETHING',
           path: '/api/pet/{id}',
@@ -342,6 +345,7 @@ describe('route', () => {
     test('createOptionsRoute', () => {
       expect(
         createOptionsRoute({
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           method: 'SOMETHING',
           path: '/api/pet/{id}',
@@ -365,6 +369,7 @@ describe('route', () => {
     test('createPatchRoute', () => {
       expect(
         createPatchRoute({
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           method: 'SOMETHING',
           path: '/api/pet/{id}',
@@ -388,6 +393,7 @@ describe('route', () => {
     test('createPostRoute', () => {
       expect(
         createPostRoute({
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           method: 'SOMETHING',
           path: '/api/pet/{id}',
@@ -411,6 +417,7 @@ describe('route', () => {
     test('createPutRoute', () => {
       expect(
         createPutRoute({
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
           // @ts-ignore
           method: 'SOMETHING',
           path: '/api/pet/{id}',

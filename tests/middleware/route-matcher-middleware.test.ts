@@ -1,10 +1,10 @@
 import { describe, expect, test } from '@jest/globals';
-import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
-import { Match } from '../../src/router/route-matcher';
-import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import { createNotFound } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import type { Match } from '../../src/router/route-matcher';
 import { createRouteMatcherMiddleware } from '../../src/middleware/route-matcher-middleware';
-import { Route } from '../../src/router/route';
-import { createNotFound, HttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import type { Route } from '../../src/router/route';
 
 describe('createRouteMatcherMiddleware', () => {
   test('match', async () => {
@@ -45,6 +45,8 @@ describe('createRouteMatcherMiddleware', () => {
     const response = {} as Response;
 
     const handler: Handler = jest.fn(async (givenRequest: ServerRequest): Promise<Response> => {
+      expect(givenRequest).toBe(request);
+
       return response;
     });
 

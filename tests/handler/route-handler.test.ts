@@ -1,10 +1,10 @@
 import { describe, expect, test } from '@jest/globals';
-import { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { createRouteHandler } from '../../src/handler/route-handler';
-import { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
-import { Route } from '../../src/router/route';
-import { MiddlewareDispatcher } from '../../src/middleware/middleware-dispatcher';
+import type { Route } from '../../src/router/route';
+import type { MiddlewareDispatcher } from '../../src/middleware/middleware-dispatcher';
 
 describe('createRouteHandler', () => {
   test('without route', async () => {
@@ -32,8 +32,10 @@ describe('createRouteHandler', () => {
   });
 
   test('with route', async () => {
-    const handler = () => {};
-    const middlewares = [() => {}];
+    const handler = jest.fn();
+    const middleware = jest.fn();
+
+    const middlewares = [middleware];
 
     const route = { handler, middlewares, _route: 'Route' } as unknown as Route;
     const request = { attributes: { route } } as unknown as ServerRequest;
@@ -57,6 +59,8 @@ describe('createRouteHandler', () => {
 
     expect(await routeHandler(request)).toBe(response);
 
+    expect(handler).toHaveBeenCalledTimes(0);
+    expect(middleware).toHaveBeenCalledTimes(0);
     expect(middlewareDispatcher).toHaveBeenCalledTimes(1);
   });
 });

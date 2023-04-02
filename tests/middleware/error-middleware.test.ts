@@ -1,13 +1,13 @@
 import { describe, expect, test } from '@jest/globals';
-import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
-import { createErrorMiddleware } from '../../src/middleware/error-middleware';
-import { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
-import { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
-import { Logger, NamedLogFn } from '@chubbyts/chubbyts-log-types/dist/log';
+import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
+import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import type { Logger, NamedLogFn } from '@chubbyts/chubbyts-log-types/dist/log';
 import { createBadRequest, createInternalServerError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import { createErrorMiddleware } from '../../src/middleware/error-middleware';
 
-const replaceHtmlStack = (data: string) => data.replace(/\n    at .*/g, '');
-const replaceJsonStack = (data: string) => data.replace(/\\n    at .*/g, '');
+const replaceHtmlStack = (data: string) => data.replace(/\n {4}at .*/g, '');
+const replaceJsonStack = (data: string) => data.replace(/\\n {4}at .*/g, '');
 
 describe('createErrorMiddleware', () => {
   test('successful', async () => {
@@ -208,13 +208,15 @@ describe('createErrorMiddleware', () => {
 
   test('error, with debug and with log', async () => {
     const error = new Error('error');
+    // eslint-disable-next-line functional/immutable-data
     error.stack = 'Error: error\nat Line1\nat Line2';
 
     const causeError = new Error('cause');
+    // eslint-disable-next-line functional/immutable-data
     causeError.stack = 'Error: cause\nat Line1\nat Line2\nat Line3';
 
-    // @ts-ignore
-    error.cause = causeError;
+    // eslint-disable-next-line functional/immutable-data
+    (error as Error & { cause: Error }).cause = causeError;
 
     const end = jest.fn((data: string) => {
       expect(replaceHtmlStack(data)).toMatchInlineSnapshot(`
@@ -393,7 +395,7 @@ describe('createErrorMiddleware', () => {
       return response;
     });
 
-    const logError: NamedLogFn = jest.fn((message: string, context: Record<string, any>) => {
+    const logError: NamedLogFn = jest.fn((message: string, context: Record<string, unknown>) => {
       expect(message).toBe('Http Error');
       expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
         "{
@@ -617,7 +619,7 @@ describe('createErrorMiddleware', () => {
       return response;
     });
 
-    const logError: NamedLogFn = jest.fn((message: string, context: Record<string, any>) => {
+    const logError: NamedLogFn = jest.fn((message: string, context: Record<string, unknown>) => {
       expect(message).toBe('Http Error');
       expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
         "{
@@ -833,7 +835,7 @@ describe('createErrorMiddleware', () => {
       return response;
     });
 
-    const logInfo: NamedLogFn = jest.fn((message: string, context: Record<string, any>) => {
+    const logInfo: NamedLogFn = jest.fn((message: string, context: Record<string, unknown>) => {
       expect(message).toBe('Http Error');
       expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
         "{
@@ -1042,7 +1044,7 @@ describe('createErrorMiddleware', () => {
       return response;
     });
 
-    const logError: NamedLogFn = jest.fn((message: string, context: Record<string, any>) => {
+    const logError: NamedLogFn = jest.fn((message: string, context: Record<string, unknown>) => {
       expect(message).toBe('Http Error');
       expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
         "{
