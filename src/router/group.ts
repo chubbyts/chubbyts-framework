@@ -15,7 +15,7 @@ export type Group = RequiredProperties<GroupArgument, 'middlewares' | 'pathOptio
 };
 
 export const isGroup = (group: unknown): group is Group => {
-  return typeof group === 'object' && null !== group && typeof (group as Group)._group === 'string';
+  return typeof group === 'object' && null !== group && '_group' in group;
 };
 
 export const createGroup = ({ path, children, middlewares, pathOptions }: GroupArgument): Group => {

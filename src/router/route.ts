@@ -23,7 +23,7 @@ export type Route = RequiredProperties<RouteArgument, 'middlewares' | 'pathOptio
 };
 
 export const isRoute = (route: unknown): route is Route => {
-  return typeof route === 'object' && null !== route && typeof (route as Route)._route === 'string';
+  return typeof route === 'object' && null !== route && '_route' in route;
 };
 
 export const createRoute = ({ method, path, name, handler, middlewares, pathOptions }: RouteArgument): Route => {
