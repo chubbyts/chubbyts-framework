@@ -3,36 +3,32 @@ import type { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist
 import type { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import type { FunctionMocks } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import { createFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import type { ObjectMocks } from '@chubbyts/chubbyts-function-mock/dist/object-mock';
+import { createObjectMock } from '@chubbyts/chubbyts-function-mock/dist/object-mock';
 import { createLazyMiddleware } from '../../src/middleware/lazy-middleware';
 
 test('createLazyMiddleware', async () => {
   const request = {} as ServerRequest;
   const response = {} as Response;
 
-  const handler: Handler = jest.fn(async (givenRequest: ServerRequest): Promise<Response> => {
-    expect(givenRequest).toBe(request);
-    return response;
-  });
+  const handler = createFunctionMock<Handler>([]);
 
-  const middleware: Middleware = jest.fn(
-    async (givenRequest: ServerRequest, givenHandler: Handler): Promise<Response> => {
-      return givenHandler(givenRequest);
-    },
-  );
+  const middlewareMocks: FunctionMocks<Middleware> = [
+    { parameters: [request, handler], return: Promise.resolve(response) },
+  ];
 
-  const get = jest.fn((id: string) => {
-    expect(id).toBe('id');
+  const middleware = createFunctionMock(middlewareMocks);
 
-    return middleware;
-  });
+  const containerMocks: ObjectMocks<Container> = [{ name: 'get', parameters: ['id'], return: middleware }];
 
-  const container = { get } as unknown as Container;
+  const container = createObjectMock(containerMocks);
 
   const lazyMiddleware = createLazyMiddleware(container, 'id');
 
   expect(await lazyMiddleware(request, handler)).toBe(response);
 
-  expect(handler).toHaveBeenCalledTimes(1);
-  expect(middleware).toHaveBeenCalledTimes(1);
-  expect(get).toHaveBeenCalledTimes(1);
+  expect(middlewareMocks.length).toBe(0);
+  expect(containerMocks.length).toBe(0);
 });

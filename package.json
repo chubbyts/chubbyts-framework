@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@chubbyts/chubbyts-eslint": "^1.0.0",
+    "@chubbyts/chubbyts-function-mock": "^1.2.3",
     "@stryker-mutator/core": "^6.4.1",
     "@stryker-mutator/jest-runner": "^6.4.1",
     "@types/jest": "^29.5.0",
