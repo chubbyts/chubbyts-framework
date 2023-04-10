@@ -1,6 +1,6 @@
 {
   "name": "@chubbyts/chubbyts-framework",
-  "version": "1.6.7",
+  "version": "1.6.8",
   "description": "A minimal, highly performant middleware PSR-15 inspired function based microframework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.",
   "keywords": [
     "chubbyts",
@@ -57,6 +57,7 @@
   },
   "devDependencies": {
     "@chubbyts/chubbyts-eslint": "^1.0.0",
+    "@chubbyts/chubbyts-function-mock": "^1.2.3",
     "@stryker-mutator/core": "^6.4.1",
     "@stryker-mutator/jest-runner": "^6.4.1",
     "@types/jest": "^29.5.0",

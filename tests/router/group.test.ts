@@ -1,7 +1,10 @@
 import { describe, expect, test } from '@jest/globals';
 import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
-import { createGroup, getRoutes, isGroup } from '../../src/router/group';
+import { createFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { createRoute } from '../../src/router/route';
+import { createGroup, getRoutes, isGroup } from '../../src/router/group';
 
 describe('group', () => {
   describe('isGroup', () => {
@@ -48,7 +51,7 @@ describe('group', () => {
             }),
           ],
 
-          middlewares: [jest.fn()],
+          middlewares: [createFunctionMock<Middleware>([])],
           pathOptions: { key: 'value' },
         }),
       ).toMatchInlineSnapshot(`
@@ -64,7 +67,7 @@ describe('group', () => {
             },
           ],
           "middlewares": [
-            [MockFunction],
+            [Function],
           ],
           "path": "/api",
           "pathOptions": {
@@ -86,48 +89,48 @@ describe('group', () => {
               method: Method.GET,
               path: '/',
               name: 'pet_list',
-              handler: jest.fn(),
-              middlewares: [jest.fn()],
+              handler: createFunctionMock<Handler>([]),
+              middlewares: [createFunctionMock<Middleware>([])],
               pathOptions: { name3: 'list' },
             }),
             createRoute({
               method: Method.POST,
               path: '/',
               name: 'pet_create',
-              handler: jest.fn(),
-              middlewares: [jest.fn()],
+              handler: createFunctionMock<Handler>([]),
+              middlewares: [createFunctionMock<Middleware>([])],
               pathOptions: { name3: 'create' },
             }),
             createRoute({
               method: Method.GET,
               path: '/{id}',
               name: 'pet_read',
-              handler: jest.fn(),
-              middlewares: [jest.fn()],
+              handler: createFunctionMock<Handler>([]),
+              middlewares: [createFunctionMock<Middleware>([])],
               pathOptions: { name3: 'read' },
             }),
             createRoute({
               method: Method.PUT,
               path: '/{id}',
               name: 'pet_update',
-              handler: jest.fn(),
-              middlewares: [jest.fn()],
+              handler: createFunctionMock<Handler>([]),
+              middlewares: [createFunctionMock<Middleware>([])],
               pathOptions: { name3: 'update' },
             }),
             createRoute({
               method: Method.DELETE,
               path: '/{id}',
               name: 'pet_delete',
-              handler: jest.fn(),
-              middlewares: [jest.fn()],
+              handler: createFunctionMock<Handler>([]),
+              middlewares: [createFunctionMock<Middleware>([])],
               pathOptions: { name3: 'delete' },
             }),
           ],
-          middlewares: [jest.fn()],
+          middlewares: [createFunctionMock<Middleware>([])],
           pathOptions: { name2: 'pet' },
         }),
       ],
-      middlewares: [jest.fn()],
+      middlewares: [createFunctionMock<Middleware>([])],
       pathOptions: { name1: 'api' },
     });
 
@@ -136,12 +139,12 @@ describe('group', () => {
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "GET",
           "middlewares": [
-            [MockFunction],
-            [MockFunction],
-            [MockFunction],
+            [Function],
+            [Function],
+            [Function],
           ],
           "name": "pet_list",
           "path": "/api/pet/",
@@ -154,12 +157,12 @@ describe('group', () => {
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "POST",
           "middlewares": [
-            [MockFunction],
-            [MockFunction],
-            [MockFunction],
+            [Function],
+            [Function],
+            [Function],
           ],
           "name": "pet_create",
           "path": "/api/pet/",
@@ -172,12 +175,12 @@ describe('group', () => {
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "GET",
           "middlewares": [
-            [MockFunction],
-            [MockFunction],
-            [MockFunction],
+            [Function],
+            [Function],
+            [Function],
           ],
           "name": "pet_read",
           "path": "/api/pet/{id}",
@@ -190,12 +193,12 @@ describe('group', () => {
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "PUT",
           "middlewares": [
-            [MockFunction],
-            [MockFunction],
-            [MockFunction],
+            [Function],
+            [Function],
+            [Function],
           ],
           "name": "pet_update",
           "path": "/api/pet/{id}",
@@ -208,12 +211,12 @@ describe('group', () => {
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "DELETE",
           "middlewares": [
-            [MockFunction],
-            [MockFunction],
-            [MockFunction],
+            [Function],
+            [Function],
+            [Function],
           ],
           "name": "pet_delete",
           "path": "/api/pet/{id}",

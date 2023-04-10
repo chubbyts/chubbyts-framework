@@ -1,7 +1,10 @@
 import { describe, expect, test } from '@jest/globals';
 import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
-import { createRoute } from '../../src/router/route';
+import { createFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { createRoutesByName } from '../../src/router/routes-by-name';
+import { createRoute } from '../../src/router/route';
 
 describe('routes-by-name', () => {
   test('createRoutesByName', () => {
@@ -11,8 +14,8 @@ describe('routes-by-name', () => {
           method: Method.GET,
           path: '/api/pet/{id}',
           name: 'pet_read',
-          handler: jest.fn(),
-          middlewares: [jest.fn()],
+          handler: createFunctionMock<Handler>([]),
+          middlewares: [createFunctionMock<Middleware>([])],
           pathOptions: { name: 'read' },
         }),
       ]),
@@ -21,10 +24,10 @@ describe('routes-by-name', () => {
         "pet_read" => {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "GET",
           "middlewares": [
-            [MockFunction],
+            [Function],
           ],
           "name": "pet_read",
           "path": "/api/pet/{id}",

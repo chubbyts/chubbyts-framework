@@ -1,5 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
 import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
+import { createFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import {
   createRoute,
   createDeleteRoute,
@@ -35,13 +38,13 @@ describe('route', () => {
           method: Method.GET,
           path: '/api/pet/{id}',
           name: 'pet_read',
-          handler: jest.fn(),
+          handler: createFunctionMock<Handler>([]),
         }),
       ).toMatchInlineSnapshot(`
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "GET",
           "middlewares": [],
           "name": "pet_read",
@@ -57,18 +60,18 @@ describe('route', () => {
           method: Method.GET,
           path: '/api/pet/{id}',
           name: 'pet_read',
-          handler: jest.fn(),
-          middlewares: [jest.fn()],
+          handler: createFunctionMock<Handler>([]),
+          middlewares: [createFunctionMock<Middleware>([])],
           pathOptions: { name: 'read' },
         }),
       ).toMatchInlineSnapshot(`
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "GET",
           "middlewares": [
-            [MockFunction],
+            [Function],
           ],
           "name": "pet_read",
           "path": "/api/pet/{id}",
@@ -85,18 +88,18 @@ describe('route', () => {
       createDeleteRoute({
         path: '/api/pet/{id}',
         name: 'pet_delete',
-        handler: jest.fn(),
-        middlewares: [jest.fn()],
+        handler: createFunctionMock<Handler>([]),
+        middlewares: [createFunctionMock<Middleware>([])],
         pathOptions: { name: 'delete' },
       }),
     ).toMatchInlineSnapshot(`
       {
         "_route": "Route",
         "attributes": {},
-        "handler": [MockFunction],
+        "handler": [Function],
         "method": "DELETE",
         "middlewares": [
-          [MockFunction],
+          [Function],
         ],
         "name": "pet_delete",
         "path": "/api/pet/{id}",
@@ -112,18 +115,18 @@ describe('route', () => {
       createGetRoute({
         path: '/api/pet/{id}',
         name: 'pet_read',
-        handler: jest.fn(),
-        middlewares: [jest.fn()],
+        handler: createFunctionMock<Handler>([]),
+        middlewares: [createFunctionMock<Middleware>([])],
         pathOptions: { name: 'read' },
       }),
     ).toMatchInlineSnapshot(`
       {
         "_route": "Route",
         "attributes": {},
-        "handler": [MockFunction],
+        "handler": [Function],
         "method": "GET",
         "middlewares": [
-          [MockFunction],
+          [Function],
         ],
         "name": "pet_read",
         "path": "/api/pet/{id}",
@@ -139,18 +142,18 @@ describe('route', () => {
       createHeadRoute({
         path: '/api/pet/{id}',
         name: 'pet_head',
-        handler: jest.fn(),
-        middlewares: [jest.fn()],
+        handler: createFunctionMock<Handler>([]),
+        middlewares: [createFunctionMock<Middleware>([])],
         pathOptions: { name: 'head' },
       }),
     ).toMatchInlineSnapshot(`
       {
         "_route": "Route",
         "attributes": {},
-        "handler": [MockFunction],
+        "handler": [Function],
         "method": "HEAD",
         "middlewares": [
-          [MockFunction],
+          [Function],
         ],
         "name": "pet_head",
         "path": "/api/pet/{id}",
@@ -166,18 +169,18 @@ describe('route', () => {
       createOptionsRoute({
         path: '/api/pet/{id}',
         name: 'pet_options',
-        handler: jest.fn(),
-        middlewares: [jest.fn()],
+        handler: createFunctionMock<Handler>([]),
+        middlewares: [createFunctionMock<Middleware>([])],
         pathOptions: { name: 'options' },
       }),
     ).toMatchInlineSnapshot(`
       {
         "_route": "Route",
         "attributes": {},
-        "handler": [MockFunction],
+        "handler": [Function],
         "method": "OPTIONS",
         "middlewares": [
-          [MockFunction],
+          [Function],
         ],
         "name": "pet_options",
         "path": "/api/pet/{id}",
@@ -193,18 +196,18 @@ describe('route', () => {
       createPatchRoute({
         path: '/api/pet/{id}',
         name: 'pet_patch',
-        handler: jest.fn(),
-        middlewares: [jest.fn()],
+        handler: createFunctionMock<Handler>([]),
+        middlewares: [createFunctionMock<Middleware>([])],
         pathOptions: { name: 'patch' },
       }),
     ).toMatchInlineSnapshot(`
       {
         "_route": "Route",
         "attributes": {},
-        "handler": [MockFunction],
+        "handler": [Function],
         "method": "PATCH",
         "middlewares": [
-          [MockFunction],
+          [Function],
         ],
         "name": "pet_patch",
         "path": "/api/pet/{id}",
@@ -220,18 +223,18 @@ describe('route', () => {
       createPostRoute({
         path: '/api/pet/{id}',
         name: 'pet_post',
-        handler: jest.fn(),
-        middlewares: [jest.fn()],
+        handler: createFunctionMock<Handler>([]),
+        middlewares: [createFunctionMock<Middleware>([])],
         pathOptions: { name: 'post' },
       }),
     ).toMatchInlineSnapshot(`
       {
         "_route": "Route",
         "attributes": {},
-        "handler": [MockFunction],
+        "handler": [Function],
         "method": "POST",
         "middlewares": [
-          [MockFunction],
+          [Function],
         ],
         "name": "pet_post",
         "path": "/api/pet/{id}",
@@ -247,18 +250,18 @@ describe('route', () => {
       createPutRoute({
         path: '/api/pet/{id}',
         name: 'pet_put',
-        handler: jest.fn(),
-        middlewares: [jest.fn()],
+        handler: createFunctionMock<Handler>([]),
+        middlewares: [createFunctionMock<Middleware>([])],
         pathOptions: { name: 'put' },
       }),
     ).toMatchInlineSnapshot(`
       {
         "_route": "Route",
         "attributes": {},
-        "handler": [MockFunction],
+        "handler": [Function],
         "method": "PUT",
         "middlewares": [
-          [MockFunction],
+          [Function],
         ],
         "name": "pet_put",
         "path": "/api/pet/{id}",
@@ -278,13 +281,13 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_delete',
-          handler: jest.fn(),
+          handler: createFunctionMock<Handler>([]),
         }),
       ).toMatchInlineSnapshot(`
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "DELETE",
           "middlewares": [],
           "name": "pet_delete",
@@ -302,13 +305,13 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_read',
-          handler: jest.fn(),
+          handler: createFunctionMock<Handler>([]),
         }),
       ).toMatchInlineSnapshot(`
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "GET",
           "middlewares": [],
           "name": "pet_read",
@@ -326,13 +329,13 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_head',
-          handler: jest.fn(),
+          handler: createFunctionMock<Handler>([]),
         }),
       ).toMatchInlineSnapshot(`
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "HEAD",
           "middlewares": [],
           "name": "pet_head",
@@ -350,13 +353,13 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_options',
-          handler: jest.fn(),
+          handler: createFunctionMock<Handler>([]),
         }),
       ).toMatchInlineSnapshot(`
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "OPTIONS",
           "middlewares": [],
           "name": "pet_options",
@@ -374,13 +377,13 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_patch',
-          handler: jest.fn(),
+          handler: createFunctionMock<Handler>([]),
         }),
       ).toMatchInlineSnapshot(`
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "PATCH",
           "middlewares": [],
           "name": "pet_patch",
@@ -398,13 +401,13 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_post',
-          handler: jest.fn(),
+          handler: createFunctionMock<Handler>([]),
         }),
       ).toMatchInlineSnapshot(`
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "POST",
           "middlewares": [],
           "name": "pet_post",
@@ -422,13 +425,13 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_put',
-          handler: jest.fn(),
+          handler: createFunctionMock<Handler>([]),
         }),
       ).toMatchInlineSnapshot(`
         {
           "_route": "Route",
           "attributes": {},
-          "handler": [MockFunction],
+          "handler": [Function],
           "method": "PUT",
           "middlewares": [],
           "name": "pet_put",
