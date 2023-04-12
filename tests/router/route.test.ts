@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
-import { createFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import {
@@ -38,7 +38,7 @@ describe('route', () => {
           method: Method.GET,
           path: '/api/pet/{id}',
           name: 'pet_read',
-          handler: createFunctionMock<Handler>([]),
+          handler: useFunctionMock<Handler>([])[0],
         }),
       ).toMatchInlineSnapshot(`
         {
@@ -60,8 +60,8 @@ describe('route', () => {
           method: Method.GET,
           path: '/api/pet/{id}',
           name: 'pet_read',
-          handler: createFunctionMock<Handler>([]),
-          middlewares: [createFunctionMock<Middleware>([])],
+          handler: useFunctionMock<Handler>([])[0],
+          middlewares: [useFunctionMock<Middleware>([])[0]],
           pathOptions: { name: 'read' },
         }),
       ).toMatchInlineSnapshot(`
@@ -88,8 +88,8 @@ describe('route', () => {
       createDeleteRoute({
         path: '/api/pet/{id}',
         name: 'pet_delete',
-        handler: createFunctionMock<Handler>([]),
-        middlewares: [createFunctionMock<Middleware>([])],
+        handler: useFunctionMock<Handler>([])[0],
+        middlewares: [useFunctionMock<Middleware>([])[0]],
         pathOptions: { name: 'delete' },
       }),
     ).toMatchInlineSnapshot(`
@@ -115,8 +115,8 @@ describe('route', () => {
       createGetRoute({
         path: '/api/pet/{id}',
         name: 'pet_read',
-        handler: createFunctionMock<Handler>([]),
-        middlewares: [createFunctionMock<Middleware>([])],
+        handler: useFunctionMock<Handler>([])[0],
+        middlewares: [useFunctionMock<Middleware>([])[0]],
         pathOptions: { name: 'read' },
       }),
     ).toMatchInlineSnapshot(`
@@ -142,8 +142,8 @@ describe('route', () => {
       createHeadRoute({
         path: '/api/pet/{id}',
         name: 'pet_head',
-        handler: createFunctionMock<Handler>([]),
-        middlewares: [createFunctionMock<Middleware>([])],
+        handler: useFunctionMock<Handler>([])[0],
+        middlewares: [useFunctionMock<Middleware>([])[0]],
         pathOptions: { name: 'head' },
       }),
     ).toMatchInlineSnapshot(`
@@ -169,8 +169,8 @@ describe('route', () => {
       createOptionsRoute({
         path: '/api/pet/{id}',
         name: 'pet_options',
-        handler: createFunctionMock<Handler>([]),
-        middlewares: [createFunctionMock<Middleware>([])],
+        handler: useFunctionMock<Handler>([])[0],
+        middlewares: [useFunctionMock<Middleware>([])[0]],
         pathOptions: { name: 'options' },
       }),
     ).toMatchInlineSnapshot(`
@@ -196,8 +196,8 @@ describe('route', () => {
       createPatchRoute({
         path: '/api/pet/{id}',
         name: 'pet_patch',
-        handler: createFunctionMock<Handler>([]),
-        middlewares: [createFunctionMock<Middleware>([])],
+        handler: useFunctionMock<Handler>([])[0],
+        middlewares: [useFunctionMock<Middleware>([])[0]],
         pathOptions: { name: 'patch' },
       }),
     ).toMatchInlineSnapshot(`
@@ -223,8 +223,8 @@ describe('route', () => {
       createPostRoute({
         path: '/api/pet/{id}',
         name: 'pet_post',
-        handler: createFunctionMock<Handler>([]),
-        middlewares: [createFunctionMock<Middleware>([])],
+        handler: useFunctionMock<Handler>([])[0],
+        middlewares: [useFunctionMock<Middleware>([])[0]],
         pathOptions: { name: 'post' },
       }),
     ).toMatchInlineSnapshot(`
@@ -250,8 +250,8 @@ describe('route', () => {
       createPutRoute({
         path: '/api/pet/{id}',
         name: 'pet_put',
-        handler: createFunctionMock<Handler>([]),
-        middlewares: [createFunctionMock<Middleware>([])],
+        handler: useFunctionMock<Handler>([])[0],
+        middlewares: [useFunctionMock<Middleware>([])[0]],
         pathOptions: { name: 'put' },
       }),
     ).toMatchInlineSnapshot(`
@@ -281,7 +281,7 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_delete',
-          handler: createFunctionMock<Handler>([]),
+          handler: useFunctionMock<Handler>([])[0],
         }),
       ).toMatchInlineSnapshot(`
         {
@@ -305,7 +305,7 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_read',
-          handler: createFunctionMock<Handler>([]),
+          handler: useFunctionMock<Handler>([])[0],
         }),
       ).toMatchInlineSnapshot(`
         {
@@ -329,7 +329,7 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_head',
-          handler: createFunctionMock<Handler>([]),
+          handler: useFunctionMock<Handler>([])[0],
         }),
       ).toMatchInlineSnapshot(`
         {
@@ -353,7 +353,7 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_options',
-          handler: createFunctionMock<Handler>([]),
+          handler: useFunctionMock<Handler>([])[0],
         }),
       ).toMatchInlineSnapshot(`
         {
@@ -377,7 +377,7 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_patch',
-          handler: createFunctionMock<Handler>([]),
+          handler: useFunctionMock<Handler>([])[0],
         }),
       ).toMatchInlineSnapshot(`
         {
@@ -401,7 +401,7 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_post',
-          handler: createFunctionMock<Handler>([]),
+          handler: useFunctionMock<Handler>([])[0],
         }),
       ).toMatchInlineSnapshot(`
         {
@@ -425,7 +425,7 @@ describe('route', () => {
           method: 'SOMETHING',
           path: '/api/pet/{id}',
           name: 'pet_put',
-          handler: createFunctionMock<Handler>([]),
+          handler: useFunctionMock<Handler>([])[0],
         }),
       ).toMatchInlineSnapshot(`
         {

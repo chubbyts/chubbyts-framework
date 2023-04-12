@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
-import { createFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { createRoute } from '../../src/router/route';
@@ -51,7 +51,7 @@ describe('group', () => {
             }),
           ],
 
-          middlewares: [createFunctionMock<Middleware>([])],
+          middlewares: [useFunctionMock<Middleware>([])[0]],
           pathOptions: { key: 'value' },
         }),
       ).toMatchInlineSnapshot(`
@@ -89,48 +89,48 @@ describe('group', () => {
               method: Method.GET,
               path: '/',
               name: 'pet_list',
-              handler: createFunctionMock<Handler>([]),
-              middlewares: [createFunctionMock<Middleware>([])],
+              handler: useFunctionMock<Handler>([])[0],
+              middlewares: [useFunctionMock<Middleware>([])[0]],
               pathOptions: { name3: 'list' },
             }),
             createRoute({
               method: Method.POST,
               path: '/',
               name: 'pet_create',
-              handler: createFunctionMock<Handler>([]),
-              middlewares: [createFunctionMock<Middleware>([])],
+              handler: useFunctionMock<Handler>([])[0],
+              middlewares: [useFunctionMock<Middleware>([])[0]],
               pathOptions: { name3: 'create' },
             }),
             createRoute({
               method: Method.GET,
               path: '/{id}',
               name: 'pet_read',
-              handler: createFunctionMock<Handler>([]),
-              middlewares: [createFunctionMock<Middleware>([])],
+              handler: useFunctionMock<Handler>([])[0],
+              middlewares: [useFunctionMock<Middleware>([])[0]],
               pathOptions: { name3: 'read' },
             }),
             createRoute({
               method: Method.PUT,
               path: '/{id}',
               name: 'pet_update',
-              handler: createFunctionMock<Handler>([]),
-              middlewares: [createFunctionMock<Middleware>([])],
+              handler: useFunctionMock<Handler>([])[0],
+              middlewares: [useFunctionMock<Middleware>([])[0]],
               pathOptions: { name3: 'update' },
             }),
             createRoute({
               method: Method.DELETE,
               path: '/{id}',
               name: 'pet_delete',
-              handler: createFunctionMock<Handler>([]),
-              middlewares: [createFunctionMock<Middleware>([])],
+              handler: useFunctionMock<Handler>([])[0],
+              middlewares: [useFunctionMock<Middleware>([])[0]],
               pathOptions: { name3: 'delete' },
             }),
           ],
-          middlewares: [createFunctionMock<Middleware>([])],
+          middlewares: [useFunctionMock<Middleware>([])[0]],
           pathOptions: { name2: 'pet' },
         }),
       ],
-      middlewares: [createFunctionMock<Middleware>([])],
+      middlewares: [useFunctionMock<Middleware>([])[0]],
       pathOptions: { name1: 'api' },
     });
 

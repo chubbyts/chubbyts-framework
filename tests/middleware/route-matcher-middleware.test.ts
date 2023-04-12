@@ -2,8 +2,7 @@ import { describe, expect, test } from '@jest/globals';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { createNotFound } from '@chubbyts/chubbyts-http-error/dist/http-error';
-import type { FunctionMocks } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
-import { createFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import type { Match } from '../../src/router/route-matcher';
 import { createRouteMatcherMiddleware } from '../../src/middleware/route-matcher-middleware';
 import type { Route } from '../../src/router/route';
@@ -14,7 +13,7 @@ describe('createRouteMatcherMiddleware', () => {
     const request = {} as ServerRequest;
     const response = {} as Response;
 
-    const handlerMocks: FunctionMocks<Handler> = [
+    const [handler, handlerMocks] = useFunctionMock<Handler>([
       {
         callback: async (givenRequest: ServerRequest): Promise<Response> => {
           expect(givenRequest).toEqual({
@@ -25,13 +24,9 @@ describe('createRouteMatcherMiddleware', () => {
           return response;
         },
       },
-    ];
+    ]);
 
-    const handler = createFunctionMock(handlerMocks);
-
-    const matchMocks: FunctionMocks<Match> = [{ parameters: [request], return: route }];
-
-    const match = createFunctionMock(matchMocks);
+    const [match, matchMocks] = useFunctionMock<Match>([{ parameters: [request], return: route }]);
 
     const routeMatcherMiddleware = createRouteMatcherMiddleware(match);
 
@@ -49,11 +44,9 @@ describe('createRouteMatcherMiddleware', () => {
 
     const request = {} as ServerRequest;
 
-    const handler = createFunctionMock<Handler>([]);
+    const [handler, handlerMocks] = useFunctionMock<Handler>([]);
 
-    const matchMocks: FunctionMocks<Match> = [{ parameters: [request], error: httpError }];
-
-    const match = createFunctionMock(matchMocks);
+    const [match, matchMocks] = useFunctionMock<Match>([{ parameters: [request], error: httpError }]);
 
     const routeMatcherMiddleware = createRouteMatcherMiddleware(match);
 
@@ -64,6 +57,7 @@ describe('createRouteMatcherMiddleware', () => {
       expect(e).toBe(httpError);
     }
 
+    expect(handlerMocks.length).toBe(0);
     expect(matchMocks.length).toBe(0);
   });
 });

@@ -8,8 +8,7 @@ import type {
   StreamFromResourceFactory,
   UriFactory,
 } from '@chubbyts/chubbyts-http-types/dist/message-factory';
-import type { FunctionMocks } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
-import { createFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import type { ObjectMocks } from '@chubbyts/chubbyts-function-mock/dist/object-mock';
 import { createObjectMock } from '@chubbyts/chubbyts-function-mock/dist/object-mock';
 import { createResponseToNodeEmitter, createNodeToServerRequestFactory } from '../../src/server/node-http';
@@ -19,9 +18,11 @@ describe('http-node', () => {
     test('with method url', () => {
       const req = {} as IncomingMessage;
 
-      const uriFactory = createFunctionMock<UriFactory>([]);
-      const serverRequestFactory = createFunctionMock<ServerRequestFactory>([]);
-      const streamFromResourceFactory = createFunctionMock<StreamFromResourceFactory>([]);
+      const [uriFactory, uriFactoryMocks] = useFunctionMock<UriFactory>([]);
+      const [serverRequestFactory, serverRequestFactoryMocks] = useFunctionMock<ServerRequestFactory>([]);
+      const [streamFromResourceFactory, streamFromResourceFactoryMocks] = useFunctionMock<StreamFromResourceFactory>(
+        [],
+      );
 
       const nodeToServerRequestFactory = createNodeToServerRequestFactory(
         uriFactory,
@@ -32,14 +33,20 @@ describe('http-node', () => {
       expect(() => {
         nodeToServerRequestFactory(req);
       }).toThrow('Method missing');
+
+      expect(uriFactoryMocks.length).toBe(0);
+      expect(serverRequestFactoryMocks.length).toBe(0);
+      expect(streamFromResourceFactoryMocks.length).toBe(0);
     });
 
     test('with url method', () => {
       const req = { method: 'get' } as IncomingMessage;
 
-      const uriFactory = createFunctionMock<UriFactory>([]);
-      const serverRequestFactory = createFunctionMock<ServerRequestFactory>([]);
-      const streamFromResourceFactory = createFunctionMock<StreamFromResourceFactory>([]);
+      const [uriFactory, uriFactoryMocks] = useFunctionMock<UriFactory>([]);
+      const [serverRequestFactory, serverRequestFactoryMocks] = useFunctionMock<ServerRequestFactory>([]);
+      const [streamFromResourceFactory, streamFromResourceFactoryMocks] = useFunctionMock<StreamFromResourceFactory>(
+        [],
+      );
 
       const nodeToServerRequestFactory = createNodeToServerRequestFactory(
         uriFactory,
@@ -50,6 +57,10 @@ describe('http-node', () => {
       expect(() => {
         nodeToServerRequestFactory(req);
       }).toThrow('Url missing');
+
+      expect(uriFactoryMocks.length).toBe(0);
+      expect(serverRequestFactoryMocks.length).toBe(0);
+      expect(streamFromResourceFactoryMocks.length).toBe(0);
     });
 
     test('without uriOptions and without host', () => {
@@ -78,23 +89,17 @@ describe('http-node', () => {
         uri,
       } as ServerRequest;
 
-      const uriFactoryMocks: FunctionMocks<UriFactory> = [
+      const [uriFactory, uriFactoryMocks] = useFunctionMock<UriFactory>([
         { parameters: ['http://localhost/api?key=value'], return: uri },
-      ];
+      ]);
 
-      const uriFactory = createFunctionMock(uriFactoryMocks);
-
-      const serverRequestFactoryMocks: FunctionMocks<ServerRequestFactory> = [
+      const [serverRequestFactory, serverRequestFactoryMocks] = useFunctionMock<ServerRequestFactory>([
         { parameters: [Method.GET, uri], return: request },
-      ];
+      ]);
 
-      const serverRequestFactory = createFunctionMock(serverRequestFactoryMocks);
-
-      const streamFromResourceFactoryMocks: FunctionMocks<StreamFromResourceFactory> = [
+      const [streamFromResourceFactory, streamFromResourceFactoryMocks] = useFunctionMock<StreamFromResourceFactory>([
         { parameters: [req], return: stream },
-      ];
-
-      const streamFromResourceFactory = createFunctionMock(streamFromResourceFactoryMocks);
+      ]);
 
       const nodeToServerRequestFactory = createNodeToServerRequestFactory(
         uriFactory,
@@ -162,23 +167,17 @@ describe('http-node', () => {
         uri,
       } as ServerRequest;
 
-      const uriFactoryMocks: FunctionMocks<UriFactory> = [
+      const [uriFactory, uriFactoryMocks] = useFunctionMock<UriFactory>([
         { parameters: ['http://localhost:10080/api?key=value'], return: uri },
-      ];
+      ]);
 
-      const uriFactory = createFunctionMock(uriFactoryMocks);
-
-      const serverRequestFactoryMocks: FunctionMocks<ServerRequestFactory> = [
+      const [serverRequestFactory, serverRequestFactoryMocks] = useFunctionMock<ServerRequestFactory>([
         { parameters: [Method.GET, uri], return: request },
-      ];
+      ]);
 
-      const serverRequestFactory = createFunctionMock(serverRequestFactoryMocks);
-
-      const streamFromResourceFactoryMocks: FunctionMocks<StreamFromResourceFactory> = [
+      const [streamFromResourceFactory, streamFromResourceFactoryMocks] = useFunctionMock<StreamFromResourceFactory>([
         { parameters: [req], return: stream },
-      ];
-
-      const streamFromResourceFactory = createFunctionMock(streamFromResourceFactoryMocks);
+      ]);
 
       const nodeToServerRequestFactory = createNodeToServerRequestFactory(
         uriFactory,
@@ -225,9 +224,11 @@ describe('http-node', () => {
         httpVersion: '1.1',
       } as unknown as IncomingMessage;
 
-      const uriFactory = createFunctionMock<UriFactory>([]);
-      const serverRequestFactory = createFunctionMock<ServerRequestFactory>([]);
-      const streamFromResourceFactory = createFunctionMock<StreamFromResourceFactory>([]);
+      const [uriFactory, uriFactoryMocks] = useFunctionMock<UriFactory>([]);
+      const [serverRequestFactory, serverRequestFactoryMocks] = useFunctionMock<ServerRequestFactory>([]);
+      const [streamFromResourceFactory, streamFromResourceFactoryMocks] = useFunctionMock<StreamFromResourceFactory>(
+        [],
+      );
 
       const nodeToServerRequestFactory = createNodeToServerRequestFactory(
         uriFactory,
@@ -239,6 +240,10 @@ describe('http-node', () => {
       expect(() => {
         nodeToServerRequestFactory(req);
       }).toThrow('Missing "x-forwarded-proto", "x-forwarded-host", "x-forwarded-port" header(s).');
+
+      expect(serverRequestFactoryMocks.length).toBe(0);
+      expect(uriFactoryMocks.length).toBe(0);
+      expect(streamFromResourceFactoryMocks.length).toBe(0);
     });
 
     test('with uriOptions = true', () => {
@@ -264,23 +269,17 @@ describe('http-node', () => {
         uri,
       } as ServerRequest;
 
-      const uriFactoryMocks: FunctionMocks<UriFactory> = [
+      const [uriFactory, uriFactoryMocks] = useFunctionMock<UriFactory>([
         { parameters: ['https://localhost:10443/api?key=value'], return: uri },
-      ];
+      ]);
 
-      const uriFactory = createFunctionMock(uriFactoryMocks);
-
-      const serverRequestFactoryMocks: FunctionMocks<ServerRequestFactory> = [
+      const [serverRequestFactory, serverRequestFactoryMocks] = useFunctionMock<ServerRequestFactory>([
         { parameters: [Method.GET, uri], return: request },
-      ];
+      ]);
 
-      const serverRequestFactory = createFunctionMock(serverRequestFactoryMocks);
-
-      const streamFromResourceFactoryMocks: FunctionMocks<StreamFromResourceFactory> = [
+      const [streamFromResourceFactory, streamFromResourceFactoryMocks] = useFunctionMock<StreamFromResourceFactory>([
         { parameters: [req], return: stream },
-      ];
-
-      const streamFromResourceFactory = createFunctionMock(streamFromResourceFactoryMocks);
+      ]);
 
       const nodeToServerRequestFactory = createNodeToServerRequestFactory(
         uriFactory,
@@ -337,21 +336,17 @@ describe('http-node', () => {
         uri,
       } as ServerRequest;
 
-      const uriFactoryMocks: FunctionMocks<UriFactory> = [{ parameters: ['https://localhost:10443/'], return: uri }];
+      const [uriFactory, uriFactoryMocks] = useFunctionMock<UriFactory>([
+        { parameters: ['https://localhost:10443/'], return: uri },
+      ]);
 
-      const uriFactory = createFunctionMock(uriFactoryMocks);
-
-      const serverRequestFactoryMocks: FunctionMocks<ServerRequestFactory> = [
+      const [serverRequestFactory, serverRequestFactoryMocks] = useFunctionMock<ServerRequestFactory>([
         { parameters: [Method.GET, uri], return: request },
-      ];
+      ]);
 
-      const serverRequestFactory = createFunctionMock(serverRequestFactoryMocks);
-
-      const streamFromResourceFactoryMocks: FunctionMocks<StreamFromResourceFactory> = [
+      const [streamFromResourceFactory, streamFromResourceFactoryMocks] = useFunctionMock<StreamFromResourceFactory>([
         { parameters: [req], return: stream },
-      ];
-
-      const streamFromResourceFactory = createFunctionMock(streamFromResourceFactoryMocks);
+      ]);
 
       const nodeToServerRequestFactory = createNodeToServerRequestFactory(
         uriFactory,

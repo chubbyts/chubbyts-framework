@@ -2,8 +2,7 @@ import { describe, expect, test } from '@jest/globals';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import type { FunctionMocks } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
-import { createFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import type { Route } from '../src/router/route';
 import { createApplication } from '../src/application';
 
@@ -28,14 +27,14 @@ describe('createApplication', () => {
   test('with middlewares', async () => {
     const response = {} as Response;
 
-    const handler = createFunctionMock<Handler>([]);
+    const [handler, handlerMocks] = useFunctionMock<Handler>([]);
 
     const middlewares: Array<Middleware> = [];
 
     const route = { handler, middlewares, _route: 'Route' } as unknown as Route;
     const request = { attributes: { route } } as unknown as ServerRequest;
 
-    const middlewareMocks: FunctionMocks<Middleware> = [
+    const [middleware, middlewareMocks] = useFunctionMock<Middleware>([
       {
         callback: async (givenRequest: ServerRequest, givenHandler: Handler) => {
           expect(givenRequest).toBe(request);
@@ -44,14 +43,13 @@ describe('createApplication', () => {
           return response;
         },
       },
-    ];
-
-    const middleware = createFunctionMock(middlewareMocks);
+    ]);
 
     const application = createApplication([middleware]);
 
     expect(await application(request)).toBe(response);
 
+    expect(handlerMocks.length).toBe(0);
     expect(middlewareMocks.length).toBe(0);
   });
 });

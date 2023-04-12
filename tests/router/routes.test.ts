@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
-import { createFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import { createRoutesByName } from '../../src/router/routes';
@@ -14,8 +14,8 @@ describe('routes', () => {
           method: Method.GET,
           path: '/api/pet/{id}',
           name: 'pet_read',
-          handler: createFunctionMock<Handler>([]),
-          middlewares: [createFunctionMock<Middleware>([])],
+          handler: useFunctionMock<Handler>([])[0],
+          middlewares: [useFunctionMock<Middleware>([])[0]],
           pathOptions: { name: 'read' },
         }),
       ])(),

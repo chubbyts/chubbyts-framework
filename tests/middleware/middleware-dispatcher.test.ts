@@ -2,8 +2,7 @@ import { describe, expect, test } from '@jest/globals';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import type { FunctionMocks } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
-import { createFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import { createMiddlewareDispatcher } from '../../src/middleware/middleware-dispatcher';
 
 describe('createMiddlewareDispatcher', () => {
@@ -11,9 +10,9 @@ describe('createMiddlewareDispatcher', () => {
     const request = {} as ServerRequest;
     const response = {} as Response;
 
-    const handlerMocks: FunctionMocks<Handler> = [{ parameters: [request], return: Promise.resolve(response) }];
-
-    const handler = createFunctionMock(handlerMocks);
+    const [handler, handlerMocks] = useFunctionMock<Handler>([
+      { parameters: [request], return: Promise.resolve(response) },
+    ]);
 
     const middlewareDispatcher = createMiddlewareDispatcher();
 
@@ -26,7 +25,7 @@ describe('createMiddlewareDispatcher', () => {
     const request = {} as ServerRequest;
     const response = {} as Response;
 
-    const middleware1Mocks: FunctionMocks<Middleware> = [
+    const [middleware1, middleware1Mocks] = useFunctionMock<Middleware>([
       {
         callback: async (givenRequest: ServerRequest, givenHandler: Handler): Promise<Response> => {
           return givenHandler({
@@ -43,11 +42,9 @@ describe('createMiddlewareDispatcher', () => {
           });
         },
       },
-    ];
+    ]);
 
-    const middleware1 = createFunctionMock(middleware1Mocks);
-
-    const middleware2Mocks: FunctionMocks<Middleware> = [
+    const [middleware2, middleware2Mocks] = useFunctionMock<Middleware>([
       {
         callback: async (givenRequest: ServerRequest, givenHandler: Handler): Promise<Response> => {
           expect(givenRequest).toEqual({ ...givenRequest, attributes: { ...givenRequest.attributes, key: 'value1' } });
@@ -68,11 +65,9 @@ describe('createMiddlewareDispatcher', () => {
           });
         },
       },
-    ];
+    ]);
 
-    const middleware2 = createFunctionMock(middleware2Mocks);
-
-    const middleware3Mocks: FunctionMocks<Middleware> = [
+    const [middleware3, middleware3Mocks] = useFunctionMock<Middleware>([
       {
         callback: async (givenRequest: ServerRequest, givenHandler: Handler): Promise<Response> => {
           expect(givenRequest).toEqual({ ...givenRequest, attributes: { ...givenRequest.attributes, key: 'value2' } });
@@ -93,11 +88,9 @@ describe('createMiddlewareDispatcher', () => {
           });
         },
       },
-    ];
+    ]);
 
-    const middleware3 = createFunctionMock(middleware3Mocks);
-
-    const handlerMocks: FunctionMocks<Handler> = [
+    const [handler, handlerMocks] = useFunctionMock<Handler>([
       {
         callback: async (givenRequest: ServerRequest): Promise<Response> => {
           expect(givenRequest).toEqual({ ...givenRequest, attributes: { ...givenRequest.attributes, key: 'value3' } });
@@ -112,9 +105,7 @@ describe('createMiddlewareDispatcher', () => {
           return response;
         },
       },
-    ];
-
-    const handler = createFunctionMock(handlerMocks);
+    ]);
 
     const middlewareDispatcher = createMiddlewareDispatcher();
 
