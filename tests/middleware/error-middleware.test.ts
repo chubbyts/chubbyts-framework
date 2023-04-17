@@ -11,35 +11,38 @@ import { createErrorMiddleware } from '../../src/middleware/error-middleware';
 const replaceHtmlStack = (data: string) => data.replace(/\n {4}at .*/g, '');
 const replaceJsonStack = (data: string) => data.replace(/\\n {4}at .*/g, '');
 
-describe('createErrorMiddleware', () => {
-  test('successful', async () => {
-    const request = { ...({} as ServerRequest) };
-    const response = { ...({} as Response) };
+describe('error-middleware', () => {
+  describe('createErrorMiddleware', () => {
+    test('successful', async () => {
+      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
+      const [response, responseMocks] = useObjectMock<Response>([]);
 
-    const [handler, handlerMocks] = useFunctionMock<Handler>([
-      { parameters: [request], return: Promise.resolve(response) },
-    ]);
+      const [handler, handlerMocks] = useFunctionMock<Handler>([
+        { parameters: [request], return: Promise.resolve(response) },
+      ]);
 
-    const [responseFactory, responseFactoryMocks] = useFunctionMock<ResponseFactory>([]);
+      const [responseFactory, responseFactoryMocks] = useFunctionMock<ResponseFactory>([]);
 
-    const errorMiddleware = createErrorMiddleware(responseFactory);
+      const errorMiddleware = createErrorMiddleware(responseFactory);
 
-    expect(await errorMiddleware(request, handler)).toBe(response);
+      expect(await errorMiddleware(request, handler)).toBe(response);
 
-    expect(handlerMocks.length).toBe(0);
-    expect(responseFactoryMocks.length).toBe(0);
-  });
+      expect(requestMocks.length).toBe(0);
+      expect(responseMocks.length).toBe(0);
+      expect(handlerMocks.length).toBe(0);
+      expect(responseFactoryMocks.length).toBe(0);
+    });
 
-  test('error, without debug and without log', async () => {
-    const error = new Error('error');
+    test('error, without debug and without log', async () => {
+      const error = new Error('error');
 
-    const request = {} as ServerRequest;
+      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
 
-    const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
-      {
-        name: 'end',
-        callback: (chunk: unknown): Response['body'] => {
-          expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
+      const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
+        {
+          name: 'end',
+          callback: (chunk: unknown): Response['body'] => {
+            expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
       <head>
@@ -186,56 +189,57 @@ describe('createErrorMiddleware', () => {
   </html>"
   `);
 
-          expect(chunk).not.toMatch('Stryker');
+            expect(chunk).not.toMatch('Stryker');
 
-          return responseBody;
+            return responseBody;
+          },
         },
-      },
-    ]);
+      ]);
 
-    const [response, responseMocks] = useObjectMock<Response>([
-      { name: 'body', value: responseBody },
-      { name: 'headers', value: {} },
-    ]);
+      const [response, responseMocks] = useObjectMock<Response>([
+        { name: 'body', value: responseBody },
+        { name: 'headers', value: {} },
+      ]);
 
-    const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
+      const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
 
-    const [responseFactory, responseFactoryMocks] = useFunctionMock<ResponseFactory>([
-      { parameters: [500], return: response },
-    ]);
+      const [responseFactory, responseFactoryMocks] = useFunctionMock<ResponseFactory>([
+        { parameters: [500], return: response },
+      ]);
 
-    const errorMiddleware = createErrorMiddleware(responseFactory);
+      const errorMiddleware = createErrorMiddleware(responseFactory);
 
-    expect(await errorMiddleware(request, handler)).toEqual({
-      ...response,
-      headers: { 'content-type': ['text/html'] },
+      expect(await errorMiddleware(request, handler)).toEqual({
+        ...response,
+        headers: { 'content-type': ['text/html'] },
+      });
+
+      expect(requestMocks.length).toBe(0);
+      expect(responseBodyMocks.length).toBe(0);
+      expect(responseMocks.length).toBe(0);
+      expect(handlerMocks.length).toBe(0);
+      expect(responseFactoryMocks.length).toBe(0);
     });
 
-    expect(responseBodyMocks.length).toBe(0);
-    expect(responseMocks.length).toBe(0);
-    expect(handlerMocks.length).toBe(0);
-    expect(responseFactoryMocks.length).toBe(0);
-  });
+    test('error, with debug and with log', async () => {
+      const error = new Error('error');
+      // eslint-disable-next-line functional/immutable-data
+      error.stack = 'Error: error\nat Line1\nat Line2';
 
-  test('error, with debug and with log', async () => {
-    const error = new Error('error');
-    // eslint-disable-next-line functional/immutable-data
-    error.stack = 'Error: error\nat Line1\nat Line2';
+      const causeError = new Error('cause');
+      // eslint-disable-next-line functional/immutable-data
+      causeError.stack = 'Error: cause\nat Line1\nat Line2\nat Line3';
 
-    const causeError = new Error('cause');
-    // eslint-disable-next-line functional/immutable-data
-    causeError.stack = 'Error: cause\nat Line1\nat Line2\nat Line3';
+      // eslint-disable-next-line functional/immutable-data
+      (error as Error & { cause: Error }).cause = causeError;
 
-    // eslint-disable-next-line functional/immutable-data
-    (error as Error & { cause: Error }).cause = causeError;
+      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
 
-    const request = {} as ServerRequest;
-
-    const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
-      {
-        name: 'end',
-        callback: (chunk: unknown): Response['body'] => {
-          expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
+      const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
+        {
+          name: 'end',
+          callback: (chunk: unknown): Response['body'] => {
+            expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
       <head>
@@ -397,30 +401,30 @@ describe('createErrorMiddleware', () => {
   </html>"
   `);
 
-          expect(chunk).not.toMatch('Stryker');
+            expect(chunk).not.toMatch('Stryker');
 
-          return responseBody;
+            return responseBody;
+          },
         },
-      },
-    ]);
+      ]);
 
-    const [response, responseMocks] = useObjectMock<Response>([
-      { name: 'body', value: responseBody },
-      { name: 'headers', value: {} },
-    ]);
+      const [response, responseMocks] = useObjectMock<Response>([
+        { name: 'body', value: responseBody },
+        { name: 'headers', value: {} },
+      ]);
 
-    const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
+      const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
 
-    const [responseFactory, responseFactoryMocks] = useFunctionMock<ResponseFactory>([
-      { parameters: [500], return: response },
-    ]);
+      const [responseFactory, responseFactoryMocks] = useFunctionMock<ResponseFactory>([
+        { parameters: [500], return: response },
+      ]);
 
-    const [logger, loggerMocks] = useObjectMock<Logger>([
-      {
-        name: 'error',
-        callback: (message: string, context: Record<string, unknown>) => {
-          expect(message).toBe('Http Error');
-          expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
+      const [logger, loggerMocks] = useObjectMock<Logger>([
+        {
+          name: 'error',
+          callback: (message: string, context: Record<string, unknown>) => {
+            expect(message).toBe('Http Error');
+            expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
   "{
     "data": {
       "type": "https://datatracker.ietf.org/doc/html/rfc2616#section-10.5.1",
@@ -451,34 +455,35 @@ describe('createErrorMiddleware', () => {
     ]
   }"
   `);
+          },
         },
-      },
-    ]);
+      ]);
 
-    const errorMiddleware = createErrorMiddleware(responseFactory, true, logger);
+      const errorMiddleware = createErrorMiddleware(responseFactory, true, logger);
 
-    expect(await errorMiddleware(request, handler)).toEqual({
-      ...response,
-      headers: { 'content-type': ['text/html'] },
+      expect(await errorMiddleware(request, handler)).toEqual({
+        ...response,
+        headers: { 'content-type': ['text/html'] },
+      });
+
+      expect(requestMocks.length).toBe(0);
+      expect(responseBodyMocks.length).toBe(0);
+      expect(responseMocks.length).toBe(0);
+      expect(handlerMocks.length).toBe(0);
+      expect(responseFactoryMocks.length).toBe(0);
+      expect(loggerMocks.length).toBe(0);
     });
 
-    expect(responseBodyMocks.length).toBe(0);
-    expect(responseMocks.length).toBe(0);
-    expect(handlerMocks.length).toBe(0);
-    expect(responseFactoryMocks.length).toBe(0);
-    expect(loggerMocks.length).toBe(0);
-  });
+    test('error without stack, with debug and with log', async () => {
+      const error = 'error';
 
-  test('error without stack, with debug and with log', async () => {
-    const error = 'error';
+      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
 
-    const request = {} as ServerRequest;
-
-    const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
-      {
-        name: 'end',
-        callback: (chunk: unknown): Response['body'] => {
-          expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
+      const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
+        {
+          name: 'end',
+          callback: (chunk: unknown): Response['body'] => {
+            expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
       <head>
@@ -632,32 +637,32 @@ describe('createErrorMiddleware', () => {
   </html>"
   `);
 
-          expect(chunk).not.toMatch('Stryker');
+            expect(chunk).not.toMatch('Stryker');
 
-          return responseBody;
+            return responseBody;
+          },
         },
-      },
-    ]);
+      ]);
 
-    const [response, responseMocks] = useObjectMock<Response>([
-      { name: 'body', value: responseBody },
-      { name: 'headers', value: {} },
-    ]);
+      const [response, responseMocks] = useObjectMock<Response>([
+        { name: 'body', value: responseBody },
+        { name: 'headers', value: {} },
+      ]);
 
-    const [handler, handlerMocks] = useFunctionMock<Handler>([
-      { parameters: [request], error: error as unknown as Error },
-    ]);
+      const [handler, handlerMocks] = useFunctionMock<Handler>([
+        { parameters: [request], error: error as unknown as Error },
+      ]);
 
-    const [responseFactory, responseFactoryMocks] = useFunctionMock<ResponseFactory>([
-      { parameters: [500], return: response },
-    ]);
+      const [responseFactory, responseFactoryMocks] = useFunctionMock<ResponseFactory>([
+        { parameters: [500], return: response },
+      ]);
 
-    const [logger, loggerMocks] = useObjectMock<Logger>([
-      {
-        name: 'error',
-        callback: (message: string, context: Record<string, unknown>) => {
-          expect(message).toBe('Http Error');
-          expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
+      const [logger, loggerMocks] = useObjectMock<Logger>([
+        {
+          name: 'error',
+          callback: (message: string, context: Record<string, unknown>) => {
+            expect(message).toBe('Http Error');
+            expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
   "{
     "data": {
       "type": "https://datatracker.ietf.org/doc/html/rfc2616#section-10.5.1",
@@ -680,37 +685,38 @@ describe('createErrorMiddleware', () => {
     ]
   }"
   `);
+          },
         },
-      },
-    ]);
+      ]);
 
-    const errorMiddleware = createErrorMiddleware(responseFactory, true, logger);
+      const errorMiddleware = createErrorMiddleware(responseFactory, true, logger);
 
-    expect(await errorMiddleware(request, handler)).toEqual({
-      ...response,
-      headers: { 'content-type': ['text/html'] },
+      expect(await errorMiddleware(request, handler)).toEqual({
+        ...response,
+        headers: { 'content-type': ['text/html'] },
+      });
+
+      expect(requestMocks.length).toBe(0);
+      expect(responseBodyMocks.length).toBe(0);
+      expect(responseMocks.length).toBe(0);
+      expect(handlerMocks.length).toBe(0);
+      expect(responseFactoryMocks.length).toBe(0);
+      expect(loggerMocks.length).toBe(0);
     });
 
-    expect(responseBodyMocks.length).toBe(0);
-    expect(responseMocks.length).toBe(0);
-    expect(handlerMocks.length).toBe(0);
-    expect(responseFactoryMocks.length).toBe(0);
-    expect(loggerMocks.length).toBe(0);
-  });
+    test('http error: client', async () => {
+      const httpError = createBadRequest({
+        detail: 'The given data is not valid',
+        instance: 'some-instance',
+      });
 
-  test('http error: client', async () => {
-    const httpError = createBadRequest({
-      detail: 'The given data is not valid',
-      instance: 'some-instance',
-    });
+      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
 
-    const request = {} as ServerRequest;
-
-    const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
-      {
-        name: 'end',
-        callback: (chunk: unknown): Response['body'] => {
-          expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
+      const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
+        {
+          name: 'end',
+          callback: (chunk: unknown): Response['body'] => {
+            expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
       <head>
@@ -861,30 +867,30 @@ describe('createErrorMiddleware', () => {
   </html>"
   `);
 
-          expect(chunk).not.toMatch('Stryker');
+            expect(chunk).not.toMatch('Stryker');
 
-          return responseBody;
+            return responseBody;
+          },
         },
-      },
-    ]);
+      ]);
 
-    const [response, responseMocks] = useObjectMock<Response>([
-      { name: 'body', value: responseBody },
-      { name: 'headers', value: {} },
-    ]);
+      const [response, responseMocks] = useObjectMock<Response>([
+        { name: 'body', value: responseBody },
+        { name: 'headers', value: {} },
+      ]);
 
-    const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error: httpError }]);
+      const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error: httpError }]);
 
-    const [responseFactory, responseFactoryMocks] = useFunctionMock<ResponseFactory>([
-      { parameters: [400], return: response },
-    ]);
+      const [responseFactory, responseFactoryMocks] = useFunctionMock<ResponseFactory>([
+        { parameters: [400], return: response },
+      ]);
 
-    const [logger, loggerMocks] = useObjectMock<Logger>([
-      {
-        name: 'info',
-        callback: (message: string, context: Record<string, unknown>) => {
-          expect(message).toBe('Http Error');
-          expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
+      const [logger, loggerMocks] = useObjectMock<Logger>([
+        {
+          name: 'info',
+          callback: (message: string, context: Record<string, unknown>) => {
+            expect(message).toBe('Http Error');
+            expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
   "{
     "data": {
       "type": "https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.1",
@@ -903,34 +909,35 @@ describe('createErrorMiddleware', () => {
     ]
   }"
   `);
+          },
         },
-      },
-    ]);
+      ]);
 
-    const errorMiddleware = createErrorMiddleware(responseFactory, true, logger);
+      const errorMiddleware = createErrorMiddleware(responseFactory, true, logger);
 
-    expect(await errorMiddleware(request, handler)).toEqual({
-      ...response,
-      headers: { 'content-type': ['text/html'] },
+      expect(await errorMiddleware(request, handler)).toEqual({
+        ...response,
+        headers: { 'content-type': ['text/html'] },
+      });
+
+      expect(requestMocks.length).toBe(0);
+      expect(responseBodyMocks.length).toBe(0);
+      expect(responseMocks.length).toBe(0);
+      expect(handlerMocks.length).toBe(0);
+      expect(responseFactoryMocks.length).toBe(0);
+      expect(loggerMocks.length).toBe(0);
     });
 
-    expect(responseBodyMocks.length).toBe(0);
-    expect(responseMocks.length).toBe(0);
-    expect(handlerMocks.length).toBe(0);
-    expect(responseFactoryMocks.length).toBe(0);
-    expect(loggerMocks.length).toBe(0);
-  });
+    test('http error: server', async () => {
+      const httpError = createInternalServerError({});
 
-  test('http error: server', async () => {
-    const httpError = createInternalServerError({});
+      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
 
-    const request = {} as ServerRequest;
-
-    const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
-      {
-        name: 'end',
-        callback: (chunk: unknown): Response['body'] => {
-          expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
+      const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
+        {
+          name: 'end',
+          callback: (chunk: unknown): Response['body'] => {
+            expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
       <head>
@@ -1081,30 +1088,30 @@ describe('createErrorMiddleware', () => {
   </html>"
   `);
 
-          expect(chunk).not.toMatch('Stryker');
+            expect(chunk).not.toMatch('Stryker');
 
-          return responseBody;
+            return responseBody;
+          },
         },
-      },
-    ]);
+      ]);
 
-    const [response, responseMocks] = useObjectMock<Response>([
-      { name: 'body', value: responseBody },
-      { name: 'headers', value: {} },
-    ]);
+      const [response, responseMocks] = useObjectMock<Response>([
+        { name: 'body', value: responseBody },
+        { name: 'headers', value: {} },
+      ]);
 
-    const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error: httpError }]);
+      const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error: httpError }]);
 
-    const [responseFactory, responseFactoryMocks] = useFunctionMock<ResponseFactory>([
-      { parameters: [500], return: response },
-    ]);
+      const [responseFactory, responseFactoryMocks] = useFunctionMock<ResponseFactory>([
+        { parameters: [500], return: response },
+      ]);
 
-    const [logger, loggerMocks] = useObjectMock<Logger>([
-      {
-        name: 'error',
-        callback: (message: string, context: Record<string, unknown>) => {
-          expect(message).toBe('Http Error');
-          expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
+      const [logger, loggerMocks] = useObjectMock<Logger>([
+        {
+          name: 'error',
+          callback: (message: string, context: Record<string, unknown>) => {
+            expect(message).toBe('Http Error');
+            expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
                 "{
                   "data": {
                     "type": "https://datatracker.ietf.org/doc/html/rfc2616#section-10.5.1",
@@ -1121,21 +1128,23 @@ describe('createErrorMiddleware', () => {
                   ]
                 }"
               `);
+          },
         },
-      },
-    ]);
+      ]);
 
-    const errorMiddleware = createErrorMiddleware(responseFactory, true, logger);
+      const errorMiddleware = createErrorMiddleware(responseFactory, true, logger);
 
-    expect(await errorMiddleware(request, handler)).toEqual({
-      ...response,
-      headers: { 'content-type': ['text/html'] },
+      expect(await errorMiddleware(request, handler)).toEqual({
+        ...response,
+        headers: { 'content-type': ['text/html'] },
+      });
+
+      expect(requestMocks.length).toBe(0);
+      expect(responseBodyMocks.length).toBe(0);
+      expect(responseMocks.length).toBe(0);
+      expect(handlerMocks.length).toBe(0);
+      expect(responseFactoryMocks.length).toBe(0);
+      expect(loggerMocks.length).toBe(0);
     });
-
-    expect(responseBodyMocks.length).toBe(0);
-    expect(responseMocks.length).toBe(0);
-    expect(handlerMocks.length).toBe(0);
-    expect(responseFactoryMocks.length).toBe(0);
-    expect(loggerMocks.length).toBe(0);
   });
 });

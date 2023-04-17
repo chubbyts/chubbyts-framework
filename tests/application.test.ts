@@ -3,12 +3,13 @@ import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import { useObjectMock } from '@chubbyts/chubbyts-function-mock/dist/object-mock';
 import type { Route } from '../src/router/route';
 import { createApplication } from '../src/application';
 
 describe('createApplication', () => {
   test('without middlewares', async () => {
-    const request = { attributes: {} } as ServerRequest;
+    const [request, requestMocks] = useObjectMock<ServerRequest>([{ name: 'attributes', value: {} }]);
 
     const application = createApplication([]);
 
@@ -22,17 +23,25 @@ describe('createApplication', () => {
         ),
       );
     }
+
+    expect(requestMocks.length).toBe(0);
   });
 
   test('with middlewares', async () => {
-    const response = {} as Response;
+    const [handler, handlerMocks] = useFunctionMock<Handler>([
+      {
+        callback: async (givenRequest: ServerRequest): Promise<Response> => {
+          expect(givenRequest).toBe(request);
 
-    const [handler, handlerMocks] = useFunctionMock<Handler>([]);
+          return response;
+        },
+      },
+    ]);
 
-    const middlewares: Array<Middleware> = [];
+    const route = { handler, middlewares: [], _route: 'Route' } as unknown as Route;
 
-    const route = { handler, middlewares, _route: 'Route' } as unknown as Route;
-    const request = { attributes: { route } } as unknown as ServerRequest;
+    const [request, requestMocks] = useObjectMock<ServerRequest>([{ name: 'attributes', value: { route } }]);
+    const [response, responseMocks] = useObjectMock<Response>([]);
 
     const [middleware, middlewareMocks] = useFunctionMock<Middleware>([
       {
@@ -40,7 +49,7 @@ describe('createApplication', () => {
           expect(givenRequest).toBe(request);
           expect(givenHandler).toBeInstanceOf(Function);
 
-          return response;
+          return givenHandler(givenRequest);
         },
       },
     ]);
@@ -51,5 +60,7 @@ describe('createApplication', () => {
 
     expect(handlerMocks.length).toBe(0);
     expect(middlewareMocks.length).toBe(0);
+    expect(requestMocks.length).toBe(0);
+    expect(responseMocks.length).toBe(0);
   });
 });
