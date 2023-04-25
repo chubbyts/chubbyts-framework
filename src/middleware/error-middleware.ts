@@ -224,23 +224,34 @@ const handleHttpError = (
   return { ...response, headers: { ...response.headers, 'content-type': ['text/html'] } };
 };
 
-const createHttpErrorFromError = (e: unknown): HttpError => {
-  return createInternalServerError({
-    detail: 'A website error has occurred. Sorry for the temporary inconvenience.',
-    cause: e,
-  });
+type MapToHttpError = (e: unknown) => HttpError;
+
+const createHttpErrorFromError = (e: unknown, mapToHttpError: MapToHttpError): HttpError => {
+  try {
+    return mapToHttpError(e);
+  } catch {
+    return createInternalServerError({
+      detail: 'A website error has occurred. Sorry for the temporary inconvenience.',
+      cause: e,
+    });
+  }
 };
 
 export const createErrorMiddleware = (
   responseFactory: ResponseFactory,
   debug = false,
   logger: Logger = createLogger(),
+  mapToHttpError: MapToHttpError = (e: unknown) => {
+    throw e;
+  },
 ): Middleware => {
   return async (request: ServerRequest, handler: Handler) => {
     try {
       return await handler(request);
     } catch (e) {
-      return handleHttpError(responseFactory, logger, isHttpError(e) ? e : createHttpErrorFromError(e), debug);
+      const httpError = isHttpError(e) ? e : createHttpErrorFromError(e, mapToHttpError);
+
+      return handleHttpError(responseFactory, logger, httpError, debug);
     }
   };
 };
