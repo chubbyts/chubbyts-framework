@@ -5,8 +5,8 @@ import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import type { Logger } from '@chubbyts/chubbyts-log-types/dist/log';
 import { createLogger, LogLevel } from '@chubbyts/chubbyts-log-types/dist/log';
 import { throwableToError } from '@chubbyts/chubbyts-throwable-to-error/dist/throwable-to-error';
-import type { HttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
-import { createInternalServerError, isHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import type { HttpError, MapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import { isHttpError, mapToHttpError as defaultMapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 
 const htmlTemplate = `<!DOCTYPE html>
 <html>
@@ -224,16 +224,11 @@ const handleHttpError = (
   return { ...response, headers: { ...response.headers, 'content-type': ['text/html'] } };
 };
 
-type MapToHttpError = (e: unknown) => HttpError;
-
 const createHttpErrorFromError = (e: unknown, mapToHttpError: MapToHttpError): HttpError => {
   try {
     return mapToHttpError(e);
   } catch {
-    return createInternalServerError({
-      detail: 'A website error has occurred. Sorry for the temporary inconvenience.',
-      cause: e,
-    });
+    return defaultMapToHttpError(e);
   }
 };
 
@@ -241,9 +236,7 @@ export const createErrorMiddleware = (
   responseFactory: ResponseFactory,
   debug = false,
   logger: Logger = createLogger(),
-  mapToHttpError: MapToHttpError = (e: unknown) => {
-    throw e;
-  },
+  mapToHttpError: MapToHttpError = defaultMapToHttpError,
 ): Middleware => {
   return async (request: ServerRequest, handler: Handler) => {
     try {
