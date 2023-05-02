@@ -3,7 +3,6 @@ import type { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
-import { useObjectMock } from '@chubbyts/chubbyts-function-mock/dist/object-mock';
 import { createRouteHandler } from '../../src/handler/route-handler';
 import type { Route } from '../../src/router/route';
 import type { MiddlewareDispatcher } from '../../src/middleware/middleware-dispatcher';
@@ -11,7 +10,7 @@ import type { MiddlewareDispatcher } from '../../src/middleware/middleware-dispa
 describe('route-handler', () => {
   describe('createRouteHandler', () => {
     test('without route', async () => {
-      const [request, requestMocks] = useObjectMock<ServerRequest>([{ name: 'attributes', value: {} }]);
+      const request = { attributes: {} } as ServerRequest;
 
       const [middlewareDispatcher, middlewareDispatcherMocks] = useFunctionMock<MiddlewareDispatcher>([]);
 
@@ -28,7 +27,6 @@ describe('route-handler', () => {
         );
       }
 
-      expect(requestMocks.length).toBe(0);
       expect(middlewareDispatcherMocks.length).toBe(0);
     });
 
@@ -41,8 +39,8 @@ describe('route-handler', () => {
 
       const route = { handler, middlewares, _route: 'Route' } as unknown as Route;
 
-      const [request, requestMocks] = useObjectMock<ServerRequest>([{ name: 'attributes', value: { route } }]);
-      const [response, responseMocks] = useObjectMock<Response>([]);
+      const request = { attributes: { route } } as unknown as ServerRequest;
+      const response = {} as Response;
 
       const [middlewareDispatcher, middlewareDispatcherMocks] = useFunctionMock<MiddlewareDispatcher>([
         { parameters: [middlewares, handler, request], return: Promise.resolve(response) },
@@ -54,8 +52,6 @@ describe('route-handler', () => {
 
       expect(handlerMocks.length).toBe(0);
       expect(middlewareMocks.length).toBe(0);
-      expect(requestMocks.length).toBe(0);
-      expect(responseMocks.length).toBe(0);
       expect(middlewareDispatcherMocks.length).toBe(0);
     });
   });

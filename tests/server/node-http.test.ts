@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse, OutgoingHttpHeaders, IncomingHttpHeaders } from 'http';
-import { Duplex, Stream } from 'stream';
+import type { Duplex } from 'stream';
 import { describe, expect, test } from '@jest/globals';
 import type { Response, ServerRequest, Uri } from '@chubbyts/chubbyts-http-types/dist/message';
 import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
@@ -9,13 +9,12 @@ import type {
   UriFactory,
 } from '@chubbyts/chubbyts-http-types/dist/message-factory';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
-import { useObjectMock } from '@chubbyts/chubbyts-function-mock/dist/object-mock';
 import { createResponseToNodeEmitter, createNodeToServerRequestFactory } from '../../src/server/node-http';
 
 describe('http-node', () => {
   describe('createNodeToServerRequestFactory', () => {
     test('with method url', () => {
-      const [req, reqMocks] = useObjectMock<IncomingMessage>([{ name: 'method', value: undefined }]);
+      const req = {} as IncomingMessage;
 
       const [uriFactory, uriFactoryMocks] = useFunctionMock<UriFactory>([]);
       const [serverRequestFactory, serverRequestFactoryMocks] = useFunctionMock<ServerRequestFactory>([]);
@@ -33,17 +32,13 @@ describe('http-node', () => {
         nodeToServerRequestFactory(req);
       }).toThrow('Method missing');
 
-      expect(reqMocks.length).toBe(0);
       expect(uriFactoryMocks.length).toBe(0);
       expect(serverRequestFactoryMocks.length).toBe(0);
       expect(streamFromResourceFactoryMocks.length).toBe(0);
     });
 
     test('with url method', () => {
-      const [req, reqMocks] = useObjectMock<IncomingMessage>([
-        { name: 'method', value: 'get' },
-        { name: 'url', value: undefined },
-      ]);
+      const req = { method: 'get' } as IncomingMessage;
 
       const [uriFactory, uriFactoryMocks] = useFunctionMock<UriFactory>([]);
       const [serverRequestFactory, serverRequestFactoryMocks] = useFunctionMock<ServerRequestFactory>([]);
@@ -61,7 +56,6 @@ describe('http-node', () => {
         nodeToServerRequestFactory(req);
       }).toThrow('Url missing');
 
-      expect(reqMocks.length).toBe(0);
       expect(uriFactoryMocks.length).toBe(0);
       expect(serverRequestFactoryMocks.length).toBe(0);
       expect(streamFromResourceFactoryMocks.length).toBe(0);
@@ -81,30 +75,16 @@ describe('http-node', () => {
         key6: undefined,
       };
 
-      const [req, reqMocks] = useObjectMock<IncomingMessage>([
-        { name: 'method', value: reqMethod },
-        { name: 'url', value: reqUrl },
-        {
-          name: 'headers',
-          value: reqHeaders,
-        },
-        { name: 'url', value: reqUrl },
-        {
-          name: 'headers',
-          value: reqHeaders,
-        },
-        { name: 'method', value: reqMethod },
-        { name: 'httpVersion', value: '1.1' },
-      ]);
+      const req = { method: reqMethod, url: reqUrl, headers: reqHeaders, httpVersion: '1.1' } as IncomingMessage;
 
       const uri = {
         query: { key: 'value' },
       } as unknown as Uri;
 
-      const requestBody = new Duplex();
+      const requestBody = {} as Duplex;
 
       const request = {
-        body: requestBody,
+        body: {},
         uri,
       } as ServerRequest;
 
@@ -128,7 +108,7 @@ describe('http-node', () => {
 
       const { body, ...rest } = nodeToServerRequestFactory(req);
 
-      expect(body).toBeInstanceOf(Stream);
+      expect(body).toBe(requestBody);
 
       expect(rest).toMatchInlineSnapshot(`
         {
@@ -162,7 +142,6 @@ describe('http-node', () => {
         }
       `);
 
-      expect(reqMocks.length).toBe(0);
       expect(serverRequestFactoryMocks.length).toBe(0);
       expect(uriFactoryMocks.length).toBe(0);
       expect(streamFromResourceFactoryMocks.length).toBe(0);
@@ -173,27 +152,13 @@ describe('http-node', () => {
       const reqUrl = '/api?key=value';
       const reqHeaders: IncomingHttpHeaders = { host: 'localhost:10080', key1: 'value1', key2: ['value2'] };
 
-      const [req, reqMocks] = useObjectMock<IncomingMessage>([
-        { name: 'method', value: reqMethod },
-        { name: 'url', value: reqUrl },
-        {
-          name: 'headers',
-          value: reqHeaders,
-        },
-        { name: 'url', value: reqUrl },
-        {
-          name: 'headers',
-          value: reqHeaders,
-        },
-        { name: 'method', value: reqMethod },
-        { name: 'httpVersion', value: '1.1' },
-      ]);
+      const req = { method: reqMethod, url: reqUrl, headers: reqHeaders, httpVersion: '1.1' } as IncomingMessage;
 
       const uri = {
         query: { key: 'value' },
       } as unknown as Uri;
 
-      const requestBody = new Duplex();
+      const requestBody = {} as Duplex;
 
       const request = {
         body: requestBody,
@@ -218,12 +183,9 @@ describe('http-node', () => {
         streamFromResourceFactory,
       );
 
-      const { body, ...rest } = nodeToServerRequestFactory(req);
-
-      expect(body).toBeInstanceOf(Stream);
-
-      expect(rest).toMatchInlineSnapshot(`
+      expect(nodeToServerRequestFactory(req)).toMatchInlineSnapshot(`
         {
+          "body": {},
           "headers": {
             "host": [
               "localhost:10080",
@@ -244,7 +206,6 @@ describe('http-node', () => {
         }
       `);
 
-      expect(reqMocks.length).toBe(0);
       expect(serverRequestFactoryMocks.length).toBe(0);
       expect(uriFactoryMocks.length).toBe(0);
       expect(streamFromResourceFactoryMocks.length).toBe(0);
@@ -255,22 +216,7 @@ describe('http-node', () => {
       const reqUrl = '/api?key=value';
       const reqHeaders: IncomingHttpHeaders = {};
 
-      const [req, reqMocks] = useObjectMock<IncomingMessage>([
-        { name: 'method', value: reqMethod },
-        { name: 'url', value: reqUrl },
-        {
-          name: 'headers',
-          value: reqHeaders,
-        },
-        {
-          name: 'headers',
-          value: reqHeaders,
-        },
-        {
-          name: 'headers',
-          value: reqHeaders,
-        },
-      ]);
+      const req = { method: reqMethod, url: reqUrl, headers: reqHeaders } as IncomingMessage;
 
       const [uriFactory, uriFactoryMocks] = useFunctionMock<UriFactory>([]);
       const [serverRequestFactory, serverRequestFactoryMocks] = useFunctionMock<ServerRequestFactory>([]);
@@ -289,7 +235,6 @@ describe('http-node', () => {
         nodeToServerRequestFactory(req);
       }).toThrow('Missing "x-forwarded-proto", "x-forwarded-host", "x-forwarded-port" header(s).');
 
-      expect(reqMocks.length).toBe(0);
       expect(serverRequestFactoryMocks.length).toBe(0);
       expect(uriFactoryMocks.length).toBe(0);
       expect(streamFromResourceFactoryMocks.length).toBe(0);
@@ -304,35 +249,13 @@ describe('http-node', () => {
         'x-forwarded-port': '10443',
       };
 
-      const [req, reqMocks] = useObjectMock<IncomingMessage>([
-        { name: 'method', value: reqMethod },
-        { name: 'url', value: reqUrl },
-        {
-          name: 'headers',
-          value: reqHeaders,
-        },
-        {
-          name: 'headers',
-          value: reqHeaders,
-        },
-        {
-          name: 'headers',
-          value: reqHeaders,
-        },
-        { name: 'url', value: reqUrl },
-        {
-          name: 'headers',
-          value: reqHeaders,
-        },
-        { name: 'method', value: reqMethod },
-        { name: 'httpVersion', value: '1.1' },
-      ]);
+      const req = { method: reqMethod, url: reqUrl, headers: reqHeaders, httpVersion: '1.1' } as IncomingMessage;
 
       const uri = {
         query: { key: 'value' },
       } as unknown as Uri;
 
-      const requestBody = new Duplex();
+      const requestBody = {} as Duplex;
 
       const request = {
         body: requestBody,
@@ -358,12 +281,9 @@ describe('http-node', () => {
         'forwarded',
       );
 
-      const { body, ...rest } = nodeToServerRequestFactory(req);
-
-      expect(body).toBeInstanceOf(Stream);
-
-      expect(rest).toMatchInlineSnapshot(`
+      expect(nodeToServerRequestFactory(req)).toMatchInlineSnapshot(`
         {
+          "body": {},
           "headers": {
             "x-forwarded-host": [
               "localhost",
@@ -384,7 +304,6 @@ describe('http-node', () => {
         }
       `);
 
-      expect(reqMocks.length).toBe(0);
       expect(serverRequestFactoryMocks.length).toBe(0);
       expect(uriFactoryMocks.length).toBe(0);
       expect(streamFromResourceFactoryMocks.length).toBe(0);
@@ -395,21 +314,11 @@ describe('http-node', () => {
       const reqUrl = '/';
       const reqHeaders: IncomingHttpHeaders = {};
 
-      const [req, reqMocks] = useObjectMock<IncomingMessage>([
-        { name: 'method', value: reqMethod },
-        { name: 'url', value: reqUrl },
-        { name: 'url', value: reqUrl },
-        {
-          name: 'headers',
-          value: reqHeaders,
-        },
-        { name: 'method', value: reqMethod },
-        { name: 'httpVersion', value: '1.1' },
-      ]);
+      const req = { method: reqMethod, url: reqUrl, headers: reqHeaders, httpVersion: '1.1' } as IncomingMessage;
 
       const uri = {} as Uri;
 
-      const requestBody = new Duplex();
+      const requestBody = {} as Duplex;
 
       const request = {
         body: requestBody,
@@ -438,19 +347,15 @@ describe('http-node', () => {
         },
       );
 
-      const { body, ...rest } = nodeToServerRequestFactory(req);
-
-      expect(body).toBeInstanceOf(Stream);
-
-      expect(rest).toMatchInlineSnapshot(`
+      expect(nodeToServerRequestFactory(req)).toMatchInlineSnapshot(`
         {
+          "body": {},
           "headers": {},
           "protocolVersion": "1.1",
           "uri": {},
         }
       `);
 
-      expect(reqMocks.length).toBe(0);
       expect(serverRequestFactoryMocks.length).toBe(0);
       expect(uriFactoryMocks.length).toBe(0);
       expect(streamFromResourceFactoryMocks.length).toBe(0);
@@ -462,46 +367,38 @@ describe('http-node', () => {
     const reasonPhrase = 'OK';
     const headers: OutgoingHttpHeaders = { 'content-type': ['application/json'] };
 
-    const [res, resMocks] = useObjectMock<ServerResponse>([
-      {
-        name: 'writeHead',
-        callback: ((
-          givenStatusCode: number,
-          givenStatusMessage?: string,
-          givenHeaders?: OutgoingHttpHeaders,
-        ): ServerResponse => {
-          expect(givenStatusCode).toBe(status);
-          expect(givenStatusMessage).toBe(reasonPhrase);
-          expect(givenHeaders).toBe(headers);
+    const writeHead = jest.fn(
+      (givenStatusCode: number, givenStatusMessage?: string, givenHeaders?: OutgoingHttpHeaders): ServerResponse => {
+        expect(givenStatusCode).toBe(status);
+        expect(givenStatusMessage).toBe(reasonPhrase);
+        expect(givenHeaders).toBe(headers);
 
-          return res;
-        }) as ServerResponse['writeHead'],
+        return res;
       },
-    ]);
+    );
 
-    const [responseBody, responseBodyMocks] = useObjectMock<Duplex>([
-      {
-        name: 'pipe',
-        callback: (<T extends WritableStream>(destination: T): Duplex => {
-          expect(destination).toBe(res);
+    const res = {
+      writeHead,
+    } as unknown as ServerResponse;
 
-          return responseBody;
-        }) as NodeJS.ReadableStream['pipe'],
-      },
-    ]);
+    const pipe = jest.fn((givenStream) => {
+      expect(givenStream).toBe(res);
+    });
 
     const response = {
       status,
       reasonPhrase,
       headers,
-      body: responseBody,
+      body: {
+        pipe,
+      },
     } as unknown as Response;
 
     const responseToNodeEmitter = createResponseToNodeEmitter();
 
     responseToNodeEmitter(response, res);
 
-    expect(resMocks.length).toBe(0);
-    expect(responseBodyMocks.length).toBe(0);
+    expect(writeHead).toBeCalledTimes(1);
+    expect(pipe).toBeCalledTimes(1);
   });
 });

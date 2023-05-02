@@ -9,8 +9,8 @@ import { createLazyMiddleware } from '../../src/middleware/lazy-middleware';
 
 describe('lazy-middleware', () => {
   test('createLazyMiddleware', async () => {
-    const [request, requestMocks] = useObjectMock<ServerRequest>([]);
-    const [response, responseMocks] = useObjectMock<Response>([]);
+    const request = {} as ServerRequest;
+    const response = {} as Response;
 
     const [handler, handlerMocks] = useFunctionMock<Handler>([]);
 
@@ -26,8 +26,6 @@ describe('lazy-middleware', () => {
 
     expect(await lazyMiddleware(request, handler)).toBe(response);
 
-    expect(requestMocks.length).toBe(0);
-    expect(responseMocks.length).toBe(0);
     expect(handlerMocks.length).toBe(0);
     expect(middlewareMocks.length).toBe(0);
     expect(containerMocks.length).toBe(0);

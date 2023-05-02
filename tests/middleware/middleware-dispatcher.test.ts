@@ -3,14 +3,13 @@ import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
-import { useObjectMock } from '@chubbyts/chubbyts-function-mock/dist/object-mock';
 import { createMiddlewareDispatcher } from '../../src/middleware/middleware-dispatcher';
 
 describe('route-matcher-middleware', () => {
   describe('createMiddlewareDispatcher', () => {
     test('without middleware', async () => {
-      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
-      const [response, responseMocks] = useObjectMock<Response>([]);
+      const request = {} as ServerRequest;
+      const response = {} as Response;
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([
         { parameters: [request], return: Promise.resolve(response) },
@@ -20,18 +19,12 @@ describe('route-matcher-middleware', () => {
 
       expect(await middlewareDispatcher([], handler, request)).toBe(response);
 
-      expect(requestMocks.length).toBe(0);
-      expect(responseMocks.length).toBe(0);
       expect(handlerMocks.length).toBe(0);
     });
 
     test('with middlewares', async () => {
-      const [request, requestMocks] = useObjectMock<ServerRequest>([
-        { name: 'attributes', value: {} },
-        { name: 'attributes', value: {} },
-      ]);
-
-      const [response, responseMocks] = useObjectMock<Response>([]);
+      const request = { attributes: {} } as ServerRequest;
+      const response = {} as Response;
 
       const middleware1Callback = async (givenRequest: ServerRequest, givenHandler: Handler): Promise<Response> => {
         return givenHandler({
@@ -100,8 +93,6 @@ describe('route-matcher-middleware', () => {
       expect(await middlewareDispatcher(middlewares, handler, request)).toBe(response);
       expect(await middlewareDispatcher(middlewares, handler, request)).toBe(response);
 
-      expect(requestMocks.length).toBe(0);
-      expect(responseMocks.length).toBe(0);
       expect(middleware1Mocks.length).toBe(0);
       expect(middleware2Mocks.length).toBe(0);
       expect(middleware3Mocks.length).toBe(0);

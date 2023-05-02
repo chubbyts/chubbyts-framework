@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@jest/globals';
+import { describe, jest, expect, test } from '@jest/globals';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
@@ -19,8 +19,8 @@ const replaceJsonStack = (data: string) => data.replace(/\\n {4}at .*/g, '');
 describe('error-middleware', () => {
   describe('createErrorMiddleware', () => {
     test('successful', async () => {
-      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
-      const [response, responseMocks] = useObjectMock<Response>([]);
+      const request = {} as ServerRequest;
+      const response = {} as Response;
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([
         { parameters: [request], return: Promise.resolve(response) },
@@ -32,8 +32,6 @@ describe('error-middleware', () => {
 
       expect(await errorMiddleware(request, handler)).toBe(response);
 
-      expect(requestMocks.length).toBe(0);
-      expect(responseMocks.length).toBe(0);
       expect(handlerMocks.length).toBe(0);
       expect(responseFactoryMocks.length).toBe(0);
     });
@@ -41,13 +39,10 @@ describe('error-middleware', () => {
     test('error, without debug and without log', async () => {
       const error = new Error('error');
 
-      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
+      const request = {} as ServerRequest;
 
-      const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
-        {
-          name: 'end',
-          callback: (chunk: unknown): Response['body'] => {
-            expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
+      const end = jest.fn((chunk: unknown) => {
+        expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
       <head>
@@ -194,17 +189,15 @@ describe('error-middleware', () => {
   </html>"
   `);
 
-            expect(chunk).not.toMatch('Stryker');
+        expect(chunk).not.toMatch('Stryker');
+      });
 
-            return responseBody;
-          },
+      const response = {
+        body: {
+          end,
         },
-      ]);
-
-      const [response, responseMocks] = useObjectMock<Response>([
-        { name: 'body', value: responseBody },
-        { name: 'headers', value: {} },
-      ]);
+        headers: {},
+      } as unknown as Response;
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
 
@@ -219,9 +212,7 @@ describe('error-middleware', () => {
         headers: { 'content-type': ['text/html'] },
       });
 
-      expect(requestMocks.length).toBe(0);
-      expect(responseBodyMocks.length).toBe(0);
-      expect(responseMocks.length).toBe(0);
+      expect(end).toBeCalledTimes(1);
       expect(handlerMocks.length).toBe(0);
       expect(responseFactoryMocks.length).toBe(0);
     });
@@ -238,13 +229,10 @@ describe('error-middleware', () => {
       // eslint-disable-next-line functional/immutable-data
       (error as Error & { cause: Error }).cause = causeError;
 
-      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
+      const request = {} as ServerRequest;
 
-      const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
-        {
-          name: 'end',
-          callback: (chunk: unknown): Response['body'] => {
-            expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
+      const end = jest.fn((chunk: unknown) => {
+        expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
       <head>
@@ -406,17 +394,15 @@ describe('error-middleware', () => {
   </html>"
   `);
 
-            expect(chunk).not.toMatch('Stryker');
+        expect(chunk).not.toMatch('Stryker');
+      });
 
-            return responseBody;
-          },
+      const response = {
+        body: {
+          end,
         },
-      ]);
-
-      const [response, responseMocks] = useObjectMock<Response>([
-        { name: 'body', value: responseBody },
-        { name: 'headers', value: {} },
-      ]);
+        headers: {},
+      } as unknown as Response;
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
 
@@ -471,9 +457,7 @@ describe('error-middleware', () => {
         headers: { 'content-type': ['text/html'] },
       });
 
-      expect(requestMocks.length).toBe(0);
-      expect(responseBodyMocks.length).toBe(0);
-      expect(responseMocks.length).toBe(0);
+      expect(end).toBeCalledTimes(1);
       expect(handlerMocks.length).toBe(0);
       expect(responseFactoryMocks.length).toBe(0);
       expect(loggerMocks.length).toBe(0);
@@ -491,13 +475,10 @@ describe('error-middleware', () => {
       // eslint-disable-next-line functional/immutable-data
       (error as Error & { cause: Error }).cause = causeError;
 
-      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
+      const request = {} as ServerRequest;
 
-      const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
-        {
-          name: 'end',
-          callback: (chunk: unknown): Response['body'] => {
-            expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
+      const end = jest.fn((chunk: unknown) => {
+        expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
 "<!DOCTYPE html>
 <html>
     <head>
@@ -659,17 +640,15 @@ at Line3</div>
 </html>"
 `);
 
-            expect(chunk).not.toMatch('Stryker');
+        expect(chunk).not.toMatch('Stryker');
+      });
 
-            return responseBody;
-          },
+      const response = {
+        body: {
+          end,
         },
-      ]);
-
-      const [response, responseMocks] = useObjectMock<Response>([
-        { name: 'body', value: responseBody },
-        { name: 'headers', value: {} },
-      ]);
+        headers: {},
+      } as unknown as Response;
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
 
@@ -729,9 +708,7 @@ at Line3</div>
         headers: { 'content-type': ['text/html'] },
       });
 
-      expect(requestMocks.length).toBe(0);
-      expect(responseBodyMocks.length).toBe(0);
-      expect(responseMocks.length).toBe(0);
+      expect(end).toBeCalledTimes(1);
       expect(handlerMocks.length).toBe(0);
       expect(responseFactoryMocks.length).toBe(0);
       expect(loggerMocks.length).toBe(0);
@@ -749,13 +726,10 @@ at Line3</div>
       // eslint-disable-next-line functional/immutable-data
       (error as Error & { cause: Error }).cause = causeError;
 
-      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
+      const request = {} as ServerRequest;
 
-      const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
-        {
-          name: 'end',
-          callback: (chunk: unknown): Response['body'] => {
-            expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
+      const end = jest.fn((chunk: unknown) => {
+        expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
 "<!DOCTYPE html>
 <html>
     <head>
@@ -917,17 +891,15 @@ at Line3</div>
 </html>"
 `);
 
-            expect(chunk).not.toMatch('Stryker');
+        expect(chunk).not.toMatch('Stryker');
+      });
 
-            return responseBody;
-          },
+      const response = {
+        body: {
+          end,
         },
-      ]);
-
-      const [response, responseMocks] = useObjectMock<Response>([
-        { name: 'body', value: responseBody },
-        { name: 'headers', value: {} },
-      ]);
+        headers: {},
+      } as unknown as Response;
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
 
@@ -984,9 +956,7 @@ at Line3</div>
         headers: { 'content-type': ['text/html'] },
       });
 
-      expect(requestMocks.length).toBe(0);
-      expect(responseBodyMocks.length).toBe(0);
-      expect(responseMocks.length).toBe(0);
+      expect(end).toBeCalledTimes(1);
       expect(handlerMocks.length).toBe(0);
       expect(responseFactoryMocks.length).toBe(0);
       expect(loggerMocks.length).toBe(0);
@@ -995,13 +965,10 @@ at Line3</div>
     test('error without stack, with debug and with log', async () => {
       const error = 'error';
 
-      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
+      const request = {} as ServerRequest;
 
-      const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
-        {
-          name: 'end',
-          callback: (chunk: unknown): Response['body'] => {
-            expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
+      const end = jest.fn((chunk: unknown) => {
+        expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
       <head>
@@ -1155,17 +1122,15 @@ at Line3</div>
   </html>"
   `);
 
-            expect(chunk).not.toMatch('Stryker');
+        expect(chunk).not.toMatch('Stryker');
+      });
 
-            return responseBody;
-          },
+      const response = {
+        body: {
+          end,
         },
-      ]);
-
-      const [response, responseMocks] = useObjectMock<Response>([
-        { name: 'body', value: responseBody },
-        { name: 'headers', value: {} },
-      ]);
+        headers: {},
+      } as unknown as Response;
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([
         { parameters: [request], error: error as unknown as Error },
@@ -1214,9 +1179,7 @@ at Line3</div>
         headers: { 'content-type': ['text/html'] },
       });
 
-      expect(requestMocks.length).toBe(0);
-      expect(responseBodyMocks.length).toBe(0);
-      expect(responseMocks.length).toBe(0);
+      expect(end).toBeCalledTimes(1);
       expect(handlerMocks.length).toBe(0);
       expect(responseFactoryMocks.length).toBe(0);
       expect(loggerMocks.length).toBe(0);
@@ -1228,13 +1191,10 @@ at Line3</div>
         instance: 'some-instance',
       });
 
-      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
+      const request = {} as ServerRequest;
 
-      const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
-        {
-          name: 'end',
-          callback: (chunk: unknown): Response['body'] => {
-            expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
+      const end = jest.fn((chunk: unknown) => {
+        expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
       <head>
@@ -1385,17 +1345,15 @@ at Line3</div>
   </html>"
   `);
 
-            expect(chunk).not.toMatch('Stryker');
+        expect(chunk).not.toMatch('Stryker');
+      });
 
-            return responseBody;
-          },
+      const response = {
+        body: {
+          end,
         },
-      ]);
-
-      const [response, responseMocks] = useObjectMock<Response>([
-        { name: 'body', value: responseBody },
-        { name: 'headers', value: {} },
-      ]);
+        headers: {},
+      } as unknown as Response;
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error: httpError }]);
 
@@ -1438,9 +1396,7 @@ at Line3</div>
         headers: { 'content-type': ['text/html'] },
       });
 
-      expect(requestMocks.length).toBe(0);
-      expect(responseBodyMocks.length).toBe(0);
-      expect(responseMocks.length).toBe(0);
+      expect(end).toBeCalledTimes(1);
       expect(handlerMocks.length).toBe(0);
       expect(responseFactoryMocks.length).toBe(0);
       expect(loggerMocks.length).toBe(0);
@@ -1449,13 +1405,10 @@ at Line3</div>
     test('http error: server', async () => {
       const httpError = createInternalServerError({});
 
-      const [request, requestMocks] = useObjectMock<ServerRequest>([]);
+      const request = {} as ServerRequest;
 
-      const [responseBody, responseBodyMocks] = useObjectMock<Response['body']>([
-        {
-          name: 'end',
-          callback: (chunk: unknown): Response['body'] => {
-            expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
+      const end = jest.fn((chunk: unknown) => {
+        expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
       <head>
@@ -1606,17 +1559,15 @@ at Line3</div>
   </html>"
   `);
 
-            expect(chunk).not.toMatch('Stryker');
+        expect(chunk).not.toMatch('Stryker');
+      });
 
-            return responseBody;
-          },
+      const response = {
+        body: {
+          end,
         },
-      ]);
-
-      const [response, responseMocks] = useObjectMock<Response>([
-        { name: 'body', value: responseBody },
-        { name: 'headers', value: {} },
-      ]);
+        headers: {},
+      } as unknown as Response;
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error: httpError }]);
 
@@ -1657,9 +1608,7 @@ at Line3</div>
         headers: { 'content-type': ['text/html'] },
       });
 
-      expect(requestMocks.length).toBe(0);
-      expect(responseBodyMocks.length).toBe(0);
-      expect(responseMocks.length).toBe(0);
+      expect(end).toBeCalledTimes(1);
       expect(handlerMocks.length).toBe(0);
       expect(responseFactoryMocks.length).toBe(0);
       expect(loggerMocks.length).toBe(0);
