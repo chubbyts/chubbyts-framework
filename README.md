@@ -26,11 +26,11 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
 ## Requirements
 
  * node: 16
- * [@chubbyts/chubbyts-dic-types][4]: ^1.0.0
- * [@chubbyts/chubbyts-http-error][5]: ^2.1.1
- * [@chubbyts/chubbyts-http-types][6]: ^1.0.0
- * [@chubbyts/chubbyts-log-types][7]: ^1.0.0
- * [@chubbyts/chubbyts-throwable-to-error][8]: ^1.0.0
+ * [@chubbyts/chubbyts-dic-types][4]: ^1.1.0
+ * [@chubbyts/chubbyts-http-error][5]: ^2.2.0
+ * [@chubbyts/chubbyts-http-types][6]: ^1.1.0
+ * [@chubbyts/chubbyts-log-types][7]: ^1.2.0
+ * [@chubbyts/chubbyts-throwable-to-error][8]: ^1.1.0
 
 ## Installation
 
@@ -38,9 +38,9 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 
 ```sh
 npm i \
-  @chubbyts/chubbyts-framework-router-path-to-regexp@^1.2.0 \
-  @chubbyts/chubbyts-framework@^1.7.1 \
-  @chubbyts/chubbyts-http@^1.0.0
+  @chubbyts/chubbyts-framework-router-path-to-regexp@^1.3.0 \
+  @chubbyts/chubbyts-framework@^1.8.0 \
+  @chubbyts/chubbyts-http@^1.1.0
 ```
 
 ## Usage
