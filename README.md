@@ -26,11 +26,11 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
 ## Requirements
 
  * node: 16
- * [@chubbyts/chubbyts-dic-types][4]: ^1.1.0
- * [@chubbyts/chubbyts-http-error][5]: ^2.2.0
- * [@chubbyts/chubbyts-http-types][6]: ^1.1.0
- * [@chubbyts/chubbyts-log-types][7]: ^1.2.0
- * [@chubbyts/chubbyts-throwable-to-error][8]: ^1.1.0
+ * [@chubbyts/chubbyts-dic-types][4]: ^1.1.1
+ * [@chubbyts/chubbyts-http-error][5]: ^2.2.1
+ * [@chubbyts/chubbyts-http-types][6]: ^1.1.1
+ * [@chubbyts/chubbyts-log-types][7]: ^1.2.1
+ * [@chubbyts/chubbyts-throwable-to-error][8]: ^1.1.1
 
 ## Installation
 
@@ -38,8 +38,8 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 
 ```sh
 npm i \
-  @chubbyts/chubbyts-framework-router-path-to-regexp@^1.3.0 \
-  @chubbyts/chubbyts-framework@^1.8.0 \
+  @chubbyts/chubbyts-framework-router-path-to-regexp@^1.3.1 \
+  @chubbyts/chubbyts-framework@^1.8.1 \
   @chubbyts/chubbyts-http@^1.1.0
 ```
 
@@ -87,7 +87,7 @@ const app = createApplication([
 Running the application via the standard node http implementation.
 
 ```sh
-npm i @chubbyts/chubbyts-node-http-bridge@^1.0.0
+npm i @chubbyts/chubbyts-node-http-bridge@^1.1.1
 ```
 
 Check the [Usage][10] section.
@@ -97,7 +97,7 @@ Check the [Usage][10] section.
 Running the application via the uwebsockets http implementation. Linux only. Faster than the node implemenation.
 
 ```sh
-npm i @chubbyts/chubbyts-uwebsockets-http-bridge@^1.0.2
+npm i @chubbyts/chubbyts-uwebsockets-http-bridge@^1.1.1
 ```
 
 Check the [Usage][11] section.
