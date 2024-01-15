@@ -83,6 +83,8 @@ const app = createApplication([
 ]);
 ```
 
+[Typedoc](docs/index.html)
+
 ### Server
 
 #### Node
