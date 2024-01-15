@@ -83,8 +83,6 @@ const app = createApplication([
 ]);
 ```
 
-[Step by step](doc/step-by-step.md)
-
 ### Server
 
 #### Node
