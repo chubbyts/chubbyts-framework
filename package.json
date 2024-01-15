@@ -21,7 +21,7 @@
     "infection": "stryker run",
     "lint-fix": "eslint src tests --fix",
     "lint": "eslint src tests",
-    "prepare": "npm run build && npm run typedoc",
+    "prepare": "npm run build",
     "test": "jest",
     "typedoc": "rm -Rf docs && ./node_modules/.bin/typedoc src/index.ts"
   },
