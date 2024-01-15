@@ -232,6 +232,17 @@ const createHttpErrorFromError = (e: unknown, mapToHttpError: MapToHttpError): H
   }
 };
 
+/**
+ * ```ts
+ * import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+ * import type { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
+ * import { createErrorMiddleware } from '@chubbyts/chubbyts-framework/dist/middleware/error-middleware';
+ *
+ * const responseFactory: ResponseFactory = ...;
+ *
+ * const errorMiddleware: Middleware = createErrorMiddleware(responseFactory);
+ * ```
+ */
 export const createErrorMiddleware = (
   responseFactory: ResponseFactory,
   debug = false,

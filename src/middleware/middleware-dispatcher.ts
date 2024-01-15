@@ -9,6 +9,14 @@ export type MiddlewareDispatcher = (
   request: ServerRequest,
 ) => Promise<Response>;
 
+/**
+ * ```ts
+ * import type { MiddlewareDispatcher } from '@chubbyts/chubbyts-framework/dist/middleware/middleware-dispatcher';
+ * import { createMiddlewareDispatcher } from '@chubbyts/chubbyts-framework/dist/middleware/middleware-dispatcher';
+ *
+ * const middlewareDispatcher: MiddlewareDispatcher = createMiddlewareDispatcher();
+ * ```
+ */
 export const createMiddlewareDispatcher = (): MiddlewareDispatcher => {
   return (middlewares: Array<Middleware>, handler: Handler, request: ServerRequest): Promise<Response> => {
     return middlewares.reduceRight(
