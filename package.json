@@ -23,7 +23,7 @@
     "lint": "eslint src tests",
     "prepare": "npm run build",
     "test": "jest",
-    "typedoc": "rm -Rf docs && ./node_modules/.bin/typedoc src/index.ts"
+    "typedoc": "rm -Rf docs && typedoc"
   },
   "jest": {
     "preset": "ts-jest",
