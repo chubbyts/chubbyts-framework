@@ -35,7 +35,10 @@
       "global": {
         "lines": 100
       }
-    }
+    },
+    "coveragePathIgnorePatterns": [
+      "src/index.ts"
+    ]
   },
   "prettier": {
     "printWidth": 120,
