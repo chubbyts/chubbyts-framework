@@ -39,7 +39,7 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^1.4.0 \
-  @chubbyts/chubbyts-framework@^1.9.0 \
+  @chubbyts/chubbyts-framework@^1.9.2 \
   @chubbyts/chubbyts-http@^1.2.1
 ```
 
