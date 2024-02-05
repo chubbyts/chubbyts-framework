@@ -8,7 +8,7 @@ import { createRouteHandler } from './handler/route-handler';
 /**
  * 
  * Creates an application that can be further customized to build a simple web application.
- * The `createApplication` function is a top-level function exported by the chubbyts Framework.
+ * The `createApplication` function is a top-level function exported by the chubbyts framework.
  * 
  * @example
  * ```ts
