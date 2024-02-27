@@ -39,7 +39,7 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^1.4.0 \
-  @chubbyts/chubbyts-framework@^1.9.2 \
+  @chubbyts/chubbyts-framework@^1.9.3 \
   @chubbyts/chubbyts-http@^1.2.1
 ```
 
@@ -92,7 +92,7 @@ const app = createApplication([
 Running the application via the standard node http implementation.
 
 ```sh
-npm i @chubbyts/chubbyts-node-http-bridge@^1.2.0
+npm i @chubbyts/chubbyts-http-node-bridge@^1.2.0
 ```
 
 Check the [Usage][10] section.
@@ -102,7 +102,7 @@ Check the [Usage][10] section.
 Running the application via the uwebsockets http implementation. Linux only. Faster than the node implemenation.
 
 ```sh
-npm i @chubbyts/chubbyts-uwebsockets-http-bridge@^1.2.0
+npm i @chubbyts/chubbyts-http-uwebsockets-bridge@^1.2.1
 ```
 
 Check the [Usage][11] section.
@@ -125,8 +125,8 @@ Check the [Usage][11] section.
 [7]: https://www.npmjs.com/package/@chubbyts/chubbyts-log-types
 [8]: https://www.npmjs.com/package/@chubbyts/chubbyts-throwable-to-error
 
-[10]: https://www.npmjs.com/package/@chubbyts/chubbyts-node-http-bridge#usage
-[11]: https://www.npmjs.com/package/@chubbyts/chubbyts-uwebsockets-http-bridge#usage
+[10]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-node-bridge#usage
+[11]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-uwebsockets-bridge#usage
 
 [20]: https://github.com/chubbyts/chubbyts-framework-skeleton
 [21]: https://github.com/chubbyts/chubbyts-petstore
