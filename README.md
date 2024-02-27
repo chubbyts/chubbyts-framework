@@ -39,7 +39,7 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^1.4.0 \
-  @chubbyts/chubbyts-framework@^1.9.3 \
+  @chubbyts/chubbyts-framework@^1.9.4 \
   @chubbyts/chubbyts-http@^1.2.1
 ```
 
@@ -107,10 +107,21 @@ npm i @chubbyts/chubbyts-http-uwebsockets-bridge@^1.2.1
 
 Check the [Usage][11] section.
 
+## Libraries
+
+ * [@chubbyts/chubbyts-api][20]
+ * [@chubbyts/chubbyts-decode-encode][21]
+ * [@chubbyts/chubbyts-dic][22]
+ * [@chubbyts/chubbyts-dic-config][23]
+ * [@chubbyts/chubbyts-http-cors][24]
+ * [@chubbyts/chubbyts-http-multipart][25]
+ * [@chubbyts/chubbyts-http-static-file][26]
+ * [@chubbyts/chubbyts-negotiation][27]
+
 ## Skeleton
 
- * [chubbyts/chubbyts-framework-skeleton][20]
- * [chubbyts/chubbyts-petstore][21]
+ * [chubbyts/chubbyts-framework-skeleton][30]
+ * [chubbyts/chubbyts-petstore][31]
 
 ## Copyright
 
@@ -128,5 +139,14 @@ Check the [Usage][11] section.
 [10]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-node-bridge#usage
 [11]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-uwebsockets-bridge#usage
 
-[20]: https://github.com/chubbyts/chubbyts-framework-skeleton
-[21]: https://github.com/chubbyts/chubbyts-petstore
+[20]: https://www.npmjs.com/package/@chubbyts/chubbyts-api
+[21]: https://www.npmjs.com/package/@chubbyts/chubbyts-decode-encode
+[22]: https://www.npmjs.com/package/@chubbyts/chubbyts-dic
+[23]: https://www.npmjs.com/package/@chubbyts/chubbyts-dic-config
+[24]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-cors
+[25]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-multipart
+[26]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-static-file
+[27]: https://www.npmjs.com/package/@chubbyts/chubbyts-negotiation
+
+[30]: https://github.com/chubbyts/chubbyts-framework-skeleton
+[31]: https://github.com/chubbyts/chubbyts-petstore
