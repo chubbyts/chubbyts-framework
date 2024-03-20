@@ -16,29 +16,14 @@
   "repository": "chubbyts/chubbyts-framework",
   "scripts": {
     "build": "node ./build.js",
-    "cs-fix": "prettier --write src tests",
-    "cs": "prettier --check src tests",
+    "cs-fix": "./node_modules/prettier/bin/prettier.cjs --write src tests",
+    "cs": "./node_modules/prettier/bin/prettier.cjs --check src tests",
     "infection": "stryker run",
     "lint-fix": "eslint src tests --fix",
     "lint": "eslint src tests",
     "prepare": "npm run build",
     "test": "jest",
     "typedoc": "rm -Rf docs && typedoc"
-  },
-  "jest": {
-    "preset": "ts-jest",
-    "testEnvironment": "node",
-    "collectCoverageFrom": [
-      "src/**/*.ts"
-    ],
-    "coverageThreshold": {
-      "global": {
-        "lines": 100
-      }
-    },
-    "coveragePathIgnorePatterns": [
-      "src/index.ts"
-    ]
   },
   "prettier": {
     "printWidth": 120,
@@ -71,16 +56,17 @@
   "devDependencies": {
     "@chubbyts/chubbyts-eslint": "^2.0.3",
     "@chubbyts/chubbyts-function-mock": "^1.4.1",
-    "@chubbyts/chubbyts-packaging": "^2.0.5",
-    "@stryker-mutator/core": "^8.0.0",
-    "@stryker-mutator/jest-runner": "^8.0.0",
-    "@types/jest": "^29.5.11",
-    "@types/node": "^20.11.2",
+    "@chubbyts/chubbyts-packaging": "^2.0.6",
+    "@stryker-mutator/core": "^8.2.6",
+    "@stryker-mutator/jest-runner": "^8.2.6",
+    "@types/jest": "^29.5.12",
+    "@types/node": "^20.11.30",
     "jest": "^29.7.0",
-    "prettier": "^3.2.2",
-    "ts-jest": "^29.1.1",
-    "typedoc": "^0.25.7",
-    "typescript": "^5.3.3"
+    "prettier": "^3.2.5",
+    "prettier-2": "npm:prettier@^2.8.8",
+    "ts-jest": "^29.1.2",
+    "typedoc": "^0.25.12",
+    "typescript": "^5.4.3"
   },
   "publishConfig": {
     "access": "public"
