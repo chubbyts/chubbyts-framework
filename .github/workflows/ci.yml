@@ -51,7 +51,7 @@ jobs:
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
       - name: coveralls.io
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@main
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: sonarcloud.io
