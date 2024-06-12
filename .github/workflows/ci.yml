@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: '16'
       - run: npm install
-      - run: npm test
+      - run: npm test -- --run --no-cache
   node18:
     name: Node 18
     runs-on: ubuntu-22.04
@@ -32,7 +32,7 @@ jobs:
         with:
           node-version: '18'
       - run: npm install
-      - run: npm test
+      - run: npm test -- --run --no-cache
   node20:
     name: Node 20
     runs-on: ubuntu-22.04
@@ -46,7 +46,7 @@ jobs:
       - run: npm install
       - run: npm run lint
       - run: npm run cs
-      - run: npm test -- --coverage --no-cache
+      - run: npm test -- --run --coverage --no-cache
       - run: npm run infection
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}

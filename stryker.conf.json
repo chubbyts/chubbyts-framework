@@ -1,6 +1,9 @@
 {
   "$schema": "./node_modules/@stryker-mutator/core/schema/stryker-schema.json",
-  "testRunner": "jest",
+  "testRunner": "vitest",
+  "vitest": {
+    "configFile": "vitest.config.ts"
+  },
   "coverageAnalysis": "off",
   "reporters": [
     "clear-text",

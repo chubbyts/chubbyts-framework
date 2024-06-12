@@ -1,4 +1,4 @@
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, test } from 'vitest';
 import type { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';

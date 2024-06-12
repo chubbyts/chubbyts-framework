@@ -1,4 +1,4 @@
-import { describe, jest, expect, test } from '@jest/globals';
+import { describe, vi, expect, test } from 'vitest';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
@@ -41,7 +41,7 @@ describe('error-middleware', () => {
 
       const request = {} as ServerRequest;
 
-      const end = jest.fn((chunk: unknown) => {
+      const end = vi.fn((chunk: unknown) => {
         expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
@@ -231,7 +231,7 @@ describe('error-middleware', () => {
 
       const request = {} as ServerRequest;
 
-      const end = jest.fn((chunk: unknown) => {
+      const end = vi.fn((chunk: unknown) => {
         expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
@@ -477,7 +477,7 @@ describe('error-middleware', () => {
 
       const request = {} as ServerRequest;
 
-      const end = jest.fn((chunk: unknown) => {
+      const end = vi.fn((chunk: unknown) => {
         expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
 "<!DOCTYPE html>
 <html>
@@ -728,7 +728,7 @@ at Line3</div>
 
       const request = {} as ServerRequest;
 
-      const end = jest.fn((chunk: unknown) => {
+      const end = vi.fn((chunk: unknown) => {
         expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
 "<!DOCTYPE html>
 <html>
@@ -967,7 +967,7 @@ at Line3</div>
 
       const request = {} as ServerRequest;
 
-      const end = jest.fn((chunk: unknown) => {
+      const end = vi.fn((chunk: unknown) => {
         expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
@@ -1193,7 +1193,7 @@ at Line3</div>
 
       const request = {} as ServerRequest;
 
-      const end = jest.fn((chunk: unknown) => {
+      const end = vi.fn((chunk: unknown) => {
         expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>
@@ -1407,7 +1407,7 @@ at Line3</div>
 
       const request = {} as ServerRequest;
 
-      const end = jest.fn((chunk: unknown) => {
+      const end = vi.fn((chunk: unknown) => {
         expect(replaceHtmlStack(chunk as string)).toMatchInlineSnapshot(`
   "<!DOCTYPE html>
   <html>

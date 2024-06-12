@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse, OutgoingHttpHeaders, IncomingHttpHeaders } from 'http';
 import type { Duplex } from 'stream';
-import { describe, expect, test } from '@jest/globals';
+import { describe, expect, vi, test } from 'vitest';
 import type { Response, ServerRequest, Uri } from '@chubbyts/chubbyts-http-types/dist/message';
 import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 import type {
@@ -367,7 +367,7 @@ describe('http-node', () => {
     const reasonPhrase = 'OK';
     const headers: OutgoingHttpHeaders = { 'content-type': ['application/json'] };
 
-    const writeHead = jest.fn(
+    const writeHead = vi.fn(
       (givenStatusCode: number, givenStatusMessage?: string, givenHeaders?: OutgoingHttpHeaders): ServerResponse => {
         expect(givenStatusCode).toBe(status);
         expect(givenStatusMessage).toBe(reasonPhrase);
@@ -381,7 +381,7 @@ describe('http-node', () => {
       writeHead,
     } as unknown as ServerResponse;
 
-    const pipe = jest.fn((givenStream) => {
+    const pipe = vi.fn((givenStream) => {
       expect(givenStream).toBe(res);
     });
 
