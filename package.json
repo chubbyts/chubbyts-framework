@@ -55,15 +55,15 @@
   },
   "devDependencies": {
     "@chubbyts/chubbyts-eslint": "^2.0.3",
-    "@chubbyts/chubbyts-function-mock": "^1.4.1",
-    "@chubbyts/chubbyts-packaging": "^2.0.6",
+    "@chubbyts/chubbyts-function-mock": "^1.4.3",
+    "@chubbyts/chubbyts-packaging": "^2.0.7",
     "@stryker-mutator/core": "^8.2.6",
     "@stryker-mutator/vitest-runner": "^8.2.6",
-    "@types/node": "^20.11.30",
+    "@types/node": "^20.14.6",
     "@vitest/coverage-v8": "^1.6.0",
-    "prettier": "^3.2.5",
-    "typedoc": "^0.25.12",
-    "typescript": "^5.4.3",
+    "prettier": "^3.3.2",
+    "typedoc": "^0.25.13",
+    "typescript": "^5.4.5",
     "vitest": "^1.6.0"
   },
   "publishConfig": {
