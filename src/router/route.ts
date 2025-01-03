@@ -12,7 +12,7 @@ import type { RequiredProperties } from '../types';
  */
 export type PathOptions = { [key: string]: unknown };
 
-type RouteWithGivenMethodArgument = {
+export type RouteWithGivenMethodArgument = {
   path: string;
   name: string;
   handler: Handler;
@@ -20,7 +20,7 @@ type RouteWithGivenMethodArgument = {
   pathOptions?: PathOptions;
 };
 
-type RouteArgument = {
+export type RouteArgument = {
   method: Method;
 } & RouteWithGivenMethodArgument;
 

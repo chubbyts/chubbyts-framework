@@ -3,7 +3,7 @@ import type { RequiredProperties } from '../types';
 import type { PathOptions, Route } from './route';
 import { createRoute } from './route';
 
-type GroupArgument = {
+export type GroupArgument = {
   path: string;
   children: Array<Group | Route>;
   middlewares?: Array<Middleware>;
