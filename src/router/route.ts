@@ -1,4 +1,4 @@
-import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import type { RequiredProperties } from '../types';
@@ -29,7 +29,7 @@ export type RouteArgument = {
  * import type { Route } from '@chubbyts/chubbyts-framework/dist/router/route';
  *
  * const route: Route = {
- *   method: Method.POST
+ *   method: 'POST'
  *   path: '/api/users',
  *   handler: userCreateHandler,
  *   middlewares: [],
@@ -70,7 +70,7 @@ export const isRoute = (route: unknown): route is Route => {
  * const responseFactory: ResponseFactory = ...;
  *
  * const route: Route = createRoute({
- *   method: Method.GET
+ *   method: 'GET'
  *   path: '/hello/:name([a-z]+)',
  *   name: 'hello',
  *   handler: async (request: ServerRequest): Promise<Response> => {
@@ -110,7 +110,7 @@ export const createRoute = ({ method, path, name, handler, middlewares, pathOpti
  * ```
  */
 export const createDeleteRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: Method.DELETE });
+  return createRoute({ ...args, method: 'DELETE' as Method });
 };
 
 /**
@@ -125,7 +125,7 @@ export const createDeleteRoute = (args: RouteWithGivenMethodArgument): Route => 
  * ```
  */
 export const createGetRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: Method.GET });
+  return createRoute({ ...args, method: 'GET' as Method });
 };
 
 /**
@@ -140,7 +140,7 @@ export const createGetRoute = (args: RouteWithGivenMethodArgument): Route => {
  * ```
  */
 export const createHeadRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: Method.HEAD });
+  return createRoute({ ...args, method: 'HEAD' as Method });
 };
 
 /**
@@ -155,7 +155,7 @@ export const createHeadRoute = (args: RouteWithGivenMethodArgument): Route => {
  * ```
  */
 export const createOptionsRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: Method.OPTIONS });
+  return createRoute({ ...args, method: 'OPTIONS' as Method });
 };
 
 /**
@@ -170,7 +170,7 @@ export const createOptionsRoute = (args: RouteWithGivenMethodArgument): Route =>
  * ```
  */
 export const createPatchRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: Method.PATCH });
+  return createRoute({ ...args, method: 'PATCH' as Method });
 };
 
 /**
@@ -185,7 +185,7 @@ export const createPatchRoute = (args: RouteWithGivenMethodArgument): Route => {
  * ```
  */
 export const createPostRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: Method.POST });
+  return createRoute({ ...args, method: 'POST' as Method });
 };
 
 /**
@@ -200,5 +200,5 @@ export const createPostRoute = (args: RouteWithGivenMethodArgument): Route => {
  * ```
  */
 export const createPutRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: Method.PUT });
+  return createRoute({ ...args, method: 'PUT' as Method });
 };

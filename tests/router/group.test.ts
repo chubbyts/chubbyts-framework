@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
@@ -86,7 +85,7 @@ describe('group', () => {
           path: '/pet',
           children: [
             createRoute({
-              method: Method.GET,
+              method: 'GET',
               path: '/',
               name: 'pet_list',
               handler: useFunctionMock<Handler>([])[0],
@@ -94,7 +93,7 @@ describe('group', () => {
               pathOptions: { name3: 'list' },
             }),
             createRoute({
-              method: Method.POST,
+              method: 'POST',
               path: '/',
               name: 'pet_create',
               handler: useFunctionMock<Handler>([])[0],
@@ -102,7 +101,7 @@ describe('group', () => {
               pathOptions: { name3: 'create' },
             }),
             createRoute({
-              method: Method.GET,
+              method: 'GET',
               path: '/{id}',
               name: 'pet_read',
               handler: useFunctionMock<Handler>([])[0],
@@ -110,7 +109,7 @@ describe('group', () => {
               pathOptions: { name3: 'read' },
             }),
             createRoute({
-              method: Method.PUT,
+              method: 'PUT',
               path: '/{id}',
               name: 'pet_update',
               handler: useFunctionMock<Handler>([])[0],
@@ -118,7 +117,7 @@ describe('group', () => {
               pathOptions: { name3: 'update' },
             }),
             createRoute({
-              method: Method.DELETE,
+              method: 'DELETE',
               path: '/{id}',
               name: 'pet_delete',
               handler: useFunctionMock<Handler>([])[0],

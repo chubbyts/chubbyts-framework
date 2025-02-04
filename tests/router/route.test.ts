@@ -1,5 +1,4 @@
 import { describe, expect, test } from 'vitest';
-import { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
@@ -35,7 +34,7 @@ describe('route', () => {
     test('minimal', () => {
       expect(
         createRoute({
-          method: Method.GET,
+          method: 'GET',
           path: '/api/pet/{id}',
           name: 'pet_read',
           handler: useFunctionMock<Handler>([])[0],
@@ -57,7 +56,7 @@ describe('route', () => {
     test('maximal', () => {
       expect(
         createRoute({
-          method: Method.GET,
+          method: 'GET',
           path: '/api/pet/{id}',
           name: 'pet_read',
           handler: useFunctionMock<Handler>([])[0],
