@@ -29,7 +29,7 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
  * [@chubbyts/chubbyts-dic-types][4]: ^1.3.1
  * [@chubbyts/chubbyts-http-error][5]: ^2.4.1
  * [@chubbyts/chubbyts-http-types][6]: ^1.3.1 || ^2.0.0
- * [@chubbyts/chubbyts-log-types][7]: ^1.4.3
+ * [@chubbyts/chubbyts-log-types][7]: ^1.4.3 || ^2.0.1
  * [@chubbyts/chubbyts-throwable-to-error][8]: ^1.3.2
 
 ## Installation
@@ -39,7 +39,7 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^1.5.1 \
-  @chubbyts/chubbyts-framework@^1.11.0 \
+  @chubbyts/chubbyts-framework@^1.12.0 \
   @chubbyts/chubbyts-http@^1.3.1
 ```
 

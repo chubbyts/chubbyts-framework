@@ -3,7 +3,7 @@ import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import type { Logger } from '@chubbyts/chubbyts-log-types/dist/log';
-import { createLogger, LogLevel } from '@chubbyts/chubbyts-log-types/dist/log';
+import { createLogger } from '@chubbyts/chubbyts-log-types/dist/log';
 import { throwableToError } from '@chubbyts/chubbyts-throwable-to-error/dist/throwable-to-error';
 import type { HttpError, MapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 import { isHttpError, mapToHttpError as defaultMapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
@@ -204,7 +204,7 @@ const handleHttpError = (
 
   const isClientError = status < 500;
 
-  logger[isClientError ? LogLevel.INFO : LogLevel.ERROR]('Http Error', { data: { ...httpError }, errors });
+  logger[isClientError ? 'info' : 'error']('Http Error', { data: { ...httpError }, errors });
 
   const response = createResponse(status);
   response.body.end(
