@@ -56,7 +56,7 @@
   "devDependencies": {
     "@chubbyts/chubbyts-eslint": "^3.0.4",
     "@chubbyts/chubbyts-function-mock": "^1.5.2",
-    "@chubbyts/chubbyts-packaging": "^3.0.2",
+    "@chubbyts/chubbyts-packaging": "^4.0.0",
     "@stryker-mutator/core": "^8.7.1",
     "@stryker-mutator/vitest-runner": "^8.7.1",
     "@types/node": "^22.13.1",
