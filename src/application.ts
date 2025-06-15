@@ -6,6 +6,11 @@ import type { MiddlewareDispatcher } from './middleware/middleware-dispatcher';
 import { createRouteHandler } from './handler/route-handler';
 
 /**
+ * 
+ * Creates an application that can be further customized to build a simple web application.
+ * The `createApplication` function is a top-level function exported by the chubbyts framework.
+ * 
+ * @example
  * ```ts
  * import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
  * import { createErrorMiddleware } from '@chubbyts/chubbyts-framework/dist/middleware/error-middleware';
@@ -17,6 +22,7 @@ import { createRouteHandler } from './handler/route-handler';
  *
  * const application = createApplication([ errorMiddleware, routeMatcherMiddleware ]);
  * ```
+ * 
  */
 export const createApplication = (
   middlewares: Array<Middleware>,
