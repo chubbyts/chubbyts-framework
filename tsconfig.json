@@ -1,1 +1,16 @@
-node_modules/@chubbyts/chubbyts-packaging/tsconfig.json
+{
+    "compilerOptions": {
+        "declaration": true,
+        "erasableSyntaxOnly": true,
+        "esModuleInterop": true,
+        "module": "ESNext",
+        "moduleResolution": "node",
+        "outDir": "dist",
+        "skipLibCheck": true,
+        "strict": true,
+        "target": "ES2021"
+    },
+    "include": [
+        "src"
+    ]
+}
