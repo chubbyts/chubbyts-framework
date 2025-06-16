@@ -1,7 +1,7 @@
 import type { Method } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import type { RequiredProperties } from '../types';
+import type { RequiredProperties } from '../types.js';
 
 /**
  * ```ts

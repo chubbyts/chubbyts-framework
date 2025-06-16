@@ -1,7 +1,7 @@
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
-import type { MiddlewareDispatcher } from '../middleware/middleware-dispatcher';
-import { isRoute } from '../router/route';
+import type { MiddlewareDispatcher } from '../middleware/middleware-dispatcher.js';
+import { isRoute } from '../router/route.js';
 
 /**
  * ```ts
