@@ -1,24 +1,20 @@
 import { describe, expect, test } from 'vitest';
-import type { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
-import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import type { Handler, Middleware } from '@chubbyts/chubbyts-undici-server/dist/server';
+import { ServerRequest, Response } from '@chubbyts/chubbyts-undici-server/dist/server';
 import { createRouteHandler } from '../../src/handler/route-handler';
 import type { Route } from '../../src/router/route';
-import type { MiddlewareDispatcher } from '../../src/middleware/middleware-dispatcher';
 
 describe('route-handler', () => {
   describe('createRouteHandler', () => {
     test('without route', async () => {
-      const request = { attributes: {} } as ServerRequest;
+      const request = new ServerRequest('https://example.com');
 
-      const [middlewareDispatcher, middlewareDispatcherMocks] = useFunctionMock<MiddlewareDispatcher>([]);
-
-      const routeHandler = createRouteHandler(middlewareDispatcher);
+      const routeHandler = createRouteHandler();
 
       try {
         await routeHandler(request);
-        fail('Missing error');
+        throw new Error('Missing error');
       } catch (e) {
         expect(e).toEqual(
           new Error(
@@ -26,33 +22,34 @@ describe('route-handler', () => {
           ),
         );
       }
-
-      expect(middlewareDispatcherMocks.length).toBe(0);
     });
 
     test('with route', async () => {
-      const [handler, handlerMocks] = useFunctionMock<Handler>([]);
+      const [handler, handlerMocks] = useFunctionMock<Handler>([
+        {
+          callback: async () => response,
+        },
+      ]);
 
-      const [middleware, middlewareMocks] = useFunctionMock<Middleware>([]);
+      const [middleware, middlewareMocks] = useFunctionMock<Middleware>([
+        {
+          callback: (request, handler) => handler(request),
+        },
+      ]);
 
       const middlewares = [middleware];
 
       const route = { handler, middlewares, _route: 'Route' } as unknown as Route;
 
-      const request = { attributes: { route } } as unknown as ServerRequest;
-      const response = {} as Response;
+      const request = new ServerRequest('https://example.com', { attributes: { route } });
+      const response = new Response();
 
-      const [middlewareDispatcher, middlewareDispatcherMocks] = useFunctionMock<MiddlewareDispatcher>([
-        { parameters: [middlewares, handler, request], return: Promise.resolve(response) },
-      ]);
-
-      const routeHandler = createRouteHandler(middlewareDispatcher);
+      const routeHandler = createRouteHandler();
 
       expect(await routeHandler(request)).toBe(response);
 
       expect(handlerMocks.length).toBe(0);
       expect(middlewareMocks.length).toBe(0);
-      expect(middlewareDispatcherMocks.length).toBe(0);
     });
   });
 });

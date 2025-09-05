@@ -1,10 +1,10 @@
-import type { Query, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
+import type { ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
 
 export type GenerateUrl = (
-  request: ServerRequest,
+  serverRequest: ServerRequest,
   name: string,
   attributes?: Record<string, string>,
-  query?: Query,
+  query?: string,
 ) => string;
 
-export type GeneratePath = (name: string, attributes?: Record<string, string>, query?: Query) => string;
+export type GeneratePath = (name: string, attributes?: Record<string, string>, query?: string) => string;

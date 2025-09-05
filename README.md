@@ -19,18 +19,18 @@
 
 ## Description
 
-A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based microframework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.
+A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based micro framework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.
 
 ![Workflow](resources/workflow.svg "Workflow")
 
 ## Requirements
 
- * node: 18
- * [@chubbyts/chubbyts-dic-types][4]: ^2.0.0
- * [@chubbyts/chubbyts-http-error][5]: ^3.0.0
- * [@chubbyts/chubbyts-http-types][6]: ^3.0.0
- * [@chubbyts/chubbyts-log-types][7]: ^3.0.0
- * [@chubbyts/chubbyts-throwable-to-error][8]: ^2.0.0
+ * node: 20
+ * [@chubbyts/chubbyts-dic-types][4]: ^2.0.1
+ * [@chubbyts/chubbyts-http-error][5]: ^3.0.1
+ * [@chubbyts/chubbyts-log-types][7]: ^3.0.1
+ * [@chubbyts/chubbyts-throwable-to-error][8]: ^2.0.2
+ * [@chubbyts/chubbyts-undici-server][9]: ^1.0.0
 
 ## Installation
 
@@ -38,88 +38,83 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 
 ```sh
 npm i \
-  @chubbyts/chubbyts-framework-router-path-to-regexp@^2.0.0 \
-  @chubbyts/chubbyts-framework@^2.0.1 \
-  @chubbyts/chubbyts-http@^2.0.0
+  @chubbyts/chubbyts-framework-router-path-to-regexp@^3.0.0 \
+  @chubbyts/chubbyts-framework@^3.0.0
 ```
 
 ## Usage
 
-### App
-
 ```ts
+import type { Server } from 'node:http';
+import { createServer, STATUS_CODES } from 'node:http';
+import { createPathToRegexpRouteMatcher }
+  from '@chubbyts/chubbyts-framework-router-path-to-regexp/dist/path-to-regexp-router';
+import type { ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
+import { Response } from '@chubbyts/chubbyts-undici-server/dist/server';
+import {
+  createNodeRequestToUndiciRequestFactory,
+  createUndiciResponseToNodeResponseEmitter
+} from '@chubbyts/chubbyts-undici-server/dist/node';
 import { createApplication } from '@chubbyts/chubbyts-framework/dist/application';
-import { createErrorMiddleware } from '@chubbyts/chubbyts-framework/dist/middleware/error-middleware';
-import { createRouteMatcherMiddleware } from '@chubbyts/chubbyts-framework/dist/middleware/route-matcher-middleware';
+import { createErrorMiddleware }
+  from '@chubbyts/chubbyts-framework/dist/middleware/error-middleware';
+import { createRouteMatcherMiddleware }
+  from '@chubbyts/chubbyts-framework/dist/middleware/route-matcher-middleware';
 import { createGetRoute } from '@chubbyts/chubbyts-framework/dist/router/route';
 import { createRoutesByName } from '@chubbyts/chubbyts-framework/dist/router/routes-by-name';
-import { createResponseFactory } from '@chubbyts/chubbyts-http/dist/message-factory';
-import { createPathToRegexpRouteMatcher } from '@chubbyts/chubbyts-framework-router-path-to-regexp/dist/path-to-regexp-router';
-import { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
-
-const responseFactory = createResponseFactory();
 
 const app = createApplication([
-  createErrorMiddleware(responseFactory, true),
+  createErrorMiddleware(true),
   createRouteMatcherMiddleware(
     createPathToRegexpRouteMatcher(
       createRoutesByName([
         createGetRoute({
-          path: '/hello/:name([a-z]+)',
+          path: '/hello/:name',
           name: 'hello',
-          handler: async (request: ServerRequest): Promise<Response> => {
-            const response = responseFactory(200);
-            response.body.end(`Hello, ${request.attributes.name}`);
-
-            return {
-              ...response,
-              headers: { ...response.headers, 'content-type': ['text/plain'] }
-            };
+          handler: async (serverRequest: ServerRequest<{name: string}>): Promise<Response> => {
+            return new Response(`Hello, ${serverRequest.attributes.name}`, {
+              status: 200,
+              statusText: STATUS_CODES[200],
+              headers: {'content-type': 'text/plain'}
+            });
           },
         }),
       ]),
     ),
   ),
 ]);
+
+const nodeRequestToUndiciRequestFactory = createNodeRequestToUndiciRequestFactory();
+const undiciResponseToNodeResponseEmitter = createUndiciResponseToNodeResponseEmitter();
+
+const server = createServer(async (req, res) => {
+  const serverRequest = nodeRequestToUndiciRequestFactory(req);
+  const response = await app(serverRequest);
+  undiciResponseToNodeResponseEmitter(response, res);
+});
+
+const serverPort = 3000;
+const serverHost = '0.0.0.0';
+
+server.listen(serverPort, serverHost, () => {
+  console.log(`Listening to ${serverHost}:${serverPort}`);
+});
+
+const shutdownServer = (server: Server) => {
+  server.close((err) => {
+    if (err) {
+      console.warn(`Shutdown server with error: ${err}`);
+      process.exit(1);
+    }
+
+    console.log('Shutdown server');
+    process.exit(0);
+  });
+};
+
+process.on('SIGINT', () => shutdownServer(server));
+process.on('SIGTERM', () => shutdownServer(server));
 ```
-
-### Server
-
-#### Node
-
-Running the application via the standard node http implementation.
-
-```sh
-npm i @chubbyts/chubbyts-http-node-bridge@^2.0.0
-```
-
-Check the [Usage][10] section.
-
-#### Uwebsockets
-
-Running the application via the uwebsockets http implementation. Linux only. Faster than the node implemenation.
-
-```sh
-npm i @chubbyts/chubbyts-http-uwebsockets-bridge@^2.0.0
-```
-
-Check the [Usage][11] section.
-
-## Libraries
-
- * [@chubbyts/chubbyts-api][20]
- * [@chubbyts/chubbyts-decode-encode][21]
- * [@chubbyts/chubbyts-dic][22]
- * [@chubbyts/chubbyts-dic-config][23]
- * [@chubbyts/chubbyts-http-cors][24]
- * [@chubbyts/chubbyts-http-multipart][25]
- * [@chubbyts/chubbyts-http-static-file][26]
- * [@chubbyts/chubbyts-negotiation][27]
-
-## Skeleton
-
- * [chubbyts/chubbyts-framework-skeleton][30]
- * [chubbyts/chubbyts-petstore][31]
 
 ## Copyright
 
@@ -133,18 +128,4 @@ Check the [Usage][11] section.
 [6]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-types
 [7]: https://www.npmjs.com/package/@chubbyts/chubbyts-log-types
 [8]: https://www.npmjs.com/package/@chubbyts/chubbyts-throwable-to-error
-
-[10]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-node-bridge#usage
-[11]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-uwebsockets-bridge#usage
-
-[20]: https://www.npmjs.com/package/@chubbyts/chubbyts-api
-[21]: https://www.npmjs.com/package/@chubbyts/chubbyts-decode-encode
-[22]: https://www.npmjs.com/package/@chubbyts/chubbyts-dic
-[23]: https://www.npmjs.com/package/@chubbyts/chubbyts-dic-config
-[24]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-cors
-[25]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-multipart
-[26]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-static-file
-[27]: https://www.npmjs.com/package/@chubbyts/chubbyts-negotiation
-
-[30]: https://github.com/chubbyts/chubbyts-framework-skeleton
-[31]: https://github.com/chubbyts/chubbyts-petstore
+[9]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-server

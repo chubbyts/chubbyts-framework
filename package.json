@@ -1,11 +1,10 @@
 {
   "name": "@chubbyts/chubbyts-framework",
   "type": "module",
-  "version": "2.0.1",
-  "description": "A minimal, highly performant middleware PSR-15 inspired function based microframework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.",
+  "version": "3.0.0",
+  "description": "A minimal, highly performant middleware PSR-15 inspired function based micro framework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.",
   "keywords": [
     "chubbyts",
-    "microframework",
     "micro framework",
     "middleware",
     "handler",
@@ -42,27 +41,26 @@
     }
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
-    "@chubbyts/chubbyts-dic-types": "^2.0.0",
-    "@chubbyts/chubbyts-http-error": "^3.0.0",
-    "@chubbyts/chubbyts-http-node-bridge": "^2.0.0",
-    "@chubbyts/chubbyts-http-types": "^3.0.0",
-    "@chubbyts/chubbyts-log-types": "^3.0.0",
-    "@chubbyts/chubbyts-throwable-to-error": "^2.0.1"
+    "@chubbyts/chubbyts-dic-types": "^2.0.1",
+    "@chubbyts/chubbyts-http-error": "^3.0.1",
+    "@chubbyts/chubbyts-log-types": "^3.0.1",
+    "@chubbyts/chubbyts-throwable-to-error": "^2.0.2",
+    "@chubbyts/chubbyts-undici-server": "^1.0.0"
   },
   "devDependencies": {
-    "@chubbyts/chubbyts-eslint": "^4.0.2",
-    "@chubbyts/chubbyts-function-mock": "^2.0.1",
-    "@stryker-mutator/core": "^9.0.1",
-    "@stryker-mutator/vitest-runner": "^9.0.1",
-    "@types/node": "^24.0.1",
-    "@vitest/coverage-v8": "^3.2.3",
-    "prettier": "^3.5.3",
-    "typedoc": "^0.28.5",
-    "typescript": "^5.8.3",
-    "vitest": "^3.2.3"
+    "@chubbyts/chubbyts-eslint": "^4.0.7",
+    "@chubbyts/chubbyts-function-mock": "^2.0.2",
+    "@stryker-mutator/core": "^9.1.1",
+    "@stryker-mutator/vitest-runner": "^9.1.1",
+    "@types/node": "^24.3.1",
+    "@vitest/coverage-v8": "^3.2.4",
+    "prettier": "^3.6.2",
+    "typedoc": "^0.28.12",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
   },
   "publishConfig": {
     "access": "public"

@@ -1,6 +1,4 @@
-import type { Method } from '@chubbyts/chubbyts-http-types/dist/message';
-import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
-import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import type { Handler, Middleware } from '@chubbyts/chubbyts-undici-server/dist/server';
 import type { RequiredProperties } from '../types.js';
 
 /**
@@ -21,7 +19,7 @@ export type RouteWithGivenMethodArgument = {
 };
 
 export type RouteArgument = {
-  method: Method;
+  method: string;
 } & RouteWithGivenMethodArgument;
 
 /**
@@ -62,25 +60,20 @@ export const isRoute = (route: unknown): route is Route => {
 
 /**
  * ```ts
- * import type { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
- * import type { Method, Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
+ * import type { Response, ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
  * import type { Route } from '@chubbyts/chubbyts-framework/dist/router/route';
  * import { createRoute } from '@chubbyts/chubbyts-framework/dist/router/route';
- *
- * const responseFactory: ResponseFactory = ...;
  *
  * const route: Route = createRoute({
  *   method: 'GET'
  *   path: '/hello/:name([a-z]+)',
  *   name: 'hello',
- *   handler: async (request: ServerRequest): Promise<Response> => {
- *     const response = responseFactory(200);
- *     response.body.end(`Hello, ${request.attributes.name}`);
- *
- *     return {
- *       ...response,
- *       headers: { ...response.headers, 'content-type': ['text/plain'] }
- *     };
+ *   handler: async (serverRequest: ServerRequest): Promise<Response> => {
+ *     return new Response(`Hello, ${serverRequest.attributes.get('name')}`, {
+ *       status: 200,
+ *       statusText: 'OK',
+ *       headers: { 'content-type': 'text/plain' },
+ *     });
  *   },
  * });
  * ```
@@ -110,7 +103,7 @@ export const createRoute = ({ method, path, name, handler, middlewares, pathOpti
  * ```
  */
 export const createDeleteRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: 'DELETE' as Method });
+  return createRoute({ ...args, method: 'DELETE' });
 };
 
 /**
@@ -125,7 +118,7 @@ export const createDeleteRoute = (args: RouteWithGivenMethodArgument): Route => 
  * ```
  */
 export const createGetRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: 'GET' as Method });
+  return createRoute({ ...args, method: 'GET' });
 };
 
 /**
@@ -140,7 +133,7 @@ export const createGetRoute = (args: RouteWithGivenMethodArgument): Route => {
  * ```
  */
 export const createHeadRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: 'HEAD' as Method });
+  return createRoute({ ...args, method: 'HEAD' });
 };
 
 /**
@@ -155,7 +148,7 @@ export const createHeadRoute = (args: RouteWithGivenMethodArgument): Route => {
  * ```
  */
 export const createOptionsRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: 'OPTIONS' as Method });
+  return createRoute({ ...args, method: 'OPTIONS' });
 };
 
 /**
@@ -170,7 +163,7 @@ export const createOptionsRoute = (args: RouteWithGivenMethodArgument): Route =>
  * ```
  */
 export const createPatchRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: 'PATCH' as Method });
+  return createRoute({ ...args, method: 'PATCH' });
 };
 
 /**
@@ -185,7 +178,7 @@ export const createPatchRoute = (args: RouteWithGivenMethodArgument): Route => {
  * ```
  */
 export const createPostRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: 'POST' as Method });
+  return createRoute({ ...args, method: 'POST' });
 };
 
 /**
@@ -200,5 +193,5 @@ export const createPostRoute = (args: RouteWithGivenMethodArgument): Route => {
  * ```
  */
 export const createPutRoute = (args: RouteWithGivenMethodArgument): Route => {
-  return createRoute({ ...args, method: 'PUT' as Method });
+  return createRoute({ ...args, method: 'PUT' });
 };
