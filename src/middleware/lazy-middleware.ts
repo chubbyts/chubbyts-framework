@@ -1,13 +1,11 @@
 import type { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
-import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
-import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
-import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import type { Handler, Middleware, Response, ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
 
 /**
  * ```ts
  * import type { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
  * import { createContainer } from '@chubbyts/chubbyts-dic/dist/container';
- * import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+ * import type { Middleware } from '@chubbyts/chubbyts-undici-server/dist/server';
  * import type { Logger } from 'some-logger/dist/logger';
  * import { createLazyMiddleware } from '@chubbyts/chubbyts-framework/dist/middleware/lazy-middleware';
  *
@@ -21,6 +19,6 @@ import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
  * ```
  */
 export const createLazyMiddleware = (container: Container, id: string): Middleware => {
-  return async (request: ServerRequest, handler: Handler): Promise<Response> =>
-    (await container.get<Promise<Middleware>>(id))(request, handler);
+  return async (serverRequest: ServerRequest, handler: Handler): Promise<Response> =>
+    (await container.get<Promise<Middleware>>(id))(serverRequest, handler);
 };

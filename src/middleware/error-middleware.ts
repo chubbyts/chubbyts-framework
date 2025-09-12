@@ -1,12 +1,11 @@
-import type { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
-import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
-import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
-import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import { STATUS_CODES } from 'node:http';
 import type { Logger } from '@chubbyts/chubbyts-log-types/dist/log';
 import { createLogger } from '@chubbyts/chubbyts-log-types/dist/log';
 import { throwableToError } from '@chubbyts/chubbyts-throwable-to-error/dist/throwable-to-error';
 import type { HttpError, MapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 import { isHttpError, mapToHttpError as defaultMapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import type { Handler, Middleware, ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
+import { Response } from '@chubbyts/chubbyts-undici-server/dist/server';
 
 const htmlTemplate = `<!DOCTYPE html>
 <html>
@@ -192,12 +191,7 @@ const addDebugToBody = (errors: Array<Error>): string => {
     </div>`;
 };
 
-const handleHttpError = (
-  createResponse: ResponseFactory,
-  logger: Logger,
-  httpError: HttpError,
-  debug: boolean,
-): Response => {
+const handleHttpError = (logger: Logger, httpError: HttpError, debug: boolean): Response => {
   const { status, title, detail, instance } = httpError;
 
   const errors = errorToDataArray(httpError);
@@ -206,8 +200,7 @@ const handleHttpError = (
 
   logger[isClientError ? 'info' : 'error']('Http Error', { data: { ...httpError }, errors });
 
-  const response = createResponse(status);
-  response.body.end(
+  return new Response(
     htmlTemplate
       .replace(/__STATUS__/g, status.toString())
       .replace(/__TITLE__/g, title)
@@ -219,9 +212,8 @@ const handleHttpError = (
           ...(debug ? [addDebugToBody(errors)] : []),
         ].join(''),
       ),
+    { status, statusText: STATUS_CODES[status], headers: { 'content-type': 'text/html' } },
   );
-
-  return { ...response, headers: { ...response.headers, 'content-type': ['text/html'] } };
 };
 
 const createHttpErrorFromError = (e: unknown, mapToHttpError: MapToHttpError): HttpError => {
@@ -234,28 +226,24 @@ const createHttpErrorFromError = (e: unknown, mapToHttpError: MapToHttpError): H
 
 /**
  * ```ts
- * import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
- * import type { ResponseFactory } from '@chubbyts/chubbyts-http-types/dist/message-factory';
+ * import type { Middleware } from '@chubbyts/chubbyts-undici-for-server/dist/middleware';
  * import { createErrorMiddleware } from '@chubbyts/chubbyts-framework/dist/middleware/error-middleware';
  *
- * const responseFactory: ResponseFactory = ...;
- *
- * const errorMiddleware: Middleware = createErrorMiddleware(responseFactory);
+ * const errorMiddleware: Middleware = createErrorMiddleware();
  * ```
  */
 export const createErrorMiddleware = (
-  responseFactory: ResponseFactory,
   debug = false,
   logger: Logger = createLogger(),
   mapToHttpError: MapToHttpError = defaultMapToHttpError,
 ): Middleware => {
-  return async (request: ServerRequest, handler: Handler) => {
+  return async (serverRequest: ServerRequest, handler: Handler) => {
     try {
-      return await handler(request);
+      return await handler(serverRequest);
     } catch (e) {
       const httpError = isHttpError(e) ? e : createHttpErrorFromError(e, mapToHttpError);
 
-      return handleHttpError(responseFactory, logger, httpError, debug);
+      return handleHttpError(logger, httpError, debug);
     }
   };
 };

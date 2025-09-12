@@ -1,16 +1,15 @@
 import { describe, expect, test } from 'vitest';
-import type { ServerRequest, Response } from '@chubbyts/chubbyts-http-types/dist/message';
 import type { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
-import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
-import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import { useObjectMock } from '@chubbyts/chubbyts-function-mock/dist/object-mock';
+import type { Handler, Middleware } from '@chubbyts/chubbyts-undici-server/dist/server';
+import { ServerRequest, Response } from '@chubbyts/chubbyts-undici-server/dist/server';
 import { createLazyMiddleware } from '../../src/middleware/lazy-middleware';
 
 describe('lazy-middleware', () => {
   test('createLazyMiddleware', async () => {
-    const request = {} as ServerRequest;
-    const response = {} as Response;
+    const request = new ServerRequest('https://example.com');
+    const response = new Response();
 
     const [handler, handlerMocks] = useFunctionMock<Handler>([]);
 

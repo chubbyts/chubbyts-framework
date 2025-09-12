@@ -1,7 +1,6 @@
 import { describe, expect, test } from 'vitest';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
-import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
-import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import type { Handler, Middleware } from '@chubbyts/chubbyts-undici-server/dist/server';
 import { createRoutesByName } from '../../src/router/routes-by-name';
 import { createRoute } from '../../src/router/route';
 

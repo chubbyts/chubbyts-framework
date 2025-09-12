@@ -1,4 +1,4 @@
-import type { Middleware } from '@chubbyts/chubbyts-http-types/dist/middleware';
+import type { Middleware } from '@chubbyts/chubbyts-undici-server/dist/server';
 import type { RequiredProperties } from '../types.js';
 import type { PathOptions, Route } from './route.js';
 import { createRoute } from './route.js';

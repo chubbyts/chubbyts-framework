@@ -1,12 +1,11 @@
 import type { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
-import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/dist/message';
-import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+import type { Handler, Response, ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
 
 /**
  * ```ts
  * import type { Container } from '@chubbyts/chubbyts-dic-types/dist/container';
  * import { createContainer } from '@chubbyts/chubbyts-dic/dist/container';
- * import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
+ * import type { Handler } from '@chubbyts/chubbyts-undici-server/dist/server';
  * import type { Logger } from 'some-logger/dist/logger';
  * import { createLazyHandler } from '@chubbyts/chubbyts-framework/dist/handler/lazy-handler';
  *
@@ -20,5 +19,6 @@ import type { Handler } from '@chubbyts/chubbyts-http-types/dist/handler';
  * ```
  */
 export const createLazyHandler = (container: Container, id: string): Handler => {
-  return async (request: ServerRequest): Promise<Response> => (await container.get<Promise<Handler>>(id))(request);
+  return async (serverRequest: ServerRequest): Promise<Response> =>
+    (await container.get<Promise<Handler>>(id))(serverRequest);
 };
