@@ -30,7 +30,7 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
  * [@chubbyts/chubbyts-http-error][5]: ^3.0.1
  * [@chubbyts/chubbyts-log-types][7]: ^3.0.1
  * [@chubbyts/chubbyts-throwable-to-error][8]: ^2.0.2
- * [@chubbyts/chubbyts-undici-server][9]: ^1.0.0
+ * [@chubbyts/chubbyts-undici-server][9]: ^1.0.1
 
 ## Installation
 
@@ -39,22 +39,17 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^3.0.0 \
-  @chubbyts/chubbyts-framework@^3.0.0
+  @chubbyts/chubbyts-framework@^3.0.1
 ```
 
 ## Usage
 
 ```ts
-import type { Server } from 'node:http';
-import { createServer, STATUS_CODES } from 'node:http';
+import { STATUS_CODES } from 'node:http';
 import { createPathToRegexpRouteMatcher }
   from '@chubbyts/chubbyts-framework-router-path-to-regexp/dist/path-to-regexp-router';
 import type { ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
 import { Response } from '@chubbyts/chubbyts-undici-server/dist/server';
-import {
-  createNodeRequestToUndiciRequestFactory,
-  createUndiciResponseToNodeResponseEmitter
-} from '@chubbyts/chubbyts-undici-server/dist/node';
 import { createApplication } from '@chubbyts/chubbyts-framework/dist/application';
 import { createErrorMiddleware }
   from '@chubbyts/chubbyts-framework/dist/middleware/error-middleware';
@@ -83,38 +78,31 @@ const app = createApplication([
     ),
   ),
 ]);
-
-const nodeRequestToUndiciRequestFactory = createNodeRequestToUndiciRequestFactory();
-const undiciResponseToNodeResponseEmitter = createUndiciResponseToNodeResponseEmitter();
-
-const server = createServer(async (req, res) => {
-  const serverRequest = nodeRequestToUndiciRequestFactory(req);
-  const response = await app(serverRequest);
-  undiciResponseToNodeResponseEmitter(response, res);
-});
-
-const serverPort = 3000;
-const serverHost = '0.0.0.0';
-
-server.listen(serverPort, serverHost, () => {
-  console.log(`Listening to ${serverHost}:${serverPort}`);
-});
-
-const shutdownServer = (server: Server) => {
-  server.close((err) => {
-    if (err) {
-      console.warn(`Shutdown server with error: ${err}`);
-      process.exit(1);
-    }
-
-    console.log('Shutdown server');
-    process.exit(0);
-  });
-};
-
-process.on('SIGINT', () => shutdownServer(server));
-process.on('SIGTERM', () => shutdownServer(server));
 ```
+
+### Server
+
+#### Node
+
+Running the application via the standard node http implementation.
+
+```sh
+npm i @chubbyts/chubbyts-undici-server-node@^1.0.0
+```
+
+Check the [Usage][10] section.
+
+## Handler's / Middleware's
+
+ * [@chubbyts/chubbyts-undici-api][20]
+ * [@chubbyts/chubbyts-undici-cors][21]
+ * [@chubbyts/chubbyts-undici-multipart][22]
+ * [@chubbyts/chubbyts-undici-static-file][23]
+
+## Skeleton
+
+ * [chubbyts/chubbyts-framework-skeleton][30]
+ * [chubbyts/chubbyts-petstore][31]
 
 ## Copyright
 
@@ -129,3 +117,14 @@ process.on('SIGTERM', () => shutdownServer(server));
 [7]: https://www.npmjs.com/package/@chubbyts/chubbyts-log-types
 [8]: https://www.npmjs.com/package/@chubbyts/chubbyts-throwable-to-error
 [9]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-server
+
+[10]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-server-node#Usage
+
+[20]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-api
+[21]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-cors
+[22]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-multipart
+[23]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-static-file
+
+[30]: https://github.com/chubbyts/chubbyts-framework-skeleton
+[31]: https://github.com/chubbyts/chubbyts-petstore
+
