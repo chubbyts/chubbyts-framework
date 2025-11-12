@@ -39,7 +39,7 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^3.0.0 \
-  @chubbyts/chubbyts-framework@^3.0.1 \
+  @chubbyts/chubbyts-framework@^3.0.2 \
   @chubbyts/chubbyts-undici-server@^1.0.1
 ```
 
@@ -88,7 +88,7 @@ const app = createApplication([
 Running the application via the standard node http implementation.
 
 ```sh
-npm i @chubbyts/chubbyts-undici-server-node@^1.0.0
+npm i @chubbyts/chubbyts-undici-server-node@^1.0.1
 ```
 
 Check the [Usage][10] section.
