@@ -83,7 +83,7 @@ const app = createApplication([
 
 ### Server
 
-#### Node
+#### node
 
 Running the application via the standard node http implementation.
 
@@ -92,6 +92,16 @@ npm i @chubbyts/chubbyts-undici-server-node@^1.0.0
 ```
 
 Check the [Usage][10] section.
+
+#### uWebSockets
+
+Running the application via the uWebSockets http implementation.
+
+```sh
+npm i @chubbyts/chubbyts-undici-server-uwebsockets@^1.0.0
+```
+
+Check the [Usage][11] section.
 
 ## Handler's / Middleware's
 
@@ -120,6 +130,7 @@ Check the [Usage][10] section.
 [9]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-server
 
 [10]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-server-node#Usage
+[11]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-server-uwebsockets#Usage
 
 [20]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-api
 [21]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-cors
