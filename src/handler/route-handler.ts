@@ -4,7 +4,7 @@ import { isRoute } from '../router/route.js';
 
 /**
  * ```ts
- * import type { Handler } from '@chubbyts/chubbyts-undici-for-server/dist/handler';
+ * import type { Handler } from '@chubbyts/chubbyts-undici-server/dist/server';
  * import { createRouteHandler } from '@chubbyts/chubbyts-framework/dist/handler/route-handler';
  *
  * const routeHandler: Handler = createRouteHandler();

@@ -10,7 +10,7 @@ import { createRouteHandler } from './handler/route-handler.js';
  * import { createApplication } from '@chubbyts/chubbyts-framework/dist/application';
  *
  * const errorMiddleware: Middleware = createErrorMiddleware(...);
- * const errorMiddleware: Middleware = createRouteMatcherMiddleware(...);
+ * const routeMatcherMiddleware: Middleware = createRouteMatcherMiddleware(...);
  *
  * const application = createApplication([ errorMiddleware, routeMatcherMiddleware ]);
  * ```
