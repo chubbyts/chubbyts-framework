@@ -20,7 +20,7 @@
     "infection": "stryker run",
     "lint-fix": "eslint src tests eslint.config.js vitest.config.ts --fix",
     "lint": "eslint src tests",
-    "prepare": "npm run build",
+    "prepare": "pnpm run build",
     "test": "vitest",
     "typedoc": "rm -Rf docs && typedoc"
   },
@@ -64,5 +64,11 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "unrs-resolver"
+    ]
   }
 }

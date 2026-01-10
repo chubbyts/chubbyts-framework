@@ -19,8 +19,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - run: npm install
-      - run: npm test -- --run --no-cache
+      - run: npm install -g pnpm@latest
+      - run: pnpm install
+      - run: pnpm test --run
   node22:
     name: Node 22
     runs-on: ubuntu-24.04
@@ -31,8 +32,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
-      - run: npm install
-      - run: npm test -- --run --no-cache
+      - run: npm install -g pnpm@latest
+      - run: pnpm install
+      - run: pnpm test --run
   node24:
     name: Node 24
     runs-on: ubuntu-24.04
@@ -43,11 +45,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "24"
-      - run: npm install
-      - run: npm run lint
-      - run: npm run cs
-      - run: npm test -- --run --coverage --no-cache
-      - run: npm run infection
+      - run: npm install -g pnpm@latest
+      - run: pnpm install
+      - run: pnpm lint
+      - run: pnpm cs
+      - run: pnpm test --run --coverage
+      - run: pnpm infection
         env:
           STRYKER_DASHBOARD_API_KEY: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
       - name: coveralls.io
