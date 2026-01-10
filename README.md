@@ -117,7 +117,7 @@ Check the [Usage][11] section.
 
 ## Copyright
 
-2025 Dominik Zogg
+2026 Dominik Zogg
 
 [1]: https://www.npmjs.com/package/@chubbyts/chubbyts-framework
 [2]: https://web-frameworks-benchmark.netlify.app/result
