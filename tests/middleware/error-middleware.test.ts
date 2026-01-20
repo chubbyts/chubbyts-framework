@@ -54,7 +54,7 @@ describe('error-middleware', () => {
         ]
       `);
 
-      expect(await response.text()).toMatchInlineSnapshot(`
+      expect(await response.text()).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -119,11 +119,11 @@ describe('error-middleware', () => {
                         flex-direction: row;
                     }
 
-                    .basis-2\\/12 {
+                    .basis-2/12 {
                         flex-basis: 16.666667%;
                     }
 
-                    .basis-10\\/12 {
+                    .basis-10/12 {
                         flex-basis: 83.333333%;
                     }
 
@@ -137,7 +137,7 @@ describe('error-middleware', () => {
                         column-gap: 1rem;
                     }
 
-                    .gap-y-1\\.5 {
+                    .gap-y-1.5 {
                         row-gap: 0.375rem;
                     }
 
@@ -160,11 +160,11 @@ describe('error-middleware', () => {
                             max-width: 768px
                         }
 
-                        .md\\:grid-cols-8 {
+                        .md:grid-cols-8 {
                             grid-template-columns: repeat(8, minmax(0, 1fr));
                         }
 
-                        .md\\:col-span-7 {
+                        .md:col-span-7 {
                             grid-column: span 7/span 7
                         }
                     }
@@ -225,37 +225,37 @@ describe('error-middleware', () => {
           name: 'error',
           callback: (message: string, context: Record<string, unknown>) => {
             expect(message).toBe('Http Error');
-            expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
-  "{
-    "data": {
-      "type": "https://datatracker.ietf.org/doc/html/rfc2616#section-10.5.1",
-      "status": 500,
-      "title": "Internal Server Error",
-      "_httpError": "InternalServerError",
-      "detail": "A website error has occurred. Sorry for the temporary inconvenience.",
-      "cause": {
-        "cause": {}
-      }
-    },
-    "errors": [
-      {
-        "name": "Error",
-        "message": "Internal Server Error",
-        "stack": "Error: Internal Server Error
-      },
-      {
-        "name": "Error",
-        "message": "error",
-        "stack": "Error: error\\nat Line1\\nat Line2"
-      },
-      {
-        "name": "Error",
-        "message": "cause",
-        "stack": "Error: cause\\nat Line1\\nat Line2\\nat Line3"
-      }
-    ]
-  }"
-  `);
+            expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(String.raw`
+              "{
+                "data": {
+                  "type": "https://datatracker.ietf.org/doc/html/rfc2616#section-10.5.1",
+                  "status": 500,
+                  "title": "Internal Server Error",
+                  "_httpError": "InternalServerError",
+                  "detail": "A website error has occurred. Sorry for the temporary inconvenience.",
+                  "cause": {
+                    "cause": {}
+                  }
+                },
+                "errors": [
+                  {
+                    "name": "Error",
+                    "message": "Internal Server Error",
+                    "stack": "Error: Internal Server Error
+                  },
+                  {
+                    "name": "Error",
+                    "message": "error",
+                    "stack": "Error: error\nat Line1\nat Line2"
+                  },
+                  {
+                    "name": "Error",
+                    "message": "cause",
+                    "stack": "Error: cause\nat Line1\nat Line2\nat Line3"
+                  }
+                ]
+              }"
+            `);
           },
         },
       ]);
@@ -275,7 +275,7 @@ describe('error-middleware', () => {
         ]
       `);
 
-      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(`
+      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -340,11 +340,11 @@ describe('error-middleware', () => {
                         flex-direction: row;
                     }
 
-                    .basis-2\\/12 {
+                    .basis-2/12 {
                         flex-basis: 16.666667%;
                     }
 
-                    .basis-10\\/12 {
+                    .basis-10/12 {
                         flex-basis: 83.333333%;
                     }
 
@@ -358,7 +358,7 @@ describe('error-middleware', () => {
                         column-gap: 1rem;
                     }
 
-                    .gap-y-1\\.5 {
+                    .gap-y-1.5 {
                         row-gap: 0.375rem;
                     }
 
@@ -381,11 +381,11 @@ describe('error-middleware', () => {
                             max-width: 768px
                         }
 
-                        .md\\:grid-cols-8 {
+                        .md:grid-cols-8 {
                             grid-template-columns: repeat(8, minmax(0, 1fr));
                         }
 
-                        .md\\:col-span-7 {
+                        .md:col-span-7 {
                             grid-column: span 7/span 7
                         }
                     }
@@ -462,7 +462,7 @@ describe('error-middleware', () => {
           name: 'info',
           callback: (message: string, context: Record<string, unknown>) => {
             expect(message).toBe('Http Error');
-            expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
+            expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(String.raw`
               "{
                 "data": {
                   "type": "https://datatracker.ietf.org/doc/html/rfc2616#section-10.4.5",
@@ -482,12 +482,12 @@ describe('error-middleware', () => {
                   {
                     "name": "Error",
                     "message": "error",
-                    "stack": "Error: error\\nat Line1\\nat Line2"
+                    "stack": "Error: error\nat Line1\nat Line2"
                   },
                   {
                     "name": "Error",
                     "message": "cause",
-                    "stack": "Error: cause\\nat Line1\\nat Line2\\nat Line3"
+                    "stack": "Error: cause\nat Line1\nat Line2\nat Line3"
                   }
                 ]
               }"
@@ -517,7 +517,7 @@ describe('error-middleware', () => {
         ]
       `);
 
-      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(`
+      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -582,11 +582,11 @@ describe('error-middleware', () => {
                         flex-direction: row;
                     }
 
-                    .basis-2\\/12 {
+                    .basis-2/12 {
                         flex-basis: 16.666667%;
                     }
 
-                    .basis-10\\/12 {
+                    .basis-10/12 {
                         flex-basis: 83.333333%;
                     }
 
@@ -600,7 +600,7 @@ describe('error-middleware', () => {
                         column-gap: 1rem;
                     }
 
-                    .gap-y-1\\.5 {
+                    .gap-y-1.5 {
                         row-gap: 0.375rem;
                     }
 
@@ -623,11 +623,11 @@ describe('error-middleware', () => {
                             max-width: 768px
                         }
 
-                        .md\\:grid-cols-8 {
+                        .md:grid-cols-8 {
                             grid-template-columns: repeat(8, minmax(0, 1fr));
                         }
 
-                        .md\\:col-span-7 {
+                        .md:col-span-7 {
                             grid-column: span 7/span 7
                         }
                     }
@@ -704,7 +704,7 @@ describe('error-middleware', () => {
           name: 'error',
           callback: (message: string, context: Record<string, unknown>) => {
             expect(message).toBe('Http Error');
-            expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(`
+            expect(replaceJsonStack(JSON.stringify(context, null, 2))).toMatchInlineSnapshot(String.raw`
               "{
                 "data": {
                   "type": "https://datatracker.ietf.org/doc/html/rfc2616#section-10.5.1",
@@ -725,12 +725,12 @@ describe('error-middleware', () => {
                   {
                     "name": "Error",
                     "message": "error",
-                    "stack": "Error: error\\nat Line1\\nat Line2"
+                    "stack": "Error: error\nat Line1\nat Line2"
                   },
                   {
                     "name": "Error",
                     "message": "cause",
-                    "stack": "Error: cause\\nat Line1\\nat Line2\\nat Line3"
+                    "stack": "Error: cause\nat Line1\nat Line2\nat Line3"
                   }
                 ]
               }"
@@ -756,7 +756,7 @@ describe('error-middleware', () => {
         ]
       `);
 
-      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(`
+      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -821,11 +821,11 @@ describe('error-middleware', () => {
                         flex-direction: row;
                     }
 
-                    .basis-2\\/12 {
+                    .basis-2/12 {
                         flex-basis: 16.666667%;
                     }
 
-                    .basis-10\\/12 {
+                    .basis-10/12 {
                         flex-basis: 83.333333%;
                     }
 
@@ -839,7 +839,7 @@ describe('error-middleware', () => {
                         column-gap: 1rem;
                     }
 
-                    .gap-y-1\\.5 {
+                    .gap-y-1.5 {
                         row-gap: 0.375rem;
                     }
 
@@ -862,11 +862,11 @@ describe('error-middleware', () => {
                             max-width: 768px
                         }
 
-                        .md\\:grid-cols-8 {
+                        .md:grid-cols-8 {
                             grid-template-columns: repeat(8, minmax(0, 1fr));
                         }
 
-                        .md\\:col-span-7 {
+                        .md:col-span-7 {
                             grid-column: span 7/span 7
                         }
                     }
@@ -978,7 +978,7 @@ describe('error-middleware', () => {
         ]
       `);
 
-      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(`
+      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -1043,11 +1043,11 @@ describe('error-middleware', () => {
                         flex-direction: row;
                     }
 
-                    .basis-2\\/12 {
+                    .basis-2/12 {
                         flex-basis: 16.666667%;
                     }
 
-                    .basis-10\\/12 {
+                    .basis-10/12 {
                         flex-basis: 83.333333%;
                     }
 
@@ -1061,7 +1061,7 @@ describe('error-middleware', () => {
                         column-gap: 1rem;
                     }
 
-                    .gap-y-1\\.5 {
+                    .gap-y-1.5 {
                         row-gap: 0.375rem;
                     }
 
@@ -1084,11 +1084,11 @@ describe('error-middleware', () => {
                             max-width: 768px
                         }
 
-                        .md\\:grid-cols-8 {
+                        .md:grid-cols-8 {
                             grid-template-columns: repeat(8, minmax(0, 1fr));
                         }
 
-                        .md\\:col-span-7 {
+                        .md:col-span-7 {
                             grid-column: span 7/span 7
                         }
                     }
@@ -1189,7 +1189,7 @@ describe('error-middleware', () => {
         ]
       `);
 
-      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(`
+      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -1254,11 +1254,11 @@ describe('error-middleware', () => {
                         flex-direction: row;
                     }
 
-                    .basis-2\\/12 {
+                    .basis-2/12 {
                         flex-basis: 16.666667%;
                     }
 
-                    .basis-10\\/12 {
+                    .basis-10/12 {
                         flex-basis: 83.333333%;
                     }
 
@@ -1272,7 +1272,7 @@ describe('error-middleware', () => {
                         column-gap: 1rem;
                     }
 
-                    .gap-y-1\\.5 {
+                    .gap-y-1.5 {
                         row-gap: 0.375rem;
                     }
 
@@ -1295,11 +1295,11 @@ describe('error-middleware', () => {
                             max-width: 768px
                         }
 
-                        .md\\:grid-cols-8 {
+                        .md:grid-cols-8 {
                             grid-template-columns: repeat(8, minmax(0, 1fr));
                         }
 
-                        .md\\:col-span-7 {
+                        .md:col-span-7 {
                             grid-column: span 7/span 7
                         }
                     }
@@ -1392,7 +1392,7 @@ describe('error-middleware', () => {
         ]
       `);
 
-      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(`
+      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -1457,11 +1457,11 @@ describe('error-middleware', () => {
                         flex-direction: row;
                     }
 
-                    .basis-2\\/12 {
+                    .basis-2/12 {
                         flex-basis: 16.666667%;
                     }
 
-                    .basis-10\\/12 {
+                    .basis-10/12 {
                         flex-basis: 83.333333%;
                     }
 
@@ -1475,7 +1475,7 @@ describe('error-middleware', () => {
                         column-gap: 1rem;
                     }
 
-                    .gap-y-1\\.5 {
+                    .gap-y-1.5 {
                         row-gap: 0.375rem;
                     }
 
@@ -1498,11 +1498,11 @@ describe('error-middleware', () => {
                             max-width: 768px
                         }
 
-                        .md\\:grid-cols-8 {
+                        .md:grid-cols-8 {
                             grid-template-columns: repeat(8, minmax(0, 1fr));
                         }
 
-                        .md\\:col-span-7 {
+                        .md:col-span-7 {
                             grid-column: span 7/span 7
                         }
                     }

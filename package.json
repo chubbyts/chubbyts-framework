@@ -45,7 +45,7 @@
   },
   "dependencies": {
     "@chubbyts/chubbyts-dic-types": "^2.0.1",
-    "@chubbyts/chubbyts-http-error": "^3.0.1",
+    "@chubbyts/chubbyts-http-error": "^3.1.2",
     "@chubbyts/chubbyts-log-types": "^3.0.1",
     "@chubbyts/chubbyts-throwable-to-error": "^2.0.2",
     "@chubbyts/chubbyts-undici-server": "^1.0.1"
@@ -55,12 +55,12 @@
     "@chubbyts/chubbyts-function-mock": "^2.0.2",
     "@stryker-mutator/core": "^9.4.0",
     "@stryker-mutator/vitest-runner": "^9.4.0",
-    "@types/node": "^25.0.2",
-    "@vitest/coverage-v8": "^4.0.15",
-    "prettier": "^3.7.4",
-    "typedoc": "^0.28.15",
+    "@types/node": "^25.0.9",
+    "@vitest/coverage-v8": "^4.0.17",
+    "prettier": "^3.8.0",
+    "typedoc": "^0.28.16",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.15"
+    "vitest": "^4.0.17"
   },
   "publishConfig": {
     "access": "public"

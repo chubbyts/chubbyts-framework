@@ -7,7 +7,7 @@ import { isHttpError, mapToHttpError as defaultMapToHttpError } from '@chubbyts/
 import type { Handler, Middleware, ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
 import { Response } from '@chubbyts/chubbyts-undici-server/dist/server';
 
-const htmlTemplate = `<!DOCTYPE html>
+const htmlTemplate = String.raw`<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -71,11 +71,11 @@ const htmlTemplate = `<!DOCTYPE html>
                 flex-direction: row;
             }
 
-            .basis-2\\/12 {
+            .basis-2/12 {
                 flex-basis: 16.666667%;
             }
 
-            .basis-10\\/12 {
+            .basis-10/12 {
                 flex-basis: 83.333333%;
             }
 
@@ -89,7 +89,7 @@ const htmlTemplate = `<!DOCTYPE html>
                 column-gap: 1rem;
             }
 
-            .gap-y-1\\.5 {
+            .gap-y-1.5 {
                 row-gap: 0.375rem;
             }
 
@@ -112,11 +112,11 @@ const htmlTemplate = `<!DOCTYPE html>
                     max-width: 768px
                 }
 
-                .md\\:grid-cols-8 {
+                .md:grid-cols-8 {
                     grid-template-columns: repeat(8, minmax(0, 1fr));
                 }
 
-                .md\\:col-span-7 {
+                .md:col-span-7 {
                     grid-column: span 7/span 7
                 }
             }
@@ -181,7 +181,7 @@ const addDebugToBody = (errors: Array<Error>): string => {
           .map(
             ([key, value]) =>
               `<div><strong>${key}</strong></div><div class="md:col-span-7">${
-                typeof value === 'string' ? value.replace(/\n/g, '<br>\n') : value
+                typeof value === 'string' ? value.replaceAll('\n', '<br>\n') : value
               }</div>`,
           )
           .join('')}
@@ -202,10 +202,10 @@ const handleHttpError = (logger: Logger, httpError: HttpError, debug: boolean): 
 
   return new Response(
     htmlTemplate
-      .replace(/__STATUS__/g, status.toString())
-      .replace(/__TITLE__/g, title)
-      .replace(
-        /__BODY__/g,
+      .replaceAll('__STATUS__', status.toString())
+      .replaceAll('__TITLE__', title)
+      .replaceAll(
+        '__BODY__',
         [
           ...(detail ? [`<p>${detail}</p>`] : []),
           ...(instance ? [`<p>${instance}</p>`] : []),
