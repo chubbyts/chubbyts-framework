@@ -1,7 +1,7 @@
 {
   "name": "@chubbyts/chubbyts-framework",
   "type": "module",
-  "version": "3.1.0",
+  "version": "3.1.1",
   "description": "A minimal, highly performant middleware PSR-15 inspired function based micro framework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.",
   "keywords": [
     "chubbyts",
@@ -41,14 +41,14 @@
     }
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "dependencies": {
     "@chubbyts/chubbyts-dic-types": "^2.1.0",
     "@chubbyts/chubbyts-http-error": "^3.2.0",
     "@chubbyts/chubbyts-log-types": "^3.1.0",
     "@chubbyts/chubbyts-throwable-to-error": "^2.1.0",
-    "@chubbyts/chubbyts-undici-server": "^1.1.0"
+    "@chubbyts/chubbyts-undici-server": "^1.1.1"
   },
   "devDependencies": {
     "@chubbyts/chubbyts-eslint": "^5.1.0",
@@ -57,9 +57,9 @@
     "@stryker-mutator/vitest-runner": "^9.6.1",
     "@types/node": "^25.6.0",
     "@vitest/coverage-v8": "^4.1.4",
-    "prettier": "^3.8.2",
+    "prettier": "^3.8.3",
     "typedoc": "^0.28.19",
-    "typescript": "^6.0.2",
+    "typescript": "^6.0.3",
     "vitest": "^4.1.4"
   },
   "publishConfig": {
