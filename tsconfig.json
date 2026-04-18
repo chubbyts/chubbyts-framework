@@ -6,7 +6,7 @@
         "module": "nodenext",
         "moduleResolution": "nodenext",
         "outDir": "dist",
-        "rootDir": ".",
+        "rootDir": "src",
         "skipLibCheck": true,
         "strict": true,
         "target": "ES2021"

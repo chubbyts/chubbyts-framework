@@ -1,7 +1,7 @@
 {
   "name": "@chubbyts/chubbyts-framework",
   "type": "module",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "A minimal, highly performant middleware PSR-15 inspired function based micro framework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.",
   "keywords": [
     "chubbyts",
@@ -14,7 +14,7 @@
   "license": "MIT",
   "repository": "chubbyts/chubbyts-framework",
   "scripts": {
-    "build": "tsc",
+    "build": "rm -Rf dist && tsc",
     "cs-fix": "prettier --write src tests",
     "cs": "prettier --check src tests",
     "infection": "stryker run",
@@ -44,15 +44,15 @@
     "node": ">=22"
   },
   "dependencies": {
-    "@chubbyts/chubbyts-dic-types": "^2.1.0",
-    "@chubbyts/chubbyts-http-error": "^3.2.0",
-    "@chubbyts/chubbyts-log-types": "^3.1.0",
-    "@chubbyts/chubbyts-throwable-to-error": "^2.1.0",
-    "@chubbyts/chubbyts-undici-server": "^1.1.1"
+    "@chubbyts/chubbyts-dic-types": "^2.1.1",
+    "@chubbyts/chubbyts-http-error": "^3.2.1",
+    "@chubbyts/chubbyts-log-types": "^3.1.1",
+    "@chubbyts/chubbyts-throwable-to-error": "^2.1.1",
+    "@chubbyts/chubbyts-undici-server": "^1.1.2"
   },
   "devDependencies": {
-    "@chubbyts/chubbyts-eslint": "^5.1.0",
-    "@chubbyts/chubbyts-function-mock": "^2.1.0",
+    "@chubbyts/chubbyts-eslint": "^5.1.1",
+    "@chubbyts/chubbyts-function-mock": "^2.1.1",
     "@stryker-mutator/core": "^9.6.1",
     "@stryker-mutator/vitest-runner": "^9.6.1",
     "@types/node": "^25.6.0",
