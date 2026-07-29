@@ -26,11 +26,11 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
 ## Requirements
 
  * node: 22
- * [@chubbyts/chubbyts-dic-types][4]: ^2.2.0
- * [@chubbyts/chubbyts-http-error][5]: ^3.3.0
- * [@chubbyts/chubbyts-log-types][7]: ^3.2.0
- * [@chubbyts/chubbyts-throwable-to-error][8]: ^2.2.0
- * [@chubbyts/chubbyts-undici-server][9]: ^1.1.3
+ * [@chubbyts/chubbyts-dic-types][4]: ^2.3.0
+ * [@chubbyts/chubbyts-http-error][5]: ^3.4.0
+ * [@chubbyts/chubbyts-log-types][7]: ^3.3.0
+ * [@chubbyts/chubbyts-throwable-to-error][8]: ^2.3.0
+ * [@chubbyts/chubbyts-undici-server][9]: ^1.2.0
 
 ## Installation
 
