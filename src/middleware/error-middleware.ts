@@ -164,9 +164,9 @@ const errorToDataArray = (e: unknown): Array<Error> => {
   const errors: Array<Error> = [];
 
   do {
-    // eslint-disable-next-line functional/immutable-data
+    // oxlint-disable-next-line functional/immutable-data
     errors.push(errorToData(throwableToError(e)));
-    // eslint-disable-next-line no-param-reassign
+    // oxlint-disable-next-line no-param-reassign
   } while ((e = e && (e as { cause: unknown }).cause));
 
   return errors;

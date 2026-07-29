@@ -206,14 +206,14 @@ describe('error-middleware', () => {
 
     test('error, with debug and with log', async () => {
       const error = new Error('error');
-      // eslint-disable-next-line functional/immutable-data
+      // oxlint-disable-next-line functional/immutable-data
       error.stack = 'Error: error\nat Line1\nat Line2';
 
       const causeError = new Error('cause');
-      // eslint-disable-next-line functional/immutable-data
+      // oxlint-disable-next-line functional/immutable-data
       causeError.stack = 'Error: cause\nat Line1\nat Line2\nat Line3';
 
-      // eslint-disable-next-line functional/immutable-data
+      // oxlint-disable-next-line functional/immutable-data
       (error as Error & { cause: Error }).cause = causeError;
 
       const request = new ServerRequest('https://example.com');
@@ -443,14 +443,14 @@ describe('error-middleware', () => {
 
     test('custom mapToHttpError with catch, with debug and with log', async () => {
       const error = new Error('error');
-      // eslint-disable-next-line functional/immutable-data
+      // oxlint-disable-next-line functional/immutable-data
       error.stack = 'Error: error\nat Line1\nat Line2';
 
       const causeError = new Error('cause');
-      // eslint-disable-next-line functional/immutable-data
+      // oxlint-disable-next-line functional/immutable-data
       causeError.stack = 'Error: cause\nat Line1\nat Line2\nat Line3';
 
-      // eslint-disable-next-line functional/immutable-data
+      // oxlint-disable-next-line functional/immutable-data
       (error as Error & { cause: Error }).cause = causeError;
 
       const request = new ServerRequest('https://example.com');
@@ -685,14 +685,14 @@ describe('error-middleware', () => {
 
     test('custom mapToHttpError without catch, with debug and with log', async () => {
       const error = new Error('error');
-      // eslint-disable-next-line functional/immutable-data
+      // oxlint-disable-next-line functional/immutable-data
       error.stack = 'Error: error\nat Line1\nat Line2';
 
       const causeError = new Error('cause');
-      // eslint-disable-next-line functional/immutable-data
+      // oxlint-disable-next-line functional/immutable-data
       causeError.stack = 'Error: cause\nat Line1\nat Line2\nat Line3';
 
-      // eslint-disable-next-line functional/immutable-data
+      // oxlint-disable-next-line functional/immutable-data
       (error as Error & { cause: Error }).cause = causeError;
 
       const request = new ServerRequest('https://example.com');

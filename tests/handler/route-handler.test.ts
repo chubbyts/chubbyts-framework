@@ -33,7 +33,7 @@ describe('route-handler', () => {
 
       const [middleware, middlewareMocks] = useFunctionMock<Middleware>([
         {
-          callback: (request, handler) => handler(request),
+          callback: (middlewareRequest, middlewareHandler) => middlewareHandler(middlewareRequest),
         },
       ]);
 
