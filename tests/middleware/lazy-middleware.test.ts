@@ -25,8 +25,8 @@ describe('lazy-middleware', () => {
 
     expect(await lazyMiddleware(request, handler)).toBe(response);
 
-    expect(handlerMocks.length).toBe(0);
-    expect(middlewareMocks.length).toBe(0);
-    expect(containerMocks.length).toBe(0);
+    expect(handlerMocks).toHaveLength(0);
+    expect(middlewareMocks).toHaveLength(0);
+    expect(containerMocks).toHaveLength(0);
   });
 });

@@ -55,7 +55,7 @@ describe('createApplication', () => {
 
     expect(await application(request)).toBe(response);
 
-    expect(handlerMocks.length).toBe(0);
-    expect(middlewareMocks.length).toBe(0);
+    expect(handlerMocks).toHaveLength(0);
+    expect(middlewareMocks).toHaveLength(0);
   });
 });

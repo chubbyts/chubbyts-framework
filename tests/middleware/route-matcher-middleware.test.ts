@@ -41,8 +41,8 @@ describe('route-matcher-middleware', () => {
 
       expect(await routeMatcherMiddleware(request, handler)).toBe(response);
 
-      expect(handlerMocks.length).toBe(0);
-      expect(matchMocks.length).toBe(0);
+      expect(handlerMocks).toHaveLength(0);
+      expect(matchMocks).toHaveLength(0);
     });
 
     test('no match', async () => {
@@ -66,8 +66,8 @@ describe('route-matcher-middleware', () => {
         expect(e).toBe(httpError);
       }
 
-      expect(handlerMocks.length).toBe(0);
-      expect(matchMocks.length).toBe(0);
+      expect(handlerMocks).toHaveLength(0);
+      expect(matchMocks).toHaveLength(0);
     });
   });
 });

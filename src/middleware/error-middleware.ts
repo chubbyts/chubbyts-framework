@@ -7,7 +7,7 @@ import { isHttpError, mapToHttpError as defaultMapToHttpError } from '@chubbyts/
 import type { Handler, Middleware, ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
 import { Response } from '@chubbyts/chubbyts-undici-server/dist/server';
 
-const htmlTemplate = String.raw`<!DOCTYPE html>
+const htmlTemplate = `<!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">

@@ -23,7 +23,7 @@ describe('lazy-handler', () => {
 
     expect(await lazyHandler(request)).toBe(response);
 
-    expect(handlerMocks.length).toBe(0);
-    expect(containerMocks.length).toBe(0);
+    expect(handlerMocks).toHaveLength(0);
+    expect(containerMocks).toHaveLength(0);
   });
 });

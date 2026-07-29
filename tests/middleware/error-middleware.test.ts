@@ -29,7 +29,7 @@ describe('error-middleware', () => {
 
       expect(await errorMiddleware(request, handler)).toBe(response);
 
-      expect(handlerMocks.length).toBe(0);
+      expect(handlerMocks).toHaveLength(0);
     });
 
     test('error, without debug and without log', async () => {
@@ -201,7 +201,7 @@ describe('error-middleware', () => {
         </html>"
       `);
 
-      expect(handlerMocks.length).toBe(0);
+      expect(handlerMocks).toHaveLength(0);
     });
 
     test('error, with debug and with log', async () => {
@@ -437,8 +437,8 @@ describe('error-middleware', () => {
         </html>"
       `);
 
-      expect(handlerMocks.length).toBe(0);
-      expect(loggerMocks.length).toBe(0);
+      expect(handlerMocks).toHaveLength(0);
+      expect(loggerMocks).toHaveLength(0);
     });
 
     test('custom mapToHttpError with catch, with debug and with log', async () => {
@@ -679,8 +679,8 @@ describe('error-middleware', () => {
         </html>"
       `);
 
-      expect(handlerMocks.length).toBe(0);
-      expect(loggerMocks.length).toBe(0);
+      expect(handlerMocks).toHaveLength(0);
+      expect(loggerMocks).toHaveLength(0);
     });
 
     test('custom mapToHttpError without catch, with debug and with log', async () => {
@@ -918,8 +918,8 @@ describe('error-middleware', () => {
         </html>"
       `);
 
-      expect(handlerMocks.length).toBe(0);
-      expect(loggerMocks.length).toBe(0);
+      expect(handlerMocks).toHaveLength(0);
+      expect(loggerMocks).toHaveLength(0);
     });
 
     test('error without stack, with debug and with log', async () => {
@@ -1132,8 +1132,8 @@ describe('error-middleware', () => {
         </html>"
       `);
 
-      expect(handlerMocks.length).toBe(0);
-      expect(loggerMocks.length).toBe(0);
+      expect(handlerMocks).toHaveLength(0);
+      expect(loggerMocks).toHaveLength(0);
     });
 
     test('http error: client', async () => {
@@ -1340,8 +1340,8 @@ describe('error-middleware', () => {
         </html>"
       `);
 
-      expect(handlerMocks.length).toBe(0);
-      expect(loggerMocks.length).toBe(0);
+      expect(handlerMocks).toHaveLength(0);
+      expect(loggerMocks).toHaveLength(0);
     });
 
     test('http error: server', async () => {
@@ -1543,8 +1543,8 @@ describe('error-middleware', () => {
         </html>"
       `);
 
-      expect(handlerMocks.length).toBe(0);
-      expect(loggerMocks.length).toBe(0);
+      expect(handlerMocks).toHaveLength(0);
+      expect(loggerMocks).toHaveLength(0);
     });
   });
 });
