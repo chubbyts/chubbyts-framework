@@ -1,7 +1,7 @@
 {
   "name": "@chubbyts/chubbyts-framework",
   "type": "module",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "A minimal, highly performant middleware PSR-15 inspired function based micro framework built with as little complexity as possible, aimed primarily at those developers who want to understand all the vendors they use.",
   "keywords": [
     "chubbyts",
@@ -66,5 +66,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "pnpm@11.0.9+sha512.34ce82e6780233cf9cad8685029a8f81d2e06196c5a9bad98879f7424940c6817c4e4524fb7d38b8553ceed48b9758b8ebaf1abd3600c232c4c8cf7366086f38"
+  "packageManager": "pnpm@11.18.0+sha512.33d83c77da82f49fba836925c6f1b841181ec3132b670639bd012f7075f5c7cf634c5f870147c19aae7478fac01df09d8892e880454896edd23ee9b33757563c"
 }

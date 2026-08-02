@@ -152,6 +152,14 @@ const htmlTemplate = `<!DOCTYPE html>
     </body>
 </html>`;
 
+const escapeHtml = (value: string): string =>
+  value
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#039;');
+
 const errorToData = (error: Error): Error => {
   return {
     name: error.name,
@@ -162,12 +170,14 @@ const errorToData = (error: Error): Error => {
 
 const errorToDataArray = (e: unknown): Array<Error> => {
   const errors: Array<Error> = [];
+  const seen = new Set<unknown>();
 
   do {
+    seen.add(e);
     // oxlint-disable-next-line functional/immutable-data
     errors.push(errorToData(throwableToError(e)));
     // oxlint-disable-next-line no-param-reassign
-  } while ((e = e && (e as { cause: unknown }).cause));
+  } while ((e = e && (e as { cause: unknown }).cause) && !seen.has(e));
 
   return errors;
 };
@@ -180,8 +190,8 @@ const addDebugToBody = (errors: Array<Error>): string => {
         ${Object.entries(error)
           .map(
             ([key, value]) =>
-              `<div><strong>${key}</strong></div><div class="md:col-span-7">${
-                typeof value === 'string' ? value.replaceAll('\n', '<br>\n') : value
+              `<div><strong>${escapeHtml(key)}</strong></div><div class="md:col-span-7">${
+                typeof value === 'string' ? escapeHtml(value).replaceAll('\n', '<br>\n') : value
               }</div>`,
           )
           .join('')}
@@ -207,8 +217,8 @@ const handleHttpError = (logger: Logger, httpError: HttpError, debug: boolean): 
       .replaceAll(
         '__BODY__',
         [
-          ...(detail ? [`<p>${detail}</p>`] : []),
-          ...(instance ? [`<p>${instance}</p>`] : []),
+          ...(detail ? [`<p>${escapeHtml(detail)}</p>`] : []),
+          ...(instance ? [`<p>${escapeHtml(instance)}</p>`] : []),
           ...(debug ? [addDebugToBody(errors)] : []),
         ].join(''),
       ),

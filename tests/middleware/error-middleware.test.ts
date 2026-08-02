@@ -1546,5 +1546,111 @@ describe('error-middleware', () => {
       expect(handlerMocks).toHaveLength(0);
       expect(loggerMocks).toHaveLength(0);
     });
+
+    test('http error with html in detail and instance, without debug', async () => {
+      const httpError = createBadRequest({
+        detail: '<script>alert("detail")</script>',
+        instance: '</p><img src="x" onerror="alert(1)">',
+      });
+
+      const request = new ServerRequest('https://example.com');
+
+      const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error: httpError }]);
+
+      const [logger, loggerMocks] = useObjectMock<Logger>([
+        {
+          name: 'info',
+          callback: (message: string) => {
+            expect(message).toBe('Http Error');
+          },
+        },
+      ]);
+
+      const errorMiddleware = createErrorMiddleware(false, logger);
+
+      const response = await errorMiddleware(request, handler);
+
+      expect(response.status).toBe(400);
+
+      const html = await response.text();
+
+      expect(html).not.toContain('<script>');
+      expect(html).not.toContain('<img');
+      expect(html).toContain('&lt;script&gt;alert(&quot;detail&quot;)&lt;/script&gt;');
+      expect(html).toContain('&lt;/p&gt;&lt;img src=&quot;x&quot; onerror=&quot;alert(1)&quot;&gt;');
+
+      expect(handlerMocks).toHaveLength(0);
+      expect(loggerMocks).toHaveLength(0);
+    });
+
+    test('error with circular cause, with debug', async () => {
+      const error = new Error('circular error');
+      // oxlint-disable-next-line functional/immutable-data
+      error.stack = 'Error: circular error\nat Line1';
+
+      // oxlint-disable-next-line functional/immutable-data
+      (error as Error & { cause: unknown }).cause = error;
+
+      const request = new ServerRequest('https://example.com');
+
+      const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
+
+      const [logger, loggerMocks] = useObjectMock<Logger>([
+        {
+          name: 'error',
+          callback: (message: string) => {
+            expect(message).toBe('Http Error');
+          },
+        },
+      ]);
+
+      const errorMiddleware = createErrorMiddleware(true, logger);
+
+      const response = await errorMiddleware(request, handler);
+
+      expect(response.status).toBe(500);
+
+      const html = await response.text();
+
+      expect(html.match(/circular error/g)).toHaveLength(2);
+
+      expect(handlerMocks).toHaveLength(0);
+      expect(loggerMocks).toHaveLength(0);
+    });
+
+    test('error with html in message and stack, with debug', async () => {
+      const error = new Error('<script>alert("message")</script>');
+      // oxlint-disable-next-line functional/immutable-data
+      error.stack = 'Error: <script>alert("stack")</script>\nat <anonymous>';
+
+      const request = new ServerRequest('https://example.com');
+
+      const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
+
+      const [logger, loggerMocks] = useObjectMock<Logger>([
+        {
+          name: 'error',
+          callback: (message: string) => {
+            expect(message).toBe('Http Error');
+          },
+        },
+      ]);
+
+      const errorMiddleware = createErrorMiddleware(true, logger);
+
+      const response = await errorMiddleware(request, handler);
+
+      expect(response.status).toBe(500);
+
+      const html = await response.text();
+
+      expect(html).not.toContain('<script>');
+      expect(html).toContain('&lt;script&gt;alert(&quot;message&quot;)&lt;/script&gt;');
+      expect(html).toContain('&lt;script&gt;alert(&quot;stack&quot;)&lt;/script&gt;<br>');
+      expect(html).toContain('at &lt;anonymous&gt;');
+
+      expect(handlerMocks).toHaveLength(0);
+      expect(loggerMocks).toHaveLength(0);
+    });
   });
 });
