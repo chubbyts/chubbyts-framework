@@ -168,18 +168,12 @@ const errorToData = (error: Error): Error => {
   };
 };
 
-const errorToDataArray = (e: unknown): Array<Error> => {
-  const errors: Array<Error> = [];
-  const seen = new Set<unknown>();
+const errorToDataArray = (e: unknown, seen: Set<unknown> = new Set()): Array<Error> => {
+  seen.add(e);
 
-  do {
-    seen.add(e);
-    // oxlint-disable-next-line functional/immutable-data
-    errors.push(errorToData(throwableToError(e)));
-    // oxlint-disable-next-line no-param-reassign
-  } while ((e = e && (e as { cause: unknown }).cause) && !seen.has(e));
+  const cause: unknown = e && (e as { cause: unknown }).cause;
 
-  return errors;
+  return [errorToData(throwableToError(e)), ...(cause && !seen.has(cause) ? errorToDataArray(cause, seen) : [])];
 };
 
 const addDebugToBody = (errors: Array<Error>): string => {
