@@ -1549,7 +1549,7 @@ describe('error-middleware', () => {
 
     test('http error with html in detail and instance, without debug', async () => {
       const httpError = createBadRequest({
-        detail: '<script>alert("detail")</script>',
+        detail: '<script>alert("detail")</script> & \'quoted\'',
         instance: '</p><img src="x" onerror="alert(1)">',
       });
 
@@ -1576,7 +1576,7 @@ describe('error-middleware', () => {
 
       expect(html).not.toContain('<script>');
       expect(html).not.toContain('<img');
-      expect(html).toContain('&lt;script&gt;alert(&quot;detail&quot;)&lt;/script&gt;');
+      expect(html).toContain('&lt;script&gt;alert(&quot;detail&quot;)&lt;/script&gt; &amp; &#039;quoted&#039;');
       expect(html).toContain('&lt;/p&gt;&lt;img src=&quot;x&quot; onerror=&quot;alert(1)&quot;&gt;');
 
       expect(handlerMocks).toHaveLength(0);
