@@ -1,4 +1,5 @@
 import { pipe, type Handler, type Response, type ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
+import { createRouteMatcherMiddleware } from '../middleware/route-matcher-middleware.js';
 import type { Route } from '../router/route.js';
 import { isRoute } from '../router/route.js';
 
@@ -20,7 +21,7 @@ export const createRouteHandler = (): Handler => {
 
     throw new Error(
       `Request attribute "route" missing or wrong type "${typeof route}", please add the "${
-        createRouteHandler.name
+        createRouteMatcherMiddleware.name
       }" middleware.`,
     );
   };

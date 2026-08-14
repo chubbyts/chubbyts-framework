@@ -18,7 +18,7 @@ describe('route-handler', () => {
       } catch (e) {
         expect(e).toEqual(
           new Error(
-            'Request attribute "route" missing or wrong type "undefined", please add the "createRouteHandler" middleware.',
+            'Request attribute "route" missing or wrong type "undefined", please add the "createRouteMatcherMiddleware" middleware.',
           ),
         );
       }
