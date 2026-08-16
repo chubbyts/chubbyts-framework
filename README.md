@@ -107,7 +107,8 @@ Check the [Usage][11] section.
  * [@chubbyts/chubbyts-undici-api][20]
  * [@chubbyts/chubbyts-undici-cors][21]
  * [@chubbyts/chubbyts-undici-multipart][22]
- * [@chubbyts/chubbyts-undici-static-file][23]
+ * [@chubbyts/chubbyts-undici-oidc][23]
+ * [@chubbyts/chubbyts-undici-static-file][24]
 
 ## Skeleton
 
@@ -134,7 +135,8 @@ Check the [Usage][11] section.
 [20]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-api
 [21]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-cors
 [22]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-multipart
-[23]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-static-file
+[23]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-oidc
+[24]: https://www.npmjs.com/package/@chubbyts/chubbyts-undici-static-file
 
 [30]: https://github.com/chubbyts/chubbyts-framework-skeleton
 [31]: https://github.com/chubbyts/chubbyts-petstore
