@@ -39,7 +39,7 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^3.4.0 \
-  @chubbyts/chubbyts-framework@^3.2.3
+  @chubbyts/chubbyts-framework@^3.3.0
 ```
 
 ## Usage
@@ -78,6 +78,31 @@ const app = createApplication([
     ),
   ),
 ]);
+```
+
+### Application builder
+
+A facade around `createApplication` / `createErrorMiddleware` / `createRouteMatcherMiddleware` / `createRoute` /
+`createGroup`: pure construction sugar, the returned handler is the very same middleware pipe as with the
+explicit composition: error middleware first, app middlewares, route matcher middleware last.
+
+```ts
+import { createPathToRegexpMatch as createMatch }
+  from '@chubbyts/chubbyts-framework-router-path-to-regexp/dist/path-to-regexp-router';
+import { createApplicationBuilder } from '@chubbyts/chubbyts-framework/dist/facade';
+
+const application = createApplicationBuilder(createMatch, [corsMiddleware])
+  .get('/ping', 'ping', pingHandler)
+  .get('/openapi', 'openapi', openApiHandler)
+  .group('/api/pets', [acceptNegotiationMiddleware, apiErrorMiddleware], (pets) =>
+    pets
+      .get('', 'pet_list', petListHandler)
+      .post('', 'pet_create', [contentTypeNegotiationMiddleware], petCreateHandler)
+      .get('/:id', 'pet_read', petReadHandler)
+      .put('/:id', 'pet_update', [contentTypeNegotiationMiddleware], petUpdateHandler)
+      .delete('/:id', 'pet_delete', petDeleteHandler),
+  )
+  .build();
 ```
 
 ### Server

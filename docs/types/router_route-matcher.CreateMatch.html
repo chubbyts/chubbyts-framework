@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>RoutesByName | @chubbyts/chubbyts-framework</title><meta name="description" content="Documentation for @chubbyts/chubbyts-framework"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
+<!DOCTYPE html><html class="default" lang="en" data-base="../"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>CreateMatch | @chubbyts/chubbyts-framework</title><meta name="description" content="Documentation for @chubbyts/chubbyts-framework"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/icons.js" id="tsd-icons-script"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar">
 <div class="tsd-toolbar-contents container"><a href="../index.html" class="title">@chubbyts/chubbyts-framework</a>
 <div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="../assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/>
 <ul role="listbox" id="tsd-search-results"></ul>
@@ -8,16 +8,24 @@
 <div class="col-content">
 <div class="tsd-page-title">
 <ul class="tsd-breadcrumb" aria-label="Breadcrumb">
-<li><a href="../modules/router_routes-by-name.html">router/routes-by-name</a></li>
-<li><a href="" aria-current="page">RoutesByName</a></li></ul>
-<h1>Type Alias RoutesByName</h1></div>
-<div class="tsd-signature"><span class="tsd-kind-type-alias">RoutesByName</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Map</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">,</span> <a href="router_route.Route.html" class="tsd-signature-type tsd-kind-type-alias">Route</a><span class="tsd-signature-symbol">&gt;</span></div>
-<div class="tsd-comment tsd-typography"><pre><code class="ts"><span class="hl-4">import</span><span class="hl-1"> </span><span class="hl-4">type</span><span class="hl-1"> { </span><span class="hl-5">Route</span><span class="hl-1"> } </span><span class="hl-4">from</span><span class="hl-1"> </span><span class="hl-2">&#39;@chubbyts/chubbyts-framework/dist/router/route&#39;</span><span class="hl-1">;</span><br/><span class="hl-4">import</span><span class="hl-1"> </span><span class="hl-4">type</span><span class="hl-1"> { </span><span class="hl-5">RoutesByName</span><span class="hl-1"> } </span><span class="hl-4">from</span><span class="hl-1"> </span><span class="hl-2">&#39;@chubbyts/chubbyts-framework/dist/router/routes-by-name&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">route</span><span class="hl-1">: </span><span class="hl-8">Route</span><span class="hl-1"> = ...;</span><br/><br/><span class="hl-6">const</span><span class="hl-1"> </span><span class="hl-7">routesByName</span><span class="hl-1">: </span><span class="hl-8">RoutesByName</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">Map</span><span class="hl-1">([</span><br/><span class="hl-1">  [</span><span class="hl-2">&#39;routeName&#39;</span><span class="hl-1">, </span><span class="hl-5">route</span><span class="hl-1">],</span><br/><span class="hl-1">])</span>
-</code><button type="button">Copy</button></pre>
-
-</div><aside class="tsd-sources">
+<li><a href="../modules/router_route-matcher.html">router/route-matcher</a></li>
+<li><a href="" aria-current="page">CreateMatch</a></li></ul>
+<h1>Type Alias CreateMatch</h1></div>
+<div class="tsd-signature"><span class="tsd-kind-type-alias">CreateMatch</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">routesByName</span><span class="tsd-signature-symbol">:</span> <a href="router_routes-by-name.RoutesByName.html" class="tsd-signature-type tsd-kind-type-alias">RoutesByName</a><span class="tsd-signature-symbol">)</span> <span class="tsd-signature-symbol">=&gt;</span> <a href="router_route-matcher.Match.html" class="tsd-signature-type tsd-kind-type-alias">Match</a></div>
+<div class="tsd-type-declaration">
+<h4>Type Declaration</h4>
+<ul class="tsd-parameters">
+<li class="tsd-parameter-signature">
+<ul class="tsd-signatures">
+<li class="tsd-signature" id="__type"><span class="tsd-signature-symbol">(</span><span class="tsd-kind-parameter">routesByName</span><span class="tsd-signature-symbol">:</span> <a href="router_routes-by-name.RoutesByName.html" class="tsd-signature-type tsd-kind-type-alias">RoutesByName</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <a href="router_route-matcher.Match.html" class="tsd-signature-type tsd-kind-type-alias">Match</a></li>
+<li class="tsd-description">
+<div class="tsd-parameters">
+<h4 class="tsd-parameters-title">Parameters</h4>
+<ul class="tsd-parameter-list">
+<li><span><span class="tsd-kind-parameter">routesByName</span>: <a href="router_routes-by-name.RoutesByName.html" class="tsd-signature-type tsd-kind-type-alias">RoutesByName</a></span></li></ul></div>
+<h4 class="tsd-returns-title">Returns <a href="router_route-matcher.Match.html" class="tsd-signature-type tsd-kind-type-alias">Match</a></h4></li></ul></li></ul></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/chubbyts/chubbyts-framework/blob/55558edfdcaee5ae4f29133c0e74d492fa8bbbcd/src/router/routes-by-name.ts#L15">router/routes-by-name.ts:15</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/chubbyts/chubbyts-framework/blob/55558edfdcaee5ae4f29133c0e74d492fa8bbbcd/src/router/route-matcher.ts#L7">router/route-matcher.ts:7</a></li></ul></aside></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
