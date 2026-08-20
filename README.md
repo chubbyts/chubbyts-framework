@@ -38,8 +38,8 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 
 ```sh
 npm i \
-  @chubbyts/chubbyts-framework@^3.2.2
   @chubbyts/chubbyts-framework-router-path-to-regexp@^3.3.0 \
+  @chubbyts/chubbyts-framework@^3.2.3
 ```
 
 ## Usage
