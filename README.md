@@ -38,15 +38,15 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 
 ```sh
 npm i \
-  @chubbyts/chubbyts-framework-router-path-to-regexp@^3.2.0 \
   @chubbyts/chubbyts-framework@^3.2.2
+  @chubbyts/chubbyts-framework-router-path-to-regexp@^3.3.0 \
 ```
 
 ## Usage
 
 ```ts
 import { STATUS_CODES } from 'node:http';
-import { createPathToRegexpRouteMatcher }
+import { createPathToRegexpMatch }
   from '@chubbyts/chubbyts-framework-router-path-to-regexp/dist/path-to-regexp-router';
 import type { ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
 import { Response } from '@chubbyts/chubbyts-undici-server/dist/server';
@@ -61,7 +61,7 @@ import { createRoutesByName } from '@chubbyts/chubbyts-framework/dist/router/rou
 const app = createApplication([
   createErrorMiddleware(true),
   createRouteMatcherMiddleware(
-    createPathToRegexpRouteMatcher(
+    createPathToRegexpMatch(
       createRoutesByName([
         createGetRoute({
           path: '/hello/:name',
