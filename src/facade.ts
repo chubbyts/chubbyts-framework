@@ -1,9 +1,9 @@
 import type { Handler, Middleware } from '@chubbyts/chubbyts-undici-server/dist/server';
-import { ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
 import type { Logger } from '@chubbyts/chubbyts-log-types/dist/log';
 import type { MapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 import { createApplication } from './application.js';
 import { createErrorMiddleware } from './middleware/error-middleware.js';
+import { createUrlGeneratorMiddleware } from './middleware/url-generator-middleware.js';
 import { createRouteMatcherMiddleware } from './middleware/route-matcher-middleware.js';
 import type { PathOptions, Route } from './router/route.js';
 import { createRoute } from './router/route.js';
@@ -11,7 +11,7 @@ import type { Group } from './router/group.js';
 import { createGroup, getRoutes } from './router/group.js';
 import { createRoutesByName } from './router/routes-by-name.js';
 import type { CreateMatch } from './router/route-matcher.js';
-import type { CreateGeneratePath, CreateGenerateUrl, GeneratePath, GenerateUrl } from './router/url-generator.js';
+import type { CreateGeneratePath, CreateGenerateUrl } from './router/url-generator.js';
 
 type AddRoute<Self> = {
   (path: string, name: string, handler: Handler, pathOptions?: PathOptions): Self;
@@ -135,19 +135,6 @@ const createGroupCollector = (children: ReadonlyArray<Group | Route>): GroupColl
   children,
 });
 
-const createGeneratorsMiddleware =
-  ({ generatePath, generateUrl }: { generatePath?: GeneratePath; generateUrl?: GenerateUrl }): Middleware =>
-  async (serverRequest: ServerRequest, handler: Handler) =>
-    handler(
-      new ServerRequest(serverRequest, {
-        attributes: {
-          ...serverRequest.attributes,
-          ...(generatePath ? { generatePath } : {}),
-          ...(generateUrl ? { generateUrl } : {}),
-        },
-      }),
-    );
-
 const createApplicationBuilderFromChildren = (
   createMatch: CreateMatch,
   middlewares: Array<Middleware>,
@@ -165,7 +152,7 @@ const createApplicationBuilderFromChildren = (
 
     return createApplication([
       createErrorMiddleware(options.debug, options.logger, options.mapToHttpError),
-      ...(generatePath || generateUrl ? [createGeneratorsMiddleware({ generatePath, generateUrl })] : []),
+      ...(generatePath || generateUrl ? [createUrlGeneratorMiddleware({ generatePath, generateUrl })] : []),
       ...middlewares,
       createRouteMatcherMiddleware(createMatch(routesByName)),
     ]);
@@ -173,9 +160,10 @@ const createApplicationBuilderFromChildren = (
 });
 
 /**
- * A facade around createApplication / createErrorMiddleware / createRouteMatcherMiddleware / createRoute /
- * createGroup: pure construction sugar, the returned handler is the very same middleware pipe as with the
- * explicit composition: error middleware first, app middlewares, route matcher middleware last.
+ * A facade around createApplication / createErrorMiddleware / createUrlGeneratorMiddleware /
+ * createRouteMatcherMiddleware / createRoute / createGroup: pure construction sugar, the returned handler is the very same middleware pipe as with the
+ * explicit composition: error middleware first, optional url generator middleware, app middlewares, route matcher
+ * middleware last.
  *
  * The facade is agnostic to the router implementation: the matcher factory is given as the first parameter,
  * for example createPathToRegexpRouteMatcher from `@chubbyts/chubbyts-framework-router-path-to-regexp`.
