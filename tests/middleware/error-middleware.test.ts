@@ -5,6 +5,7 @@ import {
   createBadRequest,
   createInternalServerError,
   createNotFound,
+  createUnauthorized,
 } from '@chubbyts/chubbyts-http-error/dist/http-error';
 import { useObjectMock } from '@chubbyts/chubbyts-function-mock/dist/object-mock';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
@@ -1542,6 +1543,62 @@ describe('error-middleware', () => {
             </body>
         </html>"
       `);
+
+      expect(handlerMocks).toHaveLength(0);
+      expect(loggerMocks).toHaveLength(0);
+    });
+
+    test('http error with headers, without debug', async () => {
+      const httpError = createUnauthorized({
+        detail: 'Missing or invalid credentials',
+        headers: {
+          'www-authenticate': 'Basic realm="chubbyts"',
+          'retry-after': '120',
+          'content-type': 'application/json',
+        },
+      });
+
+      const request = new ServerRequest('https://example.com');
+
+      const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error: httpError }]);
+
+      const [logger, loggerMocks] = useObjectMock<Logger>([
+        {
+          name: 'info',
+          callback: (message: string) => {
+            expect(message).toBe('Http Error');
+          },
+        },
+      ]);
+
+      const errorMiddleware = createErrorMiddleware(false, logger);
+
+      const response = await errorMiddleware(request, handler);
+
+      expect(response.status).toBe(401);
+      expect(response.statusText).toBe('Unauthorized');
+      expect([...response.headers.entries()]).toMatchInlineSnapshot(`
+        [
+          [
+            "content-type",
+            "text/html",
+          ],
+          [
+            "retry-after",
+            "120",
+          ],
+          [
+            "www-authenticate",
+            "Basic realm="chubbyts"",
+          ],
+        ]
+      `);
+
+      const html = await response.text();
+
+      expect(html).toContain('Missing or invalid credentials');
+      expect(html).not.toContain('www-authenticate');
+      expect(html).not.toContain('retry-after');
 
       expect(handlerMocks).toHaveLength(0);
       expect(loggerMocks).toHaveLength(0);

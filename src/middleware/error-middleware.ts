@@ -196,7 +196,7 @@ const addDebugToBody = (errors: Array<Error>): string => {
 };
 
 const handleHttpError = (logger: Logger, httpError: HttpError, debug: boolean): Response => {
-  const { status, title, detail, instance } = httpError;
+  const { status, title, detail, instance, headers } = httpError;
 
   const errors = errorToDataArray(httpError);
 
@@ -216,7 +216,7 @@ const handleHttpError = (logger: Logger, httpError: HttpError, debug: boolean): 
           ...(debug ? [addDebugToBody(errors)] : []),
         ].join(''),
       ),
-    { status, statusText: STATUS_CODES[status], headers: { 'content-type': 'text/html' } },
+    { status, statusText: STATUS_CODES[status], headers: { ...headers, 'content-type': 'text/html' } },
   );
 };
 
