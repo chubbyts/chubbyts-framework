@@ -12,9 +12,10 @@
 <li><a href="" aria-current="page">createApplicationBuilder</a></li></ul>
 <h1>Variable createApplicationBuilder<code class="tsd-tag">Const</code></h1></div>
 <div class="tsd-signature"><span class="tsd-kind-variable">createApplicationBuilder</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{</span><br/>    <span class="tsd-signature-symbol">(</span><br/>        <span class="tsd-kind-parameter">createMatch</span><span class="tsd-signature-symbol">:</span> <a href="../types/router_route-matcher.CreateMatch.html" class="tsd-signature-type tsd-kind-type-alias">CreateMatch</a><span class="tsd-signature-symbol">,</span><br/>        <span class="tsd-kind-parameter">options</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ApplicationBuilderOptions</span><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ApplicationBuilder</span><span class="tsd-signature-symbol">;</span><br/>    <span class="tsd-signature-symbol">(</span><br/>        <span class="tsd-kind-parameter">createMatch</span><span class="tsd-signature-symbol">:</span> <a href="../types/router_route-matcher.CreateMatch.html" class="tsd-signature-type tsd-kind-type-alias">CreateMatch</a><span class="tsd-signature-symbol">,</span><br/>        <span class="tsd-kind-parameter">middlewares</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Middleware</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol">,</span><br/>        <span class="tsd-kind-parameter">options</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">ApplicationBuilderOptions</span><span class="tsd-signature-symbol">,</span><br/>    <span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">ApplicationBuilder</span><span class="tsd-signature-symbol">;</span><br/><span class="tsd-signature-symbol">}</span><span class="tsd-signature-symbol"> = ...</span></div>
-<div class="tsd-comment tsd-typography"><p>A facade around createApplication / createErrorMiddleware / createRouteMatcherMiddleware / createRoute /
-createGroup: pure construction sugar, the returned handler is the very same middleware pipe as with the
-explicit composition: error middleware first, app middlewares, route matcher middleware last.</p>
+<div class="tsd-comment tsd-typography"><p>A facade around createApplication / createErrorMiddleware / createUrlGeneratorMiddleware /
+createRouteMatcherMiddleware / createRoute / createGroup: pure construction sugar, the returned handler is the very same middleware pipe as with the
+explicit composition: error middleware first, optional url generator middleware, app middlewares, route matcher
+middleware last.</p>
 <p>The facade is agnostic to the router implementation: the matcher factory is given as the first parameter,
 for example createPathToRegexpRouteMatcher from <code>@chubbyts/chubbyts-framework-router-path-to-regexp</code>.</p>
 <p>The application builder is immutable: every route / group call returns a new application builder, so use
@@ -56,7 +57,7 @@ becomes available as well. Both options are independent of each other.</p>
 <li><span><code class="tsd-tag">Optional</code><span class="tsd-kind-parameter">options</span>: <span class="tsd-signature-type">ApplicationBuilderOptions</span></span></li></ul></div>
 <h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">ApplicationBuilder</span></h4></li></ul></li></ul></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/chubbyts/chubbyts-framework/blob/55558edfdcaee5ae4f29133c0e74d492fa8bbbcd/src/facade.ts#L216">facade.ts:216</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/chubbyts/chubbyts-framework/blob/28535d51080d8f043cfb999af6392481a216d929/src/facade.ts#L204">facade.ts:204</a></li></ul></aside></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
