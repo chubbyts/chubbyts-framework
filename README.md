@@ -26,11 +26,11 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
 ## Requirements
 
  * node: 22
- * [@chubbyts/chubbyts-dic-types][4]: ^2.3.0
- * [@chubbyts/chubbyts-http-error][5]: ^3.5.0
- * [@chubbyts/chubbyts-log-types][7]: ^3.3.0
- * [@chubbyts/chubbyts-throwable-to-error][8]: ^2.3.0
- * [@chubbyts/chubbyts-undici-server][9]: ^1.2.0
+ * [@chubbyts/chubbyts-dic-types][4]: ^2.3.1
+ * [@chubbyts/chubbyts-http-error][5]: ^3.5.1
+ * [@chubbyts/chubbyts-log-types][7]: ^3.3.1
+ * [@chubbyts/chubbyts-throwable-to-error][8]: ^2.3.4
+ * [@chubbyts/chubbyts-undici-server][9]: ^1.3.1
 
 ## Installation
 
@@ -39,7 +39,7 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^3.4.0 \
-  @chubbyts/chubbyts-framework@^3.5.0
+  @chubbyts/chubbyts-framework@^3.5.1
 ```
 
 ## Usage
@@ -112,7 +112,7 @@ const application = createApplicationBuilder(createMatch, [corsMiddleware])
 Running the application via the standard node http implementation.
 
 ```sh
-npm i @chubbyts/chubbyts-undici-server-node@^1.0.4
+npm i @chubbyts/chubbyts-undici-server-node@^1.3.1
 ```
 
 Check the [Usage][10] section.
@@ -122,7 +122,7 @@ Check the [Usage][10] section.
 Running the application via the uWebSockets http implementation.
 
 ```sh
-npm i @chubbyts/chubbyts-undici-server-uwebsockets@^1.0.2
+npm i @chubbyts/chubbyts-undici-server-uwebsockets@^1.3.1
 ```
 
 Check the [Usage][11] section.
