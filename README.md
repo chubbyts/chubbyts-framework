@@ -149,9 +149,13 @@ Check the [Usage][11] section.
 
 ## Handler's / Middleware's
 
- * [@chubbyts/chubbyts-http-cors][20]
- * [@chubbyts/chubbyts-http-multipart][21]
- * [@chubbyts/chubbyts-http-static-file][22]
+ * [@chubbyts/chubbyts-http-api][20]
+ * [@chubbyts/chubbyts-http-cors][21]
+ * [@chubbyts/chubbyts-http-multipart][22]
+ * [@chubbyts/chubbyts-http-oidc][23]
+ * [@chubbyts/chubbyts-http-rate-limit][24]
+ * [@chubbyts/chubbyts-http-static-file][25]
+ * [@chubbyts/chubbyts-http-trusted-proxy][26]
 
 ## Skeleton
 
@@ -174,9 +178,13 @@ Check the [Usage][11] section.
 [10]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-node#usage
 [11]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-uwebsockets#usage
 
-[20]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-cors
-[21]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-multipart
-[22]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-static-file
+[20]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-api
+[21]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-cors
+[22]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-multipart
+[23]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-oidc
+[24]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-rate-limit
+[25]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-static-file
+[26]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-trusted-proxy
 
 [30]: https://github.com/chubbyts/chubbyts-framework-skeleton
 [31]: https://github.com/chubbyts/chubbyts-petstore
