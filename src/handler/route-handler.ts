@@ -1,14 +1,15 @@
-import { pipe, type Handler, type Response, type ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
+import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
+import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/message';
+import { pipe } from '@chubbyts/chubbyts-http-types/pipe';
 import { createRouteMatcherMiddleware } from '../middleware/route-matcher-middleware.js';
-import type { Route } from '../router/route.js';
 import { isRoute } from '../router/route.js';
 
 export const createRouteHandler = (): Handler => {
-  return (request: ServerRequest<{ route: Route }>): Promise<Response> => {
-    const route = request.attributes.route;
+  return (serverRequest: ServerRequest): Promise<Response> => {
+    const route = serverRequest.attributes.route;
 
     if (isRoute(route)) {
-      return pipe(route.middlewares)(request, route.handler);
+      return pipe(route.middlewares)(serverRequest, route.handler);
     }
 
     throw new Error(

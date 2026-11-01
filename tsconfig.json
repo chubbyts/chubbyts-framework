@@ -9,7 +9,8 @@
         "rootDir": "src",
         "skipLibCheck": true,
         "strict": true,
-        "target": "ES2021"
+        "target": "ES2024",
+        "types": ["node"]
     },
     "include": [
         "src"

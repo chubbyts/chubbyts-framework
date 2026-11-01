@@ -1,16 +1,37 @@
+import { json, text } from 'node:stream/consumers';
 import { describe, expect, test } from 'vitest';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import { useObjectMock } from '@chubbyts/chubbyts-function-mock/dist/object-mock';
 import type { Logger } from '@chubbyts/chubbyts-log-types/dist/log';
 import type { MapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 import { createNotFound } from '@chubbyts/chubbyts-http-error/dist/http-error';
-import type { Handler, Middleware } from '@chubbyts/chubbyts-undici-server/dist/server';
-import { Response, ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
+import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
+import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/message';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/middleware';
+import {
+  createResponseFactory,
+  createServerRequestFactory,
+  createStreamFactory,
+} from '@chubbyts/chubbyts-http/message-factory';
 import type { Route } from '../src/router/route';
 import type { RoutesByName } from '../src/router/routes-by-name';
 import type { CreateMatch, Match } from '../src/router/route-matcher';
 import type { CreateGeneratePath, CreateGenerateUrl, GeneratePath, GenerateUrl } from '../src/router/url-generator';
 import { createApplicationBuilder } from '../src/facade';
+
+const bodyFactory = createStreamFactory();
+const responseFactory = createResponseFactory(bodyFactory);
+const serverRequestFactory = createServerRequestFactory();
+
+const createJsonResponse = (status: number, data: unknown): Response => {
+  const response = responseFactory(status);
+
+  return {
+    ...response,
+    headers: { ...response.headers, 'content-type': ['application/json'] },
+    body: bodyFactory(JSON.stringify(data)),
+  };
+};
 
 const corsMiddleware: Middleware = async (givenRequest, givenHandler) => givenHandler(givenRequest);
 const acceptNegotiationMiddleware: Middleware = async (givenRequest, givenHandler) => givenHandler(givenRequest);
@@ -21,41 +42,24 @@ describe('facade', () => {
   describe('createApplicationBuilder', () => {
     test('usage example', async () => {
       /* oxlint-disable unicorn/consistent-function-scoping */
-      const pingHandler: Handler = async () =>
-        new Response(JSON.stringify({ datetime: '2026-08-14T12:00:00.000Z' }), {
-          headers: { 'content-type': 'application/json' },
-        });
+      const pingHandler: Handler = async () => createJsonResponse(200, { datetime: '2026-08-14T12:00:00.000Z' });
 
-      const openApiHandler: Handler = async () =>
-        new Response(JSON.stringify({}), {
-          headers: { 'content-type': 'application/json' },
-        });
+      const openApiHandler: Handler = async () => createJsonResponse(200, {});
 
-      const petListHandler: Handler = async () =>
-        new Response(JSON.stringify([{ id: '1' }, { id: '2' }]), {
-          headers: { 'content-type': 'application/json' },
-        });
+      const petListHandler: Handler = async () => createJsonResponse(200, [{ id: '1' }, { id: '2' }]);
 
-      const petCreateHandler: Handler = async () =>
-        new Response(JSON.stringify({ id: '1' }), {
-          status: 201,
-          headers: { 'content-type': 'application/json' },
-        });
+      const petCreateHandler: Handler = async () => createJsonResponse(201, { id: '1' });
 
       const petReadHandler: Handler = async (givenRequest: ServerRequest) =>
-        new Response(JSON.stringify({ id: givenRequest.attributes.id }), {
-          headers: { 'content-type': 'application/json' },
-        });
+        createJsonResponse(200, { id: givenRequest.attributes.id });
 
       const petUpdateHandler: Handler = async (givenRequest: ServerRequest) =>
-        new Response(JSON.stringify({ id: givenRequest.attributes.id }), {
-          headers: { 'content-type': 'application/json' },
-        });
+        createJsonResponse(200, { id: givenRequest.attributes.id });
 
       const petDeleteHandler: Handler = async (givenRequest: ServerRequest) => {
         expect(givenRequest.attributes.id).toBe('1');
 
-        return new Response(null, { status: 204 });
+        return responseFactory(204);
       };
       /* oxlint-enable unicorn/consistent-function-scoping */
 
@@ -74,9 +78,9 @@ describe('facade', () => {
           callback:
             (givenRoutesByName: RoutesByName): Match =>
             (givenRequest: ServerRequest): Route => {
-              const { pathname } = new URL(givenRequest.url);
-
-              const routeName = routeNamesByMethodAndPathname.get(`${givenRequest.method} ${pathname}`) as string;
+              const routeName = routeNamesByMethodAndPathname.get(
+                `${givenRequest.method} ${givenRequest.uri.path}`,
+              ) as string;
 
               const route = givenRoutesByName.get(routeName) as Route;
 
@@ -87,7 +91,7 @@ describe('facade', () => {
         },
       ]);
 
-      const application = createApplicationBuilder(createMatch, [corsMiddleware])
+      const application = createApplicationBuilder({ createMatch, responseFactory, bodyFactory }, [corsMiddleware])
         .get('/ping', 'ping', pingHandler)
         .get('/openapi', 'openapi', openApiHandler)
         .group('/api/pets', [acceptNegotiationMiddleware, apiErrorMiddleware], (pets) =>
@@ -100,46 +104,40 @@ describe('facade', () => {
         )
         .build();
 
-      const pingResponse = await application(new ServerRequest('https://example.com/ping'));
+      const pingResponse = await application(serverRequestFactory('GET', 'https://example.com/ping'));
 
       expect(pingResponse.status).toBe(200);
-      expect(await pingResponse.json()).toEqual({ datetime: '2026-08-14T12:00:00.000Z' });
+      expect(await json(pingResponse.body)).toEqual({ datetime: '2026-08-14T12:00:00.000Z' });
 
-      const openApiResponse = await application(new ServerRequest('https://example.com/openapi'));
+      const openApiResponse = await application(serverRequestFactory('GET', 'https://example.com/openapi'));
 
       expect(openApiResponse.status).toBe(200);
-      expect(await openApiResponse.json()).toEqual({});
+      expect(await json(openApiResponse.body)).toEqual({});
 
-      const petListResponse = await application(new ServerRequest('https://example.com/api/pets'));
+      const petListResponse = await application(serverRequestFactory('GET', 'https://example.com/api/pets'));
 
       expect(petListResponse.status).toBe(200);
-      expect(await petListResponse.json()).toEqual([{ id: '1' }, { id: '2' }]);
+      expect(await json(petListResponse.body)).toEqual([{ id: '1' }, { id: '2' }]);
 
-      const petCreateResponse = await application(
-        new ServerRequest('https://example.com/api/pets', { method: 'POST' }),
-      );
+      const petCreateResponse = await application(serverRequestFactory('POST', 'https://example.com/api/pets'));
 
       expect(petCreateResponse.status).toBe(201);
-      expect(await petCreateResponse.json()).toEqual({ id: '1' });
+      expect(await json(petCreateResponse.body)).toEqual({ id: '1' });
 
-      const petReadResponse = await application(new ServerRequest('https://example.com/api/pets/1'));
+      const petReadResponse = await application(serverRequestFactory('GET', 'https://example.com/api/pets/1'));
 
       expect(petReadResponse.status).toBe(200);
-      expect(await petReadResponse.json()).toEqual({ id: '1' });
+      expect(await json(petReadResponse.body)).toEqual({ id: '1' });
 
-      const petUpdateResponse = await application(
-        new ServerRequest('https://example.com/api/pets/1', { method: 'PUT' }),
-      );
+      const petUpdateResponse = await application(serverRequestFactory('PUT', 'https://example.com/api/pets/1'));
 
       expect(petUpdateResponse.status).toBe(200);
-      expect(await petUpdateResponse.json()).toEqual({ id: '1' });
+      expect(await json(petUpdateResponse.body)).toEqual({ id: '1' });
 
-      const petDeleteResponse = await application(
-        new ServerRequest('https://example.com/api/pets/1', { method: 'DELETE' }),
-      );
+      const petDeleteResponse = await application(serverRequestFactory('DELETE', 'https://example.com/api/pets/1'));
 
       expect(petDeleteResponse.status).toBe(204);
-      expect(await petDeleteResponse.text()).toBe('');
+      expect(await text(petDeleteResponse.body)).toBe('');
 
       expect(createMatchMocks).toHaveLength(0);
     });
@@ -275,7 +273,7 @@ describe('facade', () => {
         },
       ]);
 
-      const application = createApplicationBuilder(createMatch)
+      const application = createApplicationBuilder({ createMatch, responseFactory, bodyFactory }, [])
         .delete('/api/pets/:id', 'pet_delete', handler)
         .get('/api/pets/:id', 'pet_read', handler)
         .head('/api/pets/:id', 'pet_head', handler)
@@ -316,7 +314,7 @@ describe('facade', () => {
         },
       ]);
 
-      const applicationBuilder = createApplicationBuilder(createMatch, []);
+      const applicationBuilder = createApplicationBuilder({ createMatch, responseFactory, bodyFactory }, []);
 
       applicationBuilder.get('/ping', 'ping', handler);
       applicationBuilder.build();
@@ -328,8 +326,8 @@ describe('facade', () => {
     });
 
     test('handle without generators', async () => {
-      const request = new ServerRequest('https://example.com/hello/name');
-      const response = new Response('');
+      const request = serverRequestFactory('GET', 'https://example.com/hello/name');
+      const response = responseFactory(200);
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([
         {
@@ -358,7 +356,7 @@ describe('facade', () => {
 
       const [createMatch, createMatchMocks] = useFunctionMock<CreateMatch>([{ callback: (): Match => match }]);
 
-      const application = createApplicationBuilder(createMatch, [middleware]).build();
+      const application = createApplicationBuilder({ createMatch, responseFactory, bodyFactory }, [middleware]).build();
 
       expect(await application(request)).toBe(response);
 
@@ -369,8 +367,8 @@ describe('facade', () => {
     });
 
     test('handle with createGeneratePath', async () => {
-      const request = new ServerRequest('https://example.com/hello/name');
-      const response = new Response('');
+      const request = serverRequestFactory('GET', 'https://example.com/hello/name');
+      const response = responseFactory(200);
 
       const generatePath = useFunctionMock<GeneratePath>([])[0];
 
@@ -411,7 +409,10 @@ describe('facade', () => {
         },
       ]);
 
-      const application = createApplicationBuilder(createMatch, { createGeneratePath }).build();
+      const application = createApplicationBuilder(
+        { createMatch, responseFactory, bodyFactory, createGeneratePath },
+        [],
+      ).build();
 
       expect(await application(request)).toBe(response);
 
@@ -422,8 +423,8 @@ describe('facade', () => {
     });
 
     test('handle with createGenerateUrl', async () => {
-      const request = new ServerRequest('https://example.com/hello/name');
-      const response = new Response('');
+      const request = serverRequestFactory('GET', 'https://example.com/hello/name');
+      const response = responseFactory(200);
 
       const generateUrl = useFunctionMock<GenerateUrl>([])[0];
 
@@ -464,7 +465,10 @@ describe('facade', () => {
         },
       ]);
 
-      const application = createApplicationBuilder(createMatch, { createGenerateUrl }).build();
+      const application = createApplicationBuilder(
+        { createMatch, responseFactory, bodyFactory, createGenerateUrl },
+        [],
+      ).build();
 
       expect(await application(request)).toBe(response);
 
@@ -478,7 +482,7 @@ describe('facade', () => {
       const error = new Error('something went wrong');
       const httpError = createNotFound({ detail: 'There is no pet with id 1' });
 
-      const request = new ServerRequest('https://example.com/api/pets/1');
+      const request = serverRequestFactory('GET', 'https://example.com/api/pets/1');
 
       const [match, matchMocks] = useFunctionMock<Match>([{ parameters: [request], error }]);
 
@@ -498,18 +502,17 @@ describe('facade', () => {
         { parameters: [error], return: httpError },
       ]);
 
-      const application = createApplicationBuilder(createMatch, [], {
-        debug: true,
-        logger,
-        mapToHttpError,
-      }).build();
+      const application = createApplicationBuilder(
+        { createMatch, responseFactory, bodyFactory, debug: true, logger, mapToHttpError },
+        [],
+      ).build();
 
       const response = await application(request);
 
       expect(response.status).toBe(404);
-      expect(response.statusText).toBe('Not Found');
+      expect(response.reasonPhrase).toBe('Not Found');
 
-      const body = await response.text();
+      const body = await text(response.body);
 
       expect(body).toContain('There is no pet with id 1');
       expect(body).toContain('<strong>stack</strong>');

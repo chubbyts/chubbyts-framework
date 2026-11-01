@@ -40,7 +40,7 @@
   <!-- RouteMatcherMiddleware -->
   <rect x="224" y="308" width="512" height="56" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="1.5"/>
   <text x="480" y="332" text-anchor="middle" font-weight="600" fill="#1e3a8a">RouteMatcherMiddleware</text>
-  <text x="480" y="351" text-anchor="middle" fill="#1e3a8a" font-size="12">match( serverRequest ) → attributes: { route, ...route.attributes }</text>
+  <text x="480" y="351" text-anchor="middle" fill="#1e3a8a" font-size="12">match( serverRequest ) → attributes: { ...route.attributes, route }</text>
 
   <!-- Middleware* (app) -->
   <rect x="224" y="384" width="512" height="56" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6 4"/>
@@ -73,7 +73,7 @@
     <path d="M380 46 H120 V668 H270" marker-end="url(#arrow-req)"/>
   </g>
   <text x="112" y="120" text-anchor="end" font-weight="700" fill="#1d4ed8">ServerRequest</text>
-  <text x="112" y="138" text-anchor="end" fill="#1d4ed8" font-size="12">@chubbyts/chubbyts-undici-server</text>
+  <text x="112" y="138" text-anchor="end" fill="#1d4ed8" font-size="12">@chubbyts/chubbyts-http-types</text>
   <g fill="#1d4ed8" font-size="12" text-anchor="end">
     <text x="112" y="268">+ generatePath *</text>
     <text x="112" y="286">+ generateUrl *</text>
@@ -95,7 +95,7 @@
     <path d="M840 46 H592" marker-end="url(#arrow-res)"/>
   </g>
   <text x="848" y="120" font-weight="700" fill="#15803d">Response</text>
-  <text x="848" y="138" fill="#15803d" font-size="12">@chubbyts/chubbyts-undici-server</text>
+  <text x="848" y="138" fill="#15803d" font-size="12">@chubbyts/chubbyts-http-types</text>
   <g stroke="#15803d" stroke-width="2">
     <line x1="736" y1="184" x2="840" y2="184"/>
     <line x1="736" y1="260" x2="840" y2="260"/>

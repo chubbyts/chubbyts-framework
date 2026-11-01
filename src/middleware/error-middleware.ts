@@ -1,11 +1,12 @@
-import { STATUS_CODES } from 'node:http';
 import type { Logger } from '@chubbyts/chubbyts-log-types/dist/log';
 import { createLogger } from '@chubbyts/chubbyts-log-types/dist/log';
 import { throwableToError } from '@chubbyts/chubbyts-throwable-to-error/dist/throwable-to-error';
 import type { HttpError, MapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 import { isHttpError, mapToHttpError as defaultMapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
-import type { Handler, Middleware, ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
-import { Response } from '@chubbyts/chubbyts-undici-server/dist/server';
+import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
+import type { Headers, Response, ServerRequest } from '@chubbyts/chubbyts-http-types/message';
+import type { BodyFactory, ResponseFactory } from '@chubbyts/chubbyts-http-types/message-factory';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/middleware';
 
 const htmlTemplate = `<!DOCTYPE html>
 <html>
@@ -195,7 +196,16 @@ const addDebugToBody = (errors: Array<Error>): string => {
     </div>`;
 };
 
-const handleHttpError = (logger: Logger, httpError: HttpError, debug: boolean): Response => {
+const toHeaders = (headers: Record<string, string>): Headers =>
+  Object.fromEntries(Object.entries(headers).map(([name, value]) => [name.toLowerCase(), [value]]));
+
+const handleHttpError = (
+  responseFactory: ResponseFactory,
+  bodyFactory: BodyFactory,
+  logger: Logger,
+  httpError: HttpError,
+  debug: boolean,
+): Response => {
   const { status, title, detail, instance, headers } = httpError;
 
   const errors = errorToDataArray(httpError);
@@ -204,20 +214,25 @@ const handleHttpError = (logger: Logger, httpError: HttpError, debug: boolean): 
 
   logger[isClientError ? 'info' : 'error']('Http Error', { data: { ...httpError }, errors });
 
-  return new Response(
-    htmlTemplate
-      .replaceAll('__STATUS__', status.toString())
-      .replaceAll('__TITLE__', title)
-      .replaceAll(
-        '__BODY__',
-        [
-          ...(detail ? [`<p>${escapeHtml(detail)}</p>`] : []),
-          ...(instance ? [`<p>${escapeHtml(instance)}</p>`] : []),
-          ...(debug ? [addDebugToBody(errors)] : []),
-        ].join(''),
-      ),
-    { status, statusText: STATUS_CODES[status], headers: { ...headers, 'content-type': 'text/html' } },
-  );
+  const response = responseFactory(status);
+
+  return {
+    ...response,
+    headers: { ...response.headers, ...toHeaders(headers ?? {}), 'content-type': ['text/html'] },
+    body: bodyFactory(
+      htmlTemplate
+        .replaceAll('__STATUS__', status.toString())
+        .replaceAll('__TITLE__', title)
+        .replaceAll(
+          '__BODY__',
+          [
+            ...(detail ? [`<p>${escapeHtml(detail)}</p>`] : []),
+            ...(instance ? [`<p>${escapeHtml(instance)}</p>`] : []),
+            ...(debug ? [addDebugToBody(errors)] : []),
+          ].join(''),
+        ),
+    ),
+  };
 };
 
 const createHttpErrorFromError = (e: unknown, mapToHttpError: MapToHttpError): HttpError => {
@@ -229,6 +244,8 @@ const createHttpErrorFromError = (e: unknown, mapToHttpError: MapToHttpError): H
 };
 
 export const createErrorMiddleware = (
+  responseFactory: ResponseFactory,
+  bodyFactory: BodyFactory,
   debug = false,
   logger: Logger = createLogger(),
   mapToHttpError: MapToHttpError = defaultMapToHttpError,
@@ -239,7 +256,7 @@ export const createErrorMiddleware = (
     } catch (e) {
       const httpError = isHttpError(e) ? e : createHttpErrorFromError(e, mapToHttpError);
 
-      return handleHttpError(logger, httpError, debug);
+      return handleHttpError(responseFactory, bodyFactory, logger, httpError, debug);
     }
   };
 };

@@ -1,5 +1,6 @@
-import { ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
-import type { Handler, Middleware, Response } from '@chubbyts/chubbyts-undici-server/dist/server';
+import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
+import type { Attributes, Response, ServerRequest } from '@chubbyts/chubbyts-http-types/message';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/middleware';
 import type { GeneratePath, GenerateUrl } from '../router/url-generator.js';
 
 export type UrlGeneratorMiddlewareOptions = {
@@ -7,19 +8,20 @@ export type UrlGeneratorMiddlewareOptions = {
   generateUrl?: GenerateUrl;
 };
 
+export type UrlGeneratorAttributes = Attributes & UrlGeneratorMiddlewareOptions;
+
 export const createUrlGeneratorMiddleware = ({
   generatePath,
   generateUrl,
-}: UrlGeneratorMiddlewareOptions): Middleware => {
-  return async (serverRequest: ServerRequest, handler: Handler): Promise<Response> => {
-    return handler(
-      new ServerRequest(serverRequest, {
-        attributes: {
-          ...serverRequest.attributes,
-          ...(generatePath ? { generatePath } : {}),
-          ...(generateUrl ? { generateUrl } : {}),
-        },
-      }),
-    );
+}: UrlGeneratorMiddlewareOptions): Middleware<Attributes, UrlGeneratorAttributes> => {
+  return async (serverRequest: ServerRequest, handler: Handler<UrlGeneratorAttributes>): Promise<Response> => {
+    return handler({
+      ...serverRequest,
+      attributes: {
+        ...serverRequest.attributes,
+        ...(generatePath ? { generatePath } : {}),
+        ...(generateUrl ? { generateUrl } : {}),
+      },
+    });
   };
 };

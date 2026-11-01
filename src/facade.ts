@@ -1,4 +1,7 @@
-import type { Handler, Middleware } from '@chubbyts/chubbyts-undici-server/dist/server';
+import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
+import type { Method } from '@chubbyts/chubbyts-http-types/message';
+import type { BodyFactory, ResponseFactory } from '@chubbyts/chubbyts-http-types/message-factory';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/middleware';
 import type { Logger } from '@chubbyts/chubbyts-log-types/dist/log';
 import type { MapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
 import { createApplication } from './application.js';
@@ -19,9 +22,9 @@ type AddRoute<Self> = {
 };
 
 type AddRouteWithMethod<Self> = {
-  (method: string, path: string, name: string, handler: Handler, pathOptions?: PathOptions): Self;
+  (method: Method, path: string, name: string, handler: Handler, pathOptions?: PathOptions): Self;
   (
-    method: string,
+    method: Method,
     path: string,
     name: string,
     middlewares: Array<Middleware>,
@@ -53,7 +56,10 @@ type GroupCollector = Collector<{ children: ReadonlyArray<Group | Route> }>;
 
 type ApplicationBuilder = Collector<{ build: () => Handler }>;
 
-type ApplicationBuilderOptions = {
+export type ApplicationBuilderDependencies = {
+  createMatch: CreateMatch;
+  responseFactory: ResponseFactory;
+  bodyFactory: BodyFactory;
   debug?: boolean;
   logger?: Logger;
   mapToHttpError?: MapToHttpError;
@@ -66,7 +72,7 @@ const createRouteCollector = <Self>(
   next: (children: ReadonlyArray<Group | Route>) => Self,
 ) => {
   const addRoute = (
-    method: string,
+    method: Method,
     path: string,
     name: string,
     middlewaresOrHandler: Array<Middleware> | Handler,
@@ -86,7 +92,7 @@ const createRouteCollector = <Self>(
   const route: AddRouteWithMethod<Self> = addRoute;
 
   const add =
-    (method: string): AddRoute<Self> =>
+    (method: Method): AddRoute<Self> =>
     (
       path: string,
       name: string,
@@ -136,22 +142,32 @@ const createGroupCollector = (children: ReadonlyArray<Group | Route>): GroupColl
 });
 
 const createApplicationBuilderFromChildren = (
-  createMatch: CreateMatch,
+  dependencies: ApplicationBuilderDependencies,
   middlewares: Array<Middleware>,
-  options: ApplicationBuilderOptions,
   children: ReadonlyArray<Group | Route>,
 ): ApplicationBuilder => ({
   ...createRouteCollector(children, (newChildren) =>
-    createApplicationBuilderFromChildren(createMatch, middlewares, options, newChildren),
+    createApplicationBuilderFromChildren(dependencies, middlewares, newChildren),
   ),
   build: () => {
+    const {
+      createMatch,
+      responseFactory,
+      bodyFactory,
+      debug,
+      logger,
+      mapToHttpError,
+      createGeneratePath,
+      createGenerateUrl,
+    } = dependencies;
+
     const routesByName = createRoutesByName(getRoutes(createGroup({ path: '', children: [...children] })));
 
-    const generatePath = options.createGeneratePath ? options.createGeneratePath(routesByName) : undefined;
-    const generateUrl = options.createGenerateUrl ? options.createGenerateUrl(routesByName) : undefined;
+    const generatePath = createGeneratePath ? createGeneratePath(routesByName) : undefined;
+    const generateUrl = createGenerateUrl ? createGenerateUrl(routesByName) : undefined;
 
     return createApplication([
-      createErrorMiddleware(options.debug, options.logger, options.mapToHttpError),
+      createErrorMiddleware(responseFactory, bodyFactory, debug, logger, mapToHttpError),
       ...(generatePath || generateUrl ? [createUrlGeneratorMiddleware({ generatePath, generateUrl })] : []),
       ...middlewares,
       createRouteMatcherMiddleware(createMatch(routesByName)),
@@ -159,17 +175,7 @@ const createApplicationBuilderFromChildren = (
   },
 });
 
-export const createApplicationBuilder: {
-  (createMatch: CreateMatch, options?: ApplicationBuilderOptions): ApplicationBuilder;
-  (createMatch: CreateMatch, middlewares: Array<Middleware>, options?: ApplicationBuilderOptions): ApplicationBuilder;
-} = (
-  createMatch: CreateMatch,
-  middlewaresOrOptions?: Array<Middleware> | ApplicationBuilderOptions,
-  options?: ApplicationBuilderOptions,
-): ApplicationBuilder => {
-  const [middlewares, resolvedOptions] = Array.isArray(middlewaresOrOptions)
-    ? [[...middlewaresOrOptions], options ?? {}]
-    : [[], middlewaresOrOptions ?? {}];
-
-  return createApplicationBuilderFromChildren(createMatch, middlewares, resolvedOptions, []);
-};
+export const createApplicationBuilder = (
+  dependencies: ApplicationBuilderDependencies,
+  middlewares: Array<Middleware>,
+): ApplicationBuilder => createApplicationBuilderFromChildren(dependencies, [...middlewares], []);

@@ -1,14 +1,23 @@
 import { describe, expect, test } from 'vitest';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
-import type { Handler, Middleware } from '@chubbyts/chubbyts-undici-server/dist/server';
-import { ServerRequest, Response } from '@chubbyts/chubbyts-undici-server/dist/server';
+import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/middleware';
+import {
+  createResponseFactory,
+  createServerRequestFactory,
+  createStreamFactory,
+} from '@chubbyts/chubbyts-http/message-factory';
 import { createRouteHandler } from '../../src/handler/route-handler';
 import type { Route } from '../../src/router/route';
+
+const bodyFactory = createStreamFactory();
+const responseFactory = createResponseFactory(bodyFactory);
+const serverRequestFactory = createServerRequestFactory();
 
 describe('route-handler', () => {
   describe('createRouteHandler', () => {
     test('without route', async () => {
-      const request = new ServerRequest('https://example.com');
+      const request = serverRequestFactory('GET', 'https://example.com');
 
       const routeHandler = createRouteHandler();
 
@@ -41,8 +50,8 @@ describe('route-handler', () => {
 
       const route = { handler, middlewares, _route: 'Route' } as unknown as Route;
 
-      const request = new ServerRequest('https://example.com', { attributes: { route } });
-      const response = new Response();
+      const request = { ...serverRequestFactory('GET', 'https://example.com'), attributes: { route } };
+      const response = responseFactory(200);
 
       const routeHandler = createRouteHandler();
 

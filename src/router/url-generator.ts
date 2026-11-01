@@ -1,4 +1,4 @@
-import type { ServerRequest } from '@chubbyts/chubbyts-undici-server/dist/server';
+import type { ServerRequest } from '@chubbyts/chubbyts-http-types/message';
 import type { RoutesByName } from './routes-by-name.js';
 
 export type GeneratePath = (name: string, attributes?: Record<string, string>, query?: string) => string;

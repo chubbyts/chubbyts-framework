@@ -1,3 +1,4 @@
+import { text } from 'node:stream/consumers';
 import { describe, expect, test } from 'vitest';
 import type { Logger } from '@chubbyts/chubbyts-log-types/dist/log';
 import type { HttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
@@ -9,9 +10,17 @@ import {
 } from '@chubbyts/chubbyts-http-error/dist/http-error';
 import { useObjectMock } from '@chubbyts/chubbyts-function-mock/dist/object-mock';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
-import type { Handler } from '@chubbyts/chubbyts-undici-server/dist/server';
-import { ServerRequest, Response } from '@chubbyts/chubbyts-undici-server/dist/server';
+import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
+import {
+  createResponseFactory,
+  createServerRequestFactory,
+  createStreamFactory,
+} from '@chubbyts/chubbyts-http/message-factory';
 import { createErrorMiddleware } from '../../src/middleware/error-middleware';
+
+const bodyFactory = createStreamFactory();
+const responseFactory = createResponseFactory(bodyFactory);
+const serverRequestFactory = createServerRequestFactory();
 
 const replaceHtmlStack = (data: string) => data.replace(/\n {4}at .*/g, '');
 const replaceJsonStack = (data: string) => data.replace(/\\n {4}at .*/g, '');
@@ -19,14 +28,14 @@ const replaceJsonStack = (data: string) => data.replace(/\\n {4}at .*/g, '');
 describe('error-middleware', () => {
   describe('createErrorMiddleware', () => {
     test('successful', async () => {
-      const request = new ServerRequest('https://example.com');
-      const response = new Response();
+      const request = serverRequestFactory('GET', 'https://example.com');
+      const response = responseFactory(200);
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([
         { parameters: [request], return: Promise.resolve(response) },
       ]);
 
-      const errorMiddleware = createErrorMiddleware();
+      const errorMiddleware = createErrorMiddleware(responseFactory, bodyFactory);
 
       expect(await errorMiddleware(request, handler)).toBe(response);
 
@@ -36,26 +45,25 @@ describe('error-middleware', () => {
     test('error, without debug and without log', async () => {
       const error = new Error('error');
 
-      const request = new ServerRequest('https://example.com');
+      const request = serverRequestFactory('GET', 'https://example.com');
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
 
-      const errorMiddleware = createErrorMiddleware();
+      const errorMiddleware = createErrorMiddleware(responseFactory, bodyFactory);
 
       const response = await errorMiddleware(request, handler);
 
       expect(response.status).toBe(500);
-      expect(response.statusText).toBe('Internal Server Error');
-      expect([...response.headers.entries()]).toMatchInlineSnapshot(`
-        [
-          [
-            "content-type",
+      expect(response.reasonPhrase).toBe('Internal Server Error');
+      expect(response.headers).toMatchInlineSnapshot(`
+        {
+          "content-type": [
             "text/html",
           ],
-        ]
+        }
       `);
 
-      expect(await response.text()).toMatchInlineSnapshot(String.raw`
+      expect(await text(response.body)).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -217,7 +225,7 @@ describe('error-middleware', () => {
       // oxlint-disable-next-line functional/immutable-data
       (error as Error & { cause: Error }).cause = causeError;
 
-      const request = new ServerRequest('https://example.com');
+      const request = serverRequestFactory('GET', 'https://example.com');
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
 
@@ -261,22 +269,21 @@ describe('error-middleware', () => {
         },
       ]);
 
-      const errorMiddleware = createErrorMiddleware(true, logger);
+      const errorMiddleware = createErrorMiddleware(responseFactory, bodyFactory, true, logger);
 
       const response = await errorMiddleware(request, handler);
 
       expect(response.status).toBe(500);
-      expect(response.statusText).toBe('Internal Server Error');
-      expect([...response.headers.entries()]).toMatchInlineSnapshot(`
-        [
-          [
-            "content-type",
+      expect(response.reasonPhrase).toBe('Internal Server Error');
+      expect(response.headers).toMatchInlineSnapshot(`
+        {
+          "content-type": [
             "text/html",
           ],
-        ]
+        }
       `);
 
-      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(String.raw`
+      expect(replaceHtmlStack(await text(response.body))).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -454,7 +461,7 @@ describe('error-middleware', () => {
       // oxlint-disable-next-line functional/immutable-data
       (error as Error & { cause: Error }).cause = causeError;
 
-      const request = new ServerRequest('https://example.com');
+      const request = serverRequestFactory('GET', 'https://example.com');
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
 
@@ -497,28 +504,33 @@ describe('error-middleware', () => {
         },
       ]);
 
-      const errorMiddleware = createErrorMiddleware(true, logger, (e: unknown): HttpError => {
-        if (e instanceof Error && e.message === 'error') {
-          return createNotFound({ cause: e });
-        }
+      const errorMiddleware = createErrorMiddleware(
+        responseFactory,
+        bodyFactory,
+        true,
+        logger,
+        (e: unknown): HttpError => {
+          if (e instanceof Error && e.message === 'error') {
+            return createNotFound({ cause: e });
+          }
 
-        throw e;
-      });
+          throw e;
+        },
+      );
 
       const response = await errorMiddleware(request, handler);
 
       expect(response.status).toBe(404);
-      expect(response.statusText).toBe('Not Found');
-      expect([...response.headers.entries()]).toMatchInlineSnapshot(`
-        [
-          [
-            "content-type",
+      expect(response.reasonPhrase).toBe('Not Found');
+      expect(response.headers).toMatchInlineSnapshot(`
+        {
+          "content-type": [
             "text/html",
           ],
-        ]
+        }
       `);
 
-      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(String.raw`
+      expect(replaceHtmlStack(await text(response.body))).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -696,7 +708,7 @@ describe('error-middleware', () => {
       // oxlint-disable-next-line functional/immutable-data
       (error as Error & { cause: Error }).cause = causeError;
 
-      const request = new ServerRequest('https://example.com');
+      const request = serverRequestFactory('GET', 'https://example.com');
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
 
@@ -740,24 +752,29 @@ describe('error-middleware', () => {
         },
       ]);
 
-      const errorMiddleware = createErrorMiddleware(true, logger, (e: unknown): HttpError => {
-        throw e;
-      });
+      const errorMiddleware = createErrorMiddleware(
+        responseFactory,
+        bodyFactory,
+        true,
+        logger,
+        (e: unknown): HttpError => {
+          throw e;
+        },
+      );
 
       const response = await errorMiddleware(request, handler);
 
       expect(response.status).toBe(500);
-      expect(response.statusText).toBe('Internal Server Error');
-      expect([...response.headers.entries()]).toMatchInlineSnapshot(`
-        [
-          [
-            "content-type",
+      expect(response.reasonPhrase).toBe('Internal Server Error');
+      expect(response.headers).toMatchInlineSnapshot(`
+        {
+          "content-type": [
             "text/html",
           ],
-        ]
+        }
       `);
 
-      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(String.raw`
+      expect(replaceHtmlStack(await text(response.body))).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -926,7 +943,7 @@ describe('error-middleware', () => {
     test('error without stack, with debug and with log', async () => {
       const error = 'error';
 
-      const request = new ServerRequest('https://example.com');
+      const request = serverRequestFactory('GET', 'https://example.com');
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([
         { parameters: [request], error: error as unknown as Error },
@@ -964,22 +981,21 @@ describe('error-middleware', () => {
         },
       ]);
 
-      const errorMiddleware = createErrorMiddleware(true, logger);
+      const errorMiddleware = createErrorMiddleware(responseFactory, bodyFactory, true, logger);
 
       const response = await errorMiddleware(request, handler);
 
       expect(response.status).toBe(500);
-      expect(response.statusText).toBe('Internal Server Error');
-      expect([...response.headers.entries()]).toMatchInlineSnapshot(`
-        [
-          [
-            "content-type",
+      expect(response.reasonPhrase).toBe('Internal Server Error');
+      expect(response.headers).toMatchInlineSnapshot(`
+        {
+          "content-type": [
             "text/html",
           ],
-        ]
+        }
       `);
 
-      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(String.raw`
+      expect(replaceHtmlStack(await text(response.body))).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -1143,7 +1159,7 @@ describe('error-middleware', () => {
         instance: 'some-instance',
       });
 
-      const request = new ServerRequest('https://example.com');
+      const request = serverRequestFactory('GET', 'https://example.com');
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error: httpError }]);
 
@@ -1175,22 +1191,21 @@ describe('error-middleware', () => {
         },
       ]);
 
-      const errorMiddleware = createErrorMiddleware(true, logger);
+      const errorMiddleware = createErrorMiddleware(responseFactory, bodyFactory, true, logger);
 
       const response = await errorMiddleware(request, handler);
 
       expect(response.status).toBe(400);
-      expect(response.statusText).toBe('Bad Request');
-      expect([...response.headers.entries()]).toMatchInlineSnapshot(`
-        [
-          [
-            "content-type",
+      expect(response.reasonPhrase).toBe('Bad Request');
+      expect(response.headers).toMatchInlineSnapshot(`
+        {
+          "content-type": [
             "text/html",
           ],
-        ]
+        }
       `);
 
-      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(String.raw`
+      expect(replaceHtmlStack(await text(response.body))).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -1348,7 +1363,7 @@ describe('error-middleware', () => {
     test('http error: server', async () => {
       const httpError = createInternalServerError({});
 
-      const request = new ServerRequest('https://example.com');
+      const request = serverRequestFactory('GET', 'https://example.com');
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error: httpError }]);
 
@@ -1378,22 +1393,21 @@ describe('error-middleware', () => {
         },
       ]);
 
-      const errorMiddleware = createErrorMiddleware(true, logger);
+      const errorMiddleware = createErrorMiddleware(responseFactory, bodyFactory, true, logger);
 
       const response = await errorMiddleware(request, handler);
 
       expect(response.status).toBe(500);
-      expect(response.statusText).toBe('Internal Server Error');
-      expect([...response.headers.entries()]).toMatchInlineSnapshot(`
-        [
-          [
-            "content-type",
+      expect(response.reasonPhrase).toBe('Internal Server Error');
+      expect(response.headers).toMatchInlineSnapshot(`
+        {
+          "content-type": [
             "text/html",
           ],
-        ]
+        }
       `);
 
-      expect(replaceHtmlStack(await response.text())).toMatchInlineSnapshot(String.raw`
+      expect(replaceHtmlStack(await text(response.body))).toMatchInlineSnapshot(String.raw`
         "<!DOCTYPE html>
         <html>
             <head>
@@ -1553,12 +1567,12 @@ describe('error-middleware', () => {
         detail: 'Missing or invalid credentials',
         headers: {
           'www-authenticate': 'Basic realm="chubbyts"',
-          'retry-after': '120',
-          'content-type': 'application/json',
+          'Retry-After': '120',
+          'Content-Type': 'application/json',
         },
       });
 
-      const request = new ServerRequest('https://example.com');
+      const request = serverRequestFactory('GET', 'https://example.com');
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error: httpError }]);
 
@@ -1571,30 +1585,27 @@ describe('error-middleware', () => {
         },
       ]);
 
-      const errorMiddleware = createErrorMiddleware(false, logger);
+      const errorMiddleware = createErrorMiddleware(responseFactory, bodyFactory, false, logger);
 
       const response = await errorMiddleware(request, handler);
 
       expect(response.status).toBe(401);
-      expect(response.statusText).toBe('Unauthorized');
-      expect([...response.headers.entries()]).toMatchInlineSnapshot(`
-        [
-          [
-            "content-type",
+      expect(response.reasonPhrase).toBe('Unauthorized');
+      expect(response.headers).toMatchInlineSnapshot(`
+        {
+          "content-type": [
             "text/html",
           ],
-          [
-            "retry-after",
+          "retry-after": [
             "120",
           ],
-          [
-            "www-authenticate",
+          "www-authenticate": [
             "Basic realm="chubbyts"",
           ],
-        ]
+        }
       `);
 
-      const html = await response.text();
+      const html = await text(response.body);
 
       expect(html).toContain('Missing or invalid credentials');
       expect(html).not.toContain('www-authenticate');
@@ -1610,7 +1621,7 @@ describe('error-middleware', () => {
         instance: '</p><img src="x" onerror="alert(1)">',
       });
 
-      const request = new ServerRequest('https://example.com');
+      const request = serverRequestFactory('GET', 'https://example.com');
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error: httpError }]);
 
@@ -1623,13 +1634,13 @@ describe('error-middleware', () => {
         },
       ]);
 
-      const errorMiddleware = createErrorMiddleware(false, logger);
+      const errorMiddleware = createErrorMiddleware(responseFactory, bodyFactory, false, logger);
 
       const response = await errorMiddleware(request, handler);
 
       expect(response.status).toBe(400);
 
-      const html = await response.text();
+      const html = await text(response.body);
 
       expect(html).not.toContain('<script>');
       expect(html).not.toContain('<img');
@@ -1648,7 +1659,7 @@ describe('error-middleware', () => {
       // oxlint-disable-next-line functional/immutable-data
       (error as Error & { cause: unknown }).cause = error;
 
-      const request = new ServerRequest('https://example.com');
+      const request = serverRequestFactory('GET', 'https://example.com');
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
 
@@ -1661,13 +1672,13 @@ describe('error-middleware', () => {
         },
       ]);
 
-      const errorMiddleware = createErrorMiddleware(true, logger);
+      const errorMiddleware = createErrorMiddleware(responseFactory, bodyFactory, true, logger);
 
       const response = await errorMiddleware(request, handler);
 
       expect(response.status).toBe(500);
 
-      const html = await response.text();
+      const html = await text(response.body);
 
       expect(html.match(/circular error/g)).toHaveLength(2);
 
@@ -1680,7 +1691,7 @@ describe('error-middleware', () => {
       // oxlint-disable-next-line functional/immutable-data
       error.stack = 'Error: <script>alert("stack")</script>\nat <anonymous>';
 
-      const request = new ServerRequest('https://example.com');
+      const request = serverRequestFactory('GET', 'https://example.com');
 
       const [handler, handlerMocks] = useFunctionMock<Handler>([{ parameters: [request], error }]);
 
@@ -1693,13 +1704,13 @@ describe('error-middleware', () => {
         },
       ]);
 
-      const errorMiddleware = createErrorMiddleware(true, logger);
+      const errorMiddleware = createErrorMiddleware(responseFactory, bodyFactory, true, logger);
 
       const response = await errorMiddleware(request, handler);
 
       expect(response.status).toBe(500);
 
-      const html = await response.text();
+      const html = await text(response.body);
 
       expect(html).not.toContain('<script>');
       expect(html).toContain('&lt;script&gt;alert(&quot;message&quot;)&lt;/script&gt;');

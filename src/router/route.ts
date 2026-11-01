@@ -1,4 +1,6 @@
-import type { Handler, Middleware } from '@chubbyts/chubbyts-undici-server/dist/server';
+import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
+import type { Method } from '@chubbyts/chubbyts-http-types/message';
+import type { Middleware } from '@chubbyts/chubbyts-http-types/middleware';
 import type { RequiredProperties } from '../types.js';
 
 export type PathOptions = { [key: string]: unknown };
@@ -12,7 +14,7 @@ export type RouteWithGivenMethodArgument = {
 };
 
 export type RouteArgument = {
-  method: string;
+  method: Method;
 } & RouteWithGivenMethodArgument;
 
 export type Route = RequiredProperties<RouteArgument, 'middlewares' | 'pathOptions'> & {
