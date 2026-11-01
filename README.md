@@ -39,7 +39,7 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^4.0.0 \
-  @chubbyts/chubbyts-framework@^4.0.1 \
+  @chubbyts/chubbyts-framework@^4.0.2 \
   @chubbyts/chubbyts-http@^3.1.0
 ```
 
@@ -132,7 +132,7 @@ const application = createApplicationBuilder(
 Running the application via the standard node http implementation.
 
 ```sh
-npm i @chubbyts/chubbyts-http-node-bridge@^3.0.0
+npm i @chubbyts/chubbyts-http-node@^1.0.0
 ```
 
 Check the [Usage][10] section.
@@ -142,7 +142,7 @@ Check the [Usage][10] section.
 Running the application via the uWebSockets http implementation.
 
 ```sh
-npm i @chubbyts/chubbyts-http-uwebsockets-bridge@^3.0.0
+npm i @chubbyts/chubbyts-http-uwebsockets@^1.0.0
 ```
 
 Check the [Usage][11] section.
@@ -171,8 +171,8 @@ Check the [Usage][11] section.
 [7]: https://www.npmjs.com/package/@chubbyts/chubbyts-log-types
 [8]: https://www.npmjs.com/package/@chubbyts/chubbyts-throwable-to-error
 
-[10]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-node-bridge#usage
-[11]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-uwebsockets-bridge#usage
+[10]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-node#usage
+[11]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-uwebsockets#usage
 
 [20]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-cors
 [21]: https://www.npmjs.com/package/@chubbyts/chubbyts-http-multipart
