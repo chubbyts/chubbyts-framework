@@ -159,48 +159,6 @@ const createApplicationBuilderFromChildren = (
   },
 });
 
-/**
- * A facade around createApplication / createErrorMiddleware / createUrlGeneratorMiddleware /
- * createRouteMatcherMiddleware / createRoute / createGroup: pure construction sugar, the returned handler is the very same middleware pipe as with the
- * explicit composition: error middleware first, optional url generator middleware, app middlewares, route matcher
- * middleware last.
- *
- * The facade is agnostic to the router implementation: the matcher factory is given as the first parameter,
- * for example createPathToRegexpRouteMatcher from `@chubbyts/chubbyts-framework-router-path-to-regexp`.
- *
- * The application builder is immutable: every route / group call returns a new application builder, so use
- * the return value (chaining or reassignment). Middlewares are given as an optional parameter directly
- * before the element content they wrap, and can be omitted entirely if there are none. Route names are
- * given as the required second parameter. Routes and groups accept pathOptions as an optional last
- * parameter, group pathOptions are merged into their children. Beside the seven method shortcuts
- * (delete / get / head / options / patch / post / put) there is a generic `route` accepting any method as
- * its first parameter: `.route('TRACE', '/trace', 'trace', traceHandler)`.
- *
- * With the createGeneratePath option (for example createPathToRegexpGeneratePath) a `generatePath` request
- * attribute becomes available within middlewares and handlers:
- * `(serverRequest.attributes.generatePath as GeneratePath)('pet_read', { id: '1' })`. With the
- * createGenerateUrl option (for example createPathToRegexpGenerateUrl) a `generateUrl` request attribute
- * becomes available as well. Both options are independent of each other.
- *
- * ```ts
- * import { createPathToRegexpMatch as createMatch }
- *   from '@chubbyts/chubbyts-framework-router-path-to-regexp/dist/path-to-regexp-router';
- * import { createApplicationBuilder } from '@chubbyts/chubbyts-framework/dist/facade';
- *
- * const application = createApplicationBuilder(createMatch, [corsMiddleware])
- *   .get('/ping', 'ping', pingHandler)
- *   .get('/openapi', 'openapi', openApiHandler)
- *   .group('/api/pets', [acceptNegotiationMiddleware, apiErrorMiddleware], (pets) =>
- *     pets
- *       .get('', 'pet_list', petListHandler)
- *       .post('', 'pet_create', [contentTypeNegotiationMiddleware], petCreateHandler)
- *       .get('/:id', 'pet_read', petReadHandler)
- *       .put('/:id', 'pet_update', [contentTypeNegotiationMiddleware], petUpdateHandler)
- *       .delete('/:id', 'pet_delete', petDeleteHandler),
- *   )
- *   .build();
- * ```
- */
 export const createApplicationBuilder: {
   (createMatch: CreateMatch, options?: ApplicationBuilderOptions): ApplicationBuilder;
   (createMatch: CreateMatch, middlewares: Array<Middleware>, options?: ApplicationBuilderOptions): ApplicationBuilder;

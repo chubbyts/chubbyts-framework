@@ -21,8 +21,7 @@
     "lint-fix": "oxlint --fix src tests vitest.config.ts",
     "lint": "oxlint src tests vitest.config.ts",
     "prepare": "pnpm run build",
-    "test": "vitest",
-    "typedoc": "rm -Rf docs && typedoc"
+    "test": "vitest"
   },
   "prettier": {
     "printWidth": 120,
@@ -59,7 +58,6 @@
     "@vitest/coverage-v8": "^4.1.12",
     "oxlint": "^1.89.0",
     "prettier": "^3.9.10",
-    "typedoc": "^0.28.20",
     "typescript": "^7.0.2",
     "vitest": "^4.1.12"
   },

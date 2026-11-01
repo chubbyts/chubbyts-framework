@@ -228,14 +228,6 @@ const createHttpErrorFromError = (e: unknown, mapToHttpError: MapToHttpError): H
   }
 };
 
-/**
- * ```ts
- * import type { Middleware } from '@chubbyts/chubbyts-undici-for-server/dist/middleware';
- * import { createErrorMiddleware } from '@chubbyts/chubbyts-framework/dist/middleware/error-middleware';
- *
- * const errorMiddleware: Middleware = createErrorMiddleware();
- * ```
- */
 export const createErrorMiddleware = (
   debug = false,
   logger: Logger = createLogger(),

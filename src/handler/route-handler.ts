@@ -3,14 +3,6 @@ import { createRouteMatcherMiddleware } from '../middleware/route-matcher-middle
 import type { Route } from '../router/route.js';
 import { isRoute } from '../router/route.js';
 
-/**
- * ```ts
- * import type { Handler } from '@chubbyts/chubbyts-undici-server/dist/server';
- * import { createRouteHandler } from '@chubbyts/chubbyts-framework/dist/handler/route-handler';
- *
- * const routeHandler: Handler = createRouteHandler();
- * ```
- */
 export const createRouteHandler = (): Handler => {
   return (request: ServerRequest<{ route: Route }>): Promise<Response> => {
     const route = request.attributes.route;
