@@ -28,7 +28,7 @@ A minimal, highly [performant][2] middleware [PSR-15][3] inspired function based
  * node: 22
  * [@chubbyts/chubbyts-dic-types][4]: ^2.3.1
  * [@chubbyts/chubbyts-http-error][5]: ^3.5.1
- * [@chubbyts/chubbyts-http-types][6]: ^4.1.0
+ * [@chubbyts/chubbyts-http-types][6]: ^4.2.0
  * [@chubbyts/chubbyts-log-types][7]: ^3.3.1
  * [@chubbyts/chubbyts-throwable-to-error][8]: ^2.3.4
 
@@ -39,7 +39,7 @@ Through [NPM](https://www.npmjs.com) as [@chubbyts/chubbyts-framework][1].
 ```sh
 npm i \
   @chubbyts/chubbyts-framework-router-path-to-regexp@^4.0.0 \
-  @chubbyts/chubbyts-framework@^4.0.2 \
+  @chubbyts/chubbyts-framework@^4.0.3 \
   @chubbyts/chubbyts-http@^3.1.0
 ```
 
