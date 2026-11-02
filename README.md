@@ -48,7 +48,7 @@ npm i \
 ```ts
 import { createPathToRegexpMatch }
   from '@chubbyts/chubbyts-framework-router-path-to-regexp/path-to-regexp-router';
-import { createResponseFactory, createStreamFactory } from '@chubbyts/chubbyts-http/message-factory';
+import { createResponseFactory, createBodyFactory } from '@chubbyts/chubbyts-http/message-factory';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/message';
 import { createApplication } from '@chubbyts/chubbyts-framework/application';
 import { createErrorMiddleware }
@@ -58,7 +58,7 @@ import { createRouteMatcherMiddleware }
 import { createGetRoute } from '@chubbyts/chubbyts-framework/router/route';
 import { createRoutesByName } from '@chubbyts/chubbyts-framework/router/routes-by-name';
 
-const bodyFactory = createStreamFactory();
+const bodyFactory = createBodyFactory();
 const responseFactory = createResponseFactory(bodyFactory);
 
 const app = createApplication([
@@ -97,10 +97,10 @@ The first argument holds all the dependencies (`ApplicationBuilderDependencies`)
 ```ts
 import { createPathToRegexpMatch as createMatch }
   from '@chubbyts/chubbyts-framework-router-path-to-regexp/path-to-regexp-router';
-import { createResponseFactory, createStreamFactory } from '@chubbyts/chubbyts-http/message-factory';
+import { createResponseFactory, createBodyFactory } from '@chubbyts/chubbyts-http/message-factory';
 import { createApplicationBuilder } from '@chubbyts/chubbyts-framework/facade';
 
-const bodyFactory = createStreamFactory();
+const bodyFactory = createBodyFactory();
 const responseFactory = createResponseFactory(bodyFactory);
 
 const application = createApplicationBuilder(
