@@ -38,7 +38,9 @@ export const createRoute = <A extends Attributes = Attributes>({
     method,
     path,
     name,
-    handler,
+    // Handler<A> is contravariant in A, so it is not assignable to Handler. The router provides the matched route
+    // attributes at runtime, so storing the handler with the wider type is safe.
+    handler: handler as Handler,
     middlewares: middlewares ?? [],
     pathOptions: pathOptions ?? {},
     attributes: {},
