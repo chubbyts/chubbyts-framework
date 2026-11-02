@@ -1,5 +1,5 @@
 import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
-import type { Method } from '@chubbyts/chubbyts-http-types/message';
+import type { Attributes, Method } from '@chubbyts/chubbyts-http-types/message';
 import type { BodyFactory, ResponseFactory } from '@chubbyts/chubbyts-http-types/message-factory';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/middleware';
 import type { Logger } from '@chubbyts/chubbyts-log-types/dist/log';
@@ -17,18 +17,30 @@ import type { CreateMatch } from './router/route-matcher.js';
 import type { CreateGeneratePath, CreateGenerateUrl } from './router/url-generator.js';
 
 type AddRoute<Self> = {
-  (path: string, name: string, handler: Handler, pathOptions?: PathOptions): Self;
-  (path: string, name: string, middlewares: Array<Middleware>, handler: Handler, pathOptions?: PathOptions): Self;
+  <A extends Attributes = Attributes>(path: string, name: string, handler: Handler<A>, pathOptions?: PathOptions): Self;
+  <A extends Attributes = Attributes>(
+    path: string,
+    name: string,
+    middlewares: Array<Middleware>,
+    handler: Handler<A>,
+    pathOptions?: PathOptions,
+  ): Self;
 };
 
 type AddRouteWithMethod<Self> = {
-  (method: Method, path: string, name: string, handler: Handler, pathOptions?: PathOptions): Self;
-  (
+  <A extends Attributes = Attributes>(
+    method: Method,
+    path: string,
+    name: string,
+    handler: Handler<A>,
+    pathOptions?: PathOptions,
+  ): Self;
+  <A extends Attributes = Attributes>(
     method: Method,
     path: string,
     name: string,
     middlewares: Array<Middleware>,
-    handler: Handler,
+    handler: Handler<A>,
     pathOptions?: PathOptions,
   ): Self;
 };

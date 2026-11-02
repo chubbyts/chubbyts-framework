@@ -1,21 +1,21 @@
 import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
-import type { Method } from '@chubbyts/chubbyts-http-types/message';
+import type { Attributes, Method } from '@chubbyts/chubbyts-http-types/message';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/middleware';
 import type { RequiredProperties } from '../types.js';
 
 export type PathOptions = { [key: string]: unknown };
 
-export type RouteWithGivenMethodArgument = {
+export type RouteWithGivenMethodArgument<A extends Attributes = Attributes> = {
   path: string;
   name: string;
-  handler: Handler;
+  handler: Handler<A>;
   middlewares?: Array<Middleware>;
   pathOptions?: PathOptions;
 };
 
-export type RouteArgument = {
+export type RouteArgument<A extends Attributes = Attributes> = {
   method: Method;
-} & RouteWithGivenMethodArgument;
+} & RouteWithGivenMethodArgument<A>;
 
 export type Route = RequiredProperties<RouteArgument, 'middlewares' | 'pathOptions'> & {
   attributes: Record<string, string>;
@@ -26,7 +26,14 @@ export const isRoute = (route: unknown): route is Route => {
   return typeof route === 'object' && null !== route && '_route' in route;
 };
 
-export const createRoute = ({ method, path, name, handler, middlewares, pathOptions }: RouteArgument): Route => {
+export const createRoute = <A extends Attributes = Attributes>({
+  method,
+  path,
+  name,
+  handler,
+  middlewares,
+  pathOptions,
+}: RouteArgument<A>): Route => {
   return {
     method,
     path,
@@ -39,30 +46,30 @@ export const createRoute = ({ method, path, name, handler, middlewares, pathOpti
   };
 };
 
-export const createDeleteRoute = (args: RouteWithGivenMethodArgument): Route => {
+export const createDeleteRoute = <A extends Attributes = Attributes>(args: RouteWithGivenMethodArgument<A>): Route => {
   return createRoute({ ...args, method: 'DELETE' });
 };
 
-export const createGetRoute = (args: RouteWithGivenMethodArgument): Route => {
+export const createGetRoute = <A extends Attributes = Attributes>(args: RouteWithGivenMethodArgument<A>): Route => {
   return createRoute({ ...args, method: 'GET' });
 };
 
-export const createHeadRoute = (args: RouteWithGivenMethodArgument): Route => {
+export const createHeadRoute = <A extends Attributes = Attributes>(args: RouteWithGivenMethodArgument<A>): Route => {
   return createRoute({ ...args, method: 'HEAD' });
 };
 
-export const createOptionsRoute = (args: RouteWithGivenMethodArgument): Route => {
+export const createOptionsRoute = <A extends Attributes = Attributes>(args: RouteWithGivenMethodArgument<A>): Route => {
   return createRoute({ ...args, method: 'OPTIONS' });
 };
 
-export const createPatchRoute = (args: RouteWithGivenMethodArgument): Route => {
+export const createPatchRoute = <A extends Attributes = Attributes>(args: RouteWithGivenMethodArgument<A>): Route => {
   return createRoute({ ...args, method: 'PATCH' });
 };
 
-export const createPostRoute = (args: RouteWithGivenMethodArgument): Route => {
+export const createPostRoute = <A extends Attributes = Attributes>(args: RouteWithGivenMethodArgument<A>): Route => {
   return createRoute({ ...args, method: 'POST' });
 };
 
-export const createPutRoute = (args: RouteWithGivenMethodArgument): Route => {
+export const createPutRoute = <A extends Attributes = Attributes>(args: RouteWithGivenMethodArgument<A>): Route => {
   return createRoute({ ...args, method: 'PUT' });
 };
