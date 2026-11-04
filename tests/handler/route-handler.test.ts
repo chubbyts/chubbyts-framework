@@ -7,8 +7,8 @@ import {
   createServerRequestFactory,
   createStreamFactory,
 } from '@chubbyts/chubbyts-http/message-factory';
-import { createRouteHandler } from '../../src/handler/route-handler';
-import type { Route } from '../../src/router/route';
+import { createRouteHandler } from '../../src/handler/route-handler.js';
+import type { Route } from '../../src/router/route.js';
 
 const bodyFactory = createStreamFactory();
 const responseFactory = createResponseFactory(bodyFactory);

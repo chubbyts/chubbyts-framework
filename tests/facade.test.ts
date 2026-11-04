@@ -13,11 +13,11 @@ import {
   createServerRequestFactory,
   createStreamFactory,
 } from '@chubbyts/chubbyts-http/message-factory';
-import type { Route } from '../src/router/route';
-import type { RoutesByName } from '../src/router/routes-by-name';
-import type { CreateMatch, Match } from '../src/router/route-matcher';
-import type { CreateGeneratePath, CreateGenerateUrl, GeneratePath, GenerateUrl } from '../src/router/url-generator';
-import { createApplicationBuilder } from '../src/facade';
+import type { Route } from '../src/router/route.js';
+import type { RoutesByName } from '../src/router/routes-by-name.js';
+import type { CreateMatch, Match } from '../src/router/route-matcher.js';
+import type { CreateGeneratePath, CreateGenerateUrl, GeneratePath, GenerateUrl } from '../src/router/url-generator.js';
+import { createApplicationBuilder } from '../src/facade.js';
 
 const bodyFactory = createStreamFactory();
 const responseFactory = createResponseFactory(bodyFactory);

@@ -7,8 +7,8 @@ import {
   createServerRequestFactory,
   createStreamFactory,
 } from '@chubbyts/chubbyts-http/message-factory';
-import type { GeneratePath, GenerateUrl } from '../../src/router/url-generator';
-import { createUrlGeneratorMiddleware } from '../../src/middleware/url-generator-middleware';
+import type { GeneratePath, GenerateUrl } from '../../src/router/url-generator.js';
+import { createUrlGeneratorMiddleware } from '../../src/middleware/url-generator-middleware.js';
 
 const bodyFactory = createStreamFactory();
 const responseFactory = createResponseFactory(bodyFactory);

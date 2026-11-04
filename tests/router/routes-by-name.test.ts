@@ -2,8 +2,8 @@ import { describe, expect, test } from 'vitest';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/middleware';
-import { createRoutesByName } from '../../src/router/routes-by-name';
-import { createRoute } from '../../src/router/route';
+import { createRoutesByName } from '../../src/router/routes-by-name.js';
+import { createRoute } from '../../src/router/route.js';
 
 describe('routes-by-name', () => {
   test('createRoutesByName', () => {

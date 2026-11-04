@@ -2,8 +2,8 @@ import { describe, expect, test } from 'vitest';
 import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
 import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/middleware';
-import { createRoute } from '../../src/router/route';
-import { createGroup, getRoutes, isGroup } from '../../src/router/group';
+import { createRoute } from '../../src/router/route.js';
+import { createGroup, getRoutes, isGroup } from '../../src/router/group.js';
 
 describe('group', () => {
   describe('isGroup', () => {

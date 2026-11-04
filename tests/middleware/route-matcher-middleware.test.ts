@@ -8,10 +8,10 @@ import {
   createServerRequestFactory,
   createStreamFactory,
 } from '@chubbyts/chubbyts-http/message-factory';
-import type { Match } from '../../src/router/route-matcher';
-import type { RouteMatcherAttributes } from '../../src/middleware/route-matcher-middleware';
-import { createRouteMatcherMiddleware } from '../../src/middleware/route-matcher-middleware';
-import type { Route } from '../../src/router/route';
+import type { Match } from '../../src/router/route-matcher.js';
+import type { RouteMatcherAttributes } from '../../src/middleware/route-matcher-middleware.js';
+import { createRouteMatcherMiddleware } from '../../src/middleware/route-matcher-middleware.js';
+import type { Route } from '../../src/router/route.js';
 
 const bodyFactory = createStreamFactory();
 const responseFactory = createResponseFactory(bodyFactory);

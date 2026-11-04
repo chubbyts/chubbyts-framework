@@ -16,7 +16,7 @@ import {
   createServerRequestFactory,
   createStreamFactory,
 } from '@chubbyts/chubbyts-http/message-factory';
-import { createErrorMiddleware } from '../../src/middleware/error-middleware';
+import { createErrorMiddleware } from '../../src/middleware/error-middleware.js';
 
 const bodyFactory = createStreamFactory();
 const responseFactory = createResponseFactory(bodyFactory);

@@ -12,7 +12,7 @@ import {
   createPatchRoute,
   createPostRoute,
   createPutRoute,
-} from '../../src/router/route';
+} from '../../src/router/route.js';
 
 describe('route', () => {
   describe('isRoute', () => {

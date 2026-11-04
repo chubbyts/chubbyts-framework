@@ -2,8 +2,8 @@ import { describe, expectTypeOf, test } from 'vitest';
 import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/message';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/middleware';
-import type { CreateMatch } from '../src/router/route-matcher';
-import { createApplicationBuilder } from '../src/facade';
+import type { CreateMatch } from '../src/router/route-matcher.js';
+import { createApplicationBuilder } from '../src/facade.js';
 
 type Attributes = { name: string };
 
@@ -25,11 +25,14 @@ const inferredHandler = async (serverRequest: ServerRequest<Attributes>) => {
 };
 
 describe('facade generics', () => {
-  const builder = createApplicationBuilder({
-    createMatch: {} as CreateMatch,
-    responseFactory: () => response,
-    bodyFactory: () => ({}) as Response['body'],
-  });
+  const builder = createApplicationBuilder(
+    {
+      createMatch: {} as CreateMatch,
+      responseFactory: () => response,
+      bodyFactory: () => ({}) as Response['body'],
+    },
+    [],
+  );
 
   test('route', () => {
     builder.route<Attributes>('GET', '/hello/:name', 'hello', async (serverRequest) => {

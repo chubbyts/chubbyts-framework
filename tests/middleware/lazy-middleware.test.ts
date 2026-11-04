@@ -9,7 +9,7 @@ import {
   createServerRequestFactory,
   createStreamFactory,
 } from '@chubbyts/chubbyts-http/message-factory';
-import { createLazyMiddleware } from '../../src/middleware/lazy-middleware';
+import { createLazyMiddleware } from '../../src/middleware/lazy-middleware.js';
 
 const bodyFactory = createStreamFactory();
 const responseFactory = createResponseFactory(bodyFactory);

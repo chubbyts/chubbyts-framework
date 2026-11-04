@@ -1,7 +1,7 @@
 import { describe, expectTypeOf, test } from 'vitest';
 import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/message';
-import type { Route } from '../../src/router/route';
+import type { Route } from '../../src/router/route.js';
 import {
   createRoute,
   createDeleteRoute,
@@ -11,7 +11,7 @@ import {
   createPatchRoute,
   createPostRoute,
   createPutRoute,
-} from '../../src/router/route';
+} from '../../src/router/route.js';
 
 type Attributes = { name: string };
 

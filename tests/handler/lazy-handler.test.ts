@@ -8,7 +8,7 @@ import {
   createServerRequestFactory,
   createStreamFactory,
 } from '@chubbyts/chubbyts-http/message-factory';
-import { createLazyHandler } from '../../src/handler/lazy-handler';
+import { createLazyHandler } from '../../src/handler/lazy-handler.js';
 
 const bodyFactory = createStreamFactory();
 const responseFactory = createResponseFactory(bodyFactory);
