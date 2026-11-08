@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'vitest';
-import { createNotFound } from '@chubbyts/chubbyts-http-error/dist/http-error';
-import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import { createNotFound } from '@chubbyts/chubbyts-http-error/http-error';
+import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/function-mock';
 import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
 import type { Response, ServerRequest } from '@chubbyts/chubbyts-http-types/message';
 import {

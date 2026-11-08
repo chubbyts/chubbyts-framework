@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest';
-import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/dist/function-mock';
+import { useFunctionMock } from '@chubbyts/chubbyts-function-mock/function-mock';
 import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
 import type { Middleware } from '@chubbyts/chubbyts-http-types/middleware';
 import {

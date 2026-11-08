@@ -1,8 +1,8 @@
-import type { Logger } from '@chubbyts/chubbyts-log-types/dist/log';
-import { createLogger } from '@chubbyts/chubbyts-log-types/dist/log';
-import { throwableToError } from '@chubbyts/chubbyts-throwable-to-error/dist/throwable-to-error';
-import type { HttpError, MapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
-import { isHttpError, mapToHttpError as defaultMapToHttpError } from '@chubbyts/chubbyts-http-error/dist/http-error';
+import type { Logger } from '@chubbyts/chubbyts-log-types/log';
+import { createLogger } from '@chubbyts/chubbyts-log-types/log';
+import { throwableToError } from '@chubbyts/chubbyts-throwable-to-error/throwable-to-error';
+import type { HttpError, MapToHttpError } from '@chubbyts/chubbyts-http-error/http-error';
+import { isHttpError, mapToHttpError as defaultMapToHttpError } from '@chubbyts/chubbyts-http-error/http-error';
 import type { Handler } from '@chubbyts/chubbyts-http-types/handler';
 import type { Headers, Response, ServerRequest } from '@chubbyts/chubbyts-http-types/message';
 import type { BodyFactory, ResponseFactory } from '@chubbyts/chubbyts-http-types/message-factory';
